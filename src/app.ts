@@ -10,7 +10,7 @@ app.use('/api', router);
 
 db.getConnection()
   .then(async () => {
-    console.log('✅ AWS MySQL DB 접속 성공');
+    console.log('✅ AWS RDS 접속 성공');
 
     app.listen(port, () => {
       console.log('DB_HOST:', env.DB_HOST);
@@ -18,7 +18,7 @@ db.getConnection()
       console.log(`Server is running on port ${port}`);
     });
   })
-  .catch((error) => console.log('⛔ DB 접속 및 서버 실행 실패', error));
+  .catch((error) => console.log('⛔ AWS RDS 접속 및 서버 실행 실패', error));
 
 // app.listen(port, () => {
 //   console.log(`Server is running on port ${port}`);
