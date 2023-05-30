@@ -10,13 +10,20 @@ interface UserProfile {
   user_created_at: string;
 }
 
-export type signUpUserInput = Pick<UserProfile, 'user_email' | 'user_name' | 'user_password'>;
+export type SignUpUserInput = Pick<UserProfile, 'user_email' | 'user_name' | 'user_password'>;
 
-export type logInUserInput = Pick<UserProfile, 'user_email' | 'user_password'>;
+export type LogInUserInput = Pick<UserProfile, 'user_email' | 'user_password'>;
 
-export type updatUserInput = Partial<
+export type UpdatUserInput = Partial<
   Pick<
     UserProfile,
     'user_name' | 'user_career_goal' | 'user_stacks' | 'user_introduction' | 'user_img'
   >
 >;
+
+export type PayloadInfo = Pick<UserProfile, 'user_id' | 'user_email' | 'user_password'>;
+
+export type TokenInfo = {
+  accessToken: string;
+  refreshToken: string;
+};
