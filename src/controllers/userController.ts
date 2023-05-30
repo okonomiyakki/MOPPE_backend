@@ -53,7 +53,7 @@ const logInUserHandler = async (
       user_password: string;
     }
   >,
-  res: Response<{ message: string; data: TokenInfo }>,
+  res: Response<{ message: string }>,
   next: NextFunction
 ) => {
   try {
@@ -67,9 +67,16 @@ const logInUserHandler = async (
       user_password,
     };
 
-    const foundUser: TokenInfo = await userService.logInUser(inputData);
+    const foundUserToken: TokenInfo = await userService.logInUser(inputData);
 
-    res.status(200).json({ message: '로그인 성공', data: foundUser });
+    res.setHeader('Authorization', `Bearer ${foundUserToken.accessToken}`);
+
+    res.cookie('refreshToken', foundUserToken.refreshToken, {
+      httpOnly: false,
+      // secure: true, // https 되면
+    });
+
+    res.status(200).json({ message: '로그인 성공' });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);
