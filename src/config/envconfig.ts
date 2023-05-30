@@ -4,6 +4,7 @@ dotenv.config();
 
 type EnvConfig = {
   BCRYPT_SALT_ROUNDS: string | undefined;
+  HOST: string | undefined;
   PORT: string | undefined;
   DB_HOST: string | undefined;
   DB_PORT: string | undefined;
@@ -19,6 +20,7 @@ type EnvConfig = {
 const env: EnvConfig = {
   BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS,
 
+  HOST: process.env.HOST,
   PORT: process.env.PORT,
 
   DB_HOST: process.env.DB_HOST,
