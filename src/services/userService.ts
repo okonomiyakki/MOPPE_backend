@@ -50,9 +50,9 @@ const logInUser = async (inputData: LogInUserInput): Promise<TokenInfo> => {
       user_password: foundUser.user_password,
     };
 
-    const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'mogakppo_DEFAULT_ACCESS_TOKEN_SECRET';
+    const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_DEFAULT_ACCESS_TOKEN_SECRET';
 
-    const refreshTokenSecret = env.REFRESH_TOKEN_SECRET || 'mogakppo_DEFAULT_REFRESH_TOKEN_SECRET';
+    const refreshTokenSecret = env.REFRESH_TOKEN_SECRET || 'MOGAKPPO_DEFAULT_REFRESH_TOKEN_SECRET';
 
     const accessToken = jwt.sign(payload, accessTokenSecret, {
       expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
