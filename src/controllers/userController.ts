@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/errorHandler';
-import { signUpUserInput, logInUserInput, updatUserInput } from '../database/types/User';
+import { SignUpUserInput, LogInUserInput, TokenInfo } from '../database/types/User';
 import * as userService from '../services/userService';
 
 /* 회원 가입 */
@@ -20,10 +20,10 @@ const signUpUserHandler = async (
   try {
     const { user_email, user_name, user_password } = req.body;
 
-    if (!user_email || !user_email || !user_email)
+    if (!user_email || !user_name || !user_password)
       throw new AppError(400, '요청 body에 모든 정보를 입력해주세요.');
 
-    const inputData: signUpUserInput = {
+    const inputData: SignUpUserInput = {
       user_email,
       user_name,
       user_password,
@@ -43,4 +43,42 @@ const signUpUserHandler = async (
   }
 };
 
-export { signUpUserHandler };
+/* 로그인 */
+const logInUserHandler = async (
+  req: Request<
+    {},
+    {},
+    {
+      user_email: string;
+      user_password: string;
+    }
+  >,
+  res: Response<{ message: string; data: TokenInfo }>,
+  next: NextFunction
+) => {
+  try {
+    const { user_email, user_password } = req.body;
+
+    if (!user_email || !user_password)
+      throw new AppError(400, '요청 body에 모든 정보를 입력해주세요.');
+
+    const inputData: LogInUserInput = {
+      user_email,
+      user_password,
+    };
+
+    const foundUser: TokenInfo = await userService.logInUser(inputData);
+
+    res.status(200).json({ message: '로그인 성공', data: foundUser });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 로그인 실패'));
+    }
+  }
+};
+
+export { signUpUserHandler, logInUserHandler };
