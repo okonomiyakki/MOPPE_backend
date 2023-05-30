@@ -9,9 +9,7 @@ import jwt from 'jsonwebtoken';
 /* 회원 가입 */
 const signUpUser = async (inputData: SignUpUserInput) => {
   try {
-    const foundUser: PayloadInfo = await userRepo.findUserByEmail<PayloadInfo>(
-      inputData.user_email
-    );
+    const foundUser: PayloadInfo = await userRepo.findUserByEmail(inputData.user_email);
 
     if (foundUser)
       if (foundUser.user_email === inputData.user_email)
@@ -38,7 +36,7 @@ const signUpUser = async (inputData: SignUpUserInput) => {
 /* 로그인 */
 const logInUser = async (inputData: LogInUserInput): Promise<TokenInfo> => {
   try {
-    const foundUser = await userRepo.findUserByEmail<PayloadInfo>(inputData.user_email);
+    const foundUser: PayloadInfo = await userRepo.findUserByEmail(inputData.user_email);
 
     if (!foundUser) throw new AppError(400, '존재하지 않는 아이디 입니다.');
 

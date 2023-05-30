@@ -21,6 +21,8 @@ export type UpdatUserInput = Partial<
   >
 >;
 
+export type foundUser = Pick<UserProfile, 'user_id' | 'user_email' | 'user_name' | 'user_password'>;
+
 export type PayloadInfo = Pick<UserProfile, 'user_id' | 'user_email' | 'user_password'>;
 
 export type TokenInfo = {
