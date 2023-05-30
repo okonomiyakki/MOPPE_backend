@@ -1,9 +1,9 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../utils/errorHandler';
-import { signUpUserInput, logInUserInput, updatUserInput } from '../types/User';
+import { SignUpUserInput } from '../types/User';
 
 /* 회원 가입 */
-const createUser = async (inputData: signUpUserInput) => {
+const createUser = async (inputData: SignUpUserInput): Promise<number> => {
   try {
     const createColums = 'user_email, user_name, user_password';
 
@@ -32,10 +32,30 @@ const createUser = async (inputData: signUpUserInput) => {
   }
 };
 
+/* 로그인 */
+// const findUser = async (user_email: string, user_password: string) => {
+//   try {
+//     const selectColums = 'user_email, user_name, user_password';
+
+//     const SQL = `
+//       SELECT ${selectColums}
+//       FROM user
+//       WHERE user_email = ? and user_password = ?
+//       `;
+
+//     const [user]: any = await db.query(SQL, [user_email, user_password]);
+
+//     return user[0];
+//   } catch (error) {
+//     console.log(error);
+//     throw new AppError(500, '[ DB 에러 ] 로그인 실패');
+//   }
+// };
+
 /* 회원 조회 - 유효성 검사용 */
-const findUserByEmail = async (user_email: string) => {
+const findUserByEmail = async <User>(user_email: string): Promise<User> => {
   try {
-    const selectColums = 'user_email, user_name, user_password';
+    const selectColums = 'user_id, user_email, user_name, user_password';
 
     const SQL = `
     SELECT ${selectColums}
@@ -52,4 +72,8 @@ const findUserByEmail = async (user_email: string) => {
   }
 };
 
-export { createUser, findUserByEmail };
+export {
+  createUser,
+  // findUser,
+  findUserByEmail,
+};
