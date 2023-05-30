@@ -2,6 +2,7 @@ import express from 'express';
 import env from './config/envconfig';
 import db from './config/dbconfig';
 import router from './routes';
+import { errorHandlerMiddleware } from './utils/errorHandler';
 
 const app = express();
 const port = Number(env.PORT || 3000);
@@ -9,6 +10,7 @@ const port = Number(env.PORT || 3000);
 app.use(express.json()); // json 파싱
 
 app.use('/api', router);
+app.use(errorHandlerMiddleware);
 
 db.getConnection()
   .then(async () => {
@@ -21,7 +23,3 @@ db.getConnection()
     });
   })
   .catch((error) => console.log('⛔ AWS RDS 접속 및 서버 실행 실패', error));
-
-// app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`);
-// });
