@@ -13,7 +13,7 @@ const signUpUser = async (inputData: SignUpUserInput) => {
 
     if (foundUser)
       if (foundUser.user_email === inputData.user_email)
-        throw new AppError(400, '이미 가입된 이메일입니다.');
+        throw new AppError(400, '이미 가입된 이메일입니다. 다른 이메일을 사용해 주세요.');
 
     const hashedPassword = await hashPassword(inputData.user_password);
 
@@ -38,7 +38,8 @@ const logInUser = async (inputData: LogInUserInput): Promise<TokenInfo> => {
   try {
     const foundUser: PayloadInfo = await userRepo.findUserByEmail(inputData.user_email);
 
-    if (!foundUser) throw new AppError(400, '존재하지 않는 아이디 입니다.');
+    if (!foundUser)
+      throw new AppError(400, '존재하지 않는 이메일입니다. 회원 가입 후 이용해 주세요.');
 
     const isPasswordMatch = await bcrypt.compare(inputData.user_password, foundUser.user_password);
 
