@@ -6,6 +6,8 @@ import router from './routes';
 const app = express();
 const port = Number(env.PORT || 3000);
 
+app.use(express.json()); // json 파싱
+
 app.use('/api', router);
 
 db.getConnection()
