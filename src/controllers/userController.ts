@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/errorHandler';
-import { SignUpUserInput, LogInUserInput, TokenInfo } from '../database/types/User';
+import { SignUpUserInput, LogInUserInput, TokenInfo } from '../database/types/UserType';
 import * as userService from '../services/userService';
 
 /* 회원 가입 */

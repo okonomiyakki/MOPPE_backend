@@ -1,7 +1,7 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../utils/errorHandler';
-import { foundUser } from '../types/User';
-import { SignUpUserInput } from '../types/User';
+import { foundUser } from '../types/UserType';
+import { SignUpUserInput } from '../types/UserType';
 
 /* 회원 가입 */
 const createUser = async (inputData: SignUpUserInput): Promise<number> => {

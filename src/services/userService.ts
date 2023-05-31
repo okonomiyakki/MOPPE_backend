@@ -1,5 +1,10 @@
 import { AppError } from '../utils/errorHandler';
-import { SignUpUserInput, LogInUserInput, PayloadInfo, TokenInfo } from '../database/types/User';
+import {
+  SignUpUserInput,
+  LogInUserInput,
+  PayloadInfo,
+  TokenInfo,
+} from '../database/types/UserType';
 import * as userRepo from '../database/repository/userRepo';
 import hashPassword from '../utils/hashPassword';
 import env from '../config/envconfig';
