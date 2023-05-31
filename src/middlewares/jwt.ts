@@ -24,7 +24,7 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
   } catch (accessTokenError: any) {
     /* 엑세스 토큰 만료 */
     if (accessTokenError.name === 'TokenExpiredError') {
-      const refreshToken = req.cookies.refreshToken; // 유저 리프레시 토큰
+      const refreshToken = req.cookies.RefreshToken; // 유저 리프레시 토큰
 
       if (!refreshToken) throw new AppError(403, '[ 접근 불가 ] RefreshToken을 제시해 주세요.');
 

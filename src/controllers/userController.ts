@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/errorHandler';
+import { AuthRequest } from '../database/types/RequestType';
 import { SignUpUserInput, LogInUserInput, TokenInfo } from '../database/types/UserType';
 import * as userService from '../services/userService';
 
 /* 회원 가입 */
-const signUpUserHandler = async (
+export const signUpUserHandler = async (
   req: Request<
     {},
     {},
@@ -44,7 +45,7 @@ const signUpUserHandler = async (
 };
 
 /* 로그인 */
-const logInUserHandler = async (
+export const logInUserHandler = async (
   req: Request<
     {},
     {},
@@ -73,12 +74,12 @@ const logInUserHandler = async (
 
     res.cookie('Authorization', `Bearer ${foundUserToken.accessToken}`, {
       httpOnly: false,
-      // secure: true, // https 되면
+      // secure: true,
     });
 
-    res.cookie('refreshToken', foundUserToken.refreshToken, {
+    res.cookie('RefreshToken', foundUserToken.refreshToken, {
       httpOnly: false,
-      // secure: true, // https 되면
+      // secure: true,
     });
 
     res.status(200).json({ message: '로그인 성공' });
@@ -93,4 +94,25 @@ const logInUserHandler = async (
   }
 };
 
-export { signUpUserHandler, logInUserHandler };
+/* 로그아웃 */
+export const logOutUserHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { user_id } = req.user;
+
+    if (isNaN(Number(user_id))) throw new AppError(400, '정상적인 로그인 상태가 아닙니다.');
+
+    res.clearCookie('Authorization');
+
+    res.clearCookie('RefreshToken');
+
+    res.status(200).json({ message: '로그아웃 성공' });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 로그아웃 실패'));
+    }
+  }
+};
