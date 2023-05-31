@@ -1,14 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/errorHandler';
 import { PayloadInfo } from '../database/types/UserType';
+import { AuthRequest } from '../database/types/RequestType';
 import jwt from 'jsonwebtoken';
 import env from '../config/envconfig';
 
-interface RequestWithToken extends Request {
-  user: PayloadInfo;
-}
-
-const tokenHandler = async (req: RequestWithToken, res: Response, next: NextFunction) => {
+const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const authorization = req.headers['authorization'];
 
@@ -62,4 +59,4 @@ const tokenHandler = async (req: RequestWithToken, res: Response, next: NextFunc
   }
 };
 
-export default tokenHandler;
+export default AuthenticateHandler;
