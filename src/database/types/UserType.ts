@@ -21,11 +21,17 @@ export type UpdatUserInput = Partial<
   >
 >;
 
-export type FoundUser = Pick<UserProfile, 'user_id' | 'user_email' | 'user_name' | 'user_password'>;
+export type Email = Pick<UserProfile, 'user_email'>;
+
+export type UserInfoWithPayload = Pick<
+  UserProfile,
+  'user_id' | 'user_email' | 'user_name' | 'user_img' | 'user_password'
+>;
 
 export type PayloadInfo = Pick<UserProfile, 'user_id' | 'user_email' | 'user_password'>;
 
-export type TokenInfo = {
-  accessToken: string;
-  refreshToken: string;
-};
+export type UserInfo = Pick<UserProfile, 'user_id' | 'user_name' | 'user_img'>;
+
+export type Tokens = { accessToken: string; refreshToken: string };
+
+export type InfoWithTokens = UserInfo & Tokens;
