@@ -23,15 +23,15 @@ export type UpdatUserInput = Partial<
 
 export type Email = Pick<UserProfile, 'user_email'>;
 
-export type UserInfoWithPayload = Pick<
+export type InfoWithPayload = Pick<
   UserProfile,
   'user_id' | 'user_email' | 'user_name' | 'user_img' | 'user_password'
 >;
 
 export type PayloadInfo = Pick<UserProfile, 'user_id' | 'user_email' | 'user_password'>;
 
-export type UserInfo = Pick<UserProfile, 'user_id' | 'user_name' | 'user_img'>;
+export type Info = Pick<UserProfile, 'user_id' | 'user_name' | 'user_img'>;
 
 export type Tokens = { accessToken: string; refreshToken: string };
 
-export type InfoWithTokens = UserInfo & Tokens;
+export type InfoWithTokens = Info & Tokens;

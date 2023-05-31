@@ -3,21 +3,13 @@ import hashPassword from '../utils/hashPassword';
 import env from '../config/envconfig';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import {
-  SignUpUserInput,
-  LogInUserInput,
-  Email,
-  UserInfoWithPayload,
-  PayloadInfo,
-  UserInfo,
-  InfoWithTokens,
-} from '../database/types/UserType';
+import * as U from '../database/types/UserType';
 import * as userRepo from '../database/repository/userRepo';
 
 /* 회원 가입 */
-export const signUpUser = async (inputData: SignUpUserInput) => {
+export const signUpUser = async (inputData: U.SignUpUserInput) => {
   try {
-    const foundUserEmail: Email = await userRepo.findUserByEmail(inputData.user_email);
+    const foundUserEmail: U.Email = await userRepo.findUserByEmail(inputData.user_email);
 
     if (foundUserEmail)
       if (foundUserEmail.user_email === inputData.user_email)
@@ -42,9 +34,9 @@ export const signUpUser = async (inputData: SignUpUserInput) => {
 };
 
 /* 로그인 - 토큰을 발급, 회원 */
-export const logInUser = async (inputData: LogInUserInput): Promise<InfoWithTokens> => {
+export const logInUser = async (inputData: U.LogInUserInput): Promise<U.InfoWithTokens> => {
   try {
-    const foundUserInfoWithPayload: UserInfoWithPayload = await userRepo.findUserPayloadByEmail(
+    const foundUserInfoWithPayload: U.InfoWithPayload = await userRepo.findUserPayloadByEmail(
       inputData.user_email
     );
 
@@ -58,7 +50,7 @@ export const logInUser = async (inputData: LogInUserInput): Promise<InfoWithToke
 
     if (!isPasswordMatch) throw new AppError(404, '비밀번호가 일치하지 않습니다.');
 
-    const payload: PayloadInfo = {
+    const payload: U.PayloadInfo = {
       user_id: foundUserInfoWithPayload.user_id,
       user_email: foundUserInfoWithPayload.user_email,
       user_password: foundUserInfoWithPayload.user_password,
@@ -76,13 +68,13 @@ export const logInUser = async (inputData: LogInUserInput): Promise<InfoWithToke
       expiresIn: env.REFRESH_TOKEN_EXPIRES_IN,
     });
 
-    const userInfo: UserInfo = {
+    const userInfo: U.Info = {
       user_id: foundUserInfoWithPayload.user_id,
       user_name: foundUserInfoWithPayload.user_name,
       user_img: foundUserInfoWithPayload.user_img,
     };
 
-    const userInfoWithTokens: InfoWithTokens = {
+    const userInfoWithTokens: U.InfoWithTokens = {
       accessToken,
       refreshToken,
       ...userInfo,

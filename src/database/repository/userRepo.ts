@@ -1,10 +1,9 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../utils/errorHandler';
-import { Email, UserInfoWithPayload } from '../types/UserType';
-import { SignUpUserInput } from '../types/UserType';
+import * as U from '../types/UserType';
 
 /* 회원 가입 */
-export const createUser = async (inputData: SignUpUserInput): Promise<number> => {
+export const createUser = async (inputData: U.SignUpUserInput): Promise<number> => {
   try {
     const createColums = 'user_email, user_name, user_password';
 
@@ -34,7 +33,7 @@ export const createUser = async (inputData: SignUpUserInput): Promise<number> =>
 };
 
 /* 회원 user_email 조회 */
-export const findUserByEmail = async (user_email: string): Promise<Email> => {
+export const findUserByEmail = async (user_email: string): Promise<U.Email> => {
   try {
     const selectColums = 'user_email';
 
@@ -54,7 +53,7 @@ export const findUserByEmail = async (user_email: string): Promise<Email> => {
 };
 
 /* 회원 payload, 기본 필드 조회  */
-export const findUserPayloadByEmail = async (user_email: string): Promise<UserInfoWithPayload> => {
+export const findUserPayloadByEmail = async (user_email: string): Promise<U.InfoWithPayload> => {
   try {
     const selectColums = 'user_id, user_email, user_name, user_img, user_password';
 

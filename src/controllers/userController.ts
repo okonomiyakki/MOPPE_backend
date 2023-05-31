@@ -1,13 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/errorHandler';
 import { AuthRequest } from '../database/types/RequestType';
-import {
-  SignUpUserInput,
-  LogInUserInput,
-  UserInfo,
-  Tokens,
-  InfoWithTokens,
-} from '../database/types/UserType';
+import * as U from '../database/types/UserType';
 import * as userService from '../services/userService';
 
 /* 회원 가입 */
@@ -22,7 +16,7 @@ export const signUpUserHandler = async (
     if (!user_email || !user_name || !user_password)
       throw new AppError(400, '요청 body에 모든 정보를 입력해주세요.');
 
-    const inputData: SignUpUserInput = {
+    const inputData: U.SignUpUserInput = {
       user_email,
       user_name,
       user_password,
@@ -50,19 +44,19 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
     if (!user_email || !user_password)
       throw new AppError(400, '요청 body에 모든 정보를 입력해주세요.');
 
-    const inputData: LogInUserInput = {
+    const inputData: U.LogInUserInput = {
       user_email,
       user_password,
     };
 
-    const foundInfoWithTokens: InfoWithTokens = await userService.logInUser(inputData);
+    const foundInfoWithTokens: U.InfoWithTokens = await userService.logInUser(inputData);
 
-    const foundTokens: Tokens = {
+    const foundTokens: U.Tokens = {
       accessToken: foundInfoWithTokens.accessToken,
       refreshToken: foundInfoWithTokens.refreshToken,
     };
 
-    const foundUserInfo: UserInfo = {
+    const foundUserInfo: U.Info = {
       user_id: foundInfoWithTokens.user_id,
       user_name: foundInfoWithTokens.user_name,
       user_img: foundInfoWithTokens.user_img,
