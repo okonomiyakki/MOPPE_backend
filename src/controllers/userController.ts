@@ -69,7 +69,12 @@ const logInUserHandler = async (
 
     const foundUserToken: TokenInfo = await userService.logInUser(inputData);
 
-    res.setHeader('Authorization', `Bearer ${foundUserToken.accessToken}`);
+    // res.setHeader('Authorization', `Bearer ${foundUserToken.accessToken}`);
+
+    res.cookie('Authorization', `Bearer ${foundUserToken.accessToken}`, {
+      httpOnly: false,
+      // secure: true, // https 되면
+    });
 
     res.cookie('refreshToken', foundUserToken.refreshToken, {
       httpOnly: false,
