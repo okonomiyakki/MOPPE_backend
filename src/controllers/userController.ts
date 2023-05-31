@@ -34,7 +34,7 @@ const signUpUserHandler = async (
     res.status(201).json({ message: '회원 가입 성공', data: { user_id: createdUserId } });
   } catch (error) {
     if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
+      if (error.statusCode === 404 || error.statusCode === 400) console.log(error);
       next(error);
     } else {
       console.log(error);
@@ -84,7 +84,7 @@ const logInUserHandler = async (
     res.status(200).json({ message: '로그인 성공' });
   } catch (error) {
     if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
+      if (error.statusCode === 404 || error.statusCode === 400) console.log(error);
       next(error);
     } else {
       console.log(error);

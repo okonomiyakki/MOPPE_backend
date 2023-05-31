@@ -18,7 +18,7 @@ const signUpUser = async (inputData: SignUpUserInput) => {
 
     if (foundUser)
       if (foundUser.user_email === inputData.user_email)
-        throw new AppError(400, '이미 가입된 이메일입니다. 다른 이메일을 사용해 주세요.');
+        throw new AppError(404, '이미 가입된 이메일입니다. 다른 이메일을 사용해 주세요.');
 
     const hashedPassword = await hashPassword(inputData.user_password);
 
@@ -44,11 +44,11 @@ const logInUser = async (inputData: LogInUserInput): Promise<TokenInfo> => {
     const foundUser: PayloadInfo = await userRepo.findUserByEmail(inputData.user_email);
 
     if (!foundUser)
-      throw new AppError(400, '존재하지 않는 이메일입니다. 회원 가입 후 이용해 주세요.');
+      throw new AppError(404, '존재하지 않는 이메일입니다. 회원 가입 후 이용해 주세요.');
 
     const isPasswordMatch = await bcrypt.compare(inputData.user_password, foundUser.user_password);
 
-    if (!isPasswordMatch) throw new AppError(400, '비밀번호가 일치하지 않습니다.');
+    if (!isPasswordMatch) throw new AppError(404, '비밀번호가 일치하지 않습니다.');
 
     const payload: PayloadInfo = {
       user_id: foundUser.user_id,
@@ -56,9 +56,9 @@ const logInUser = async (inputData: LogInUserInput): Promise<TokenInfo> => {
       user_password: foundUser.user_password,
     };
 
-    const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_DEFAULT_ACCESS_TOKEN_SECRET';
+    const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_ACCESS_TOKEN_SECRET';
 
-    const refreshTokenSecret = env.REFRESH_TOKEN_SECRET || 'MOGAKPPO_DEFAULT_REFRESH_TOKEN_SECRET';
+    const refreshTokenSecret = env.REFRESH_TOKEN_SECRET || 'MOGAKPPO_REFRESH_TOKEN_SECRET';
 
     const accessToken = jwt.sign(payload, accessTokenSecret, {
       expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
