@@ -3,10 +3,10 @@ interface UserProfile {
   user_email: string;
   user_name: string;
   user_password: string;
-  user_career_goal: string;
-  user_stacks: string;
-  user_introduction: string;
-  user_img: string;
+  user_career_goal: string | null;
+  user_stacks: string | null;
+  user_introduction: string | null;
+  user_img: string | null;
   user_created_at: string;
 }
 
