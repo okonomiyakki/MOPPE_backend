@@ -7,7 +7,8 @@ import env from '../config/envconfig';
 
 const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const authorization = req.headers['authorization'];
+    // const authorization = req.headers['authorization'];
+    const authorization = req.cookies.Authorization;
 
     const accessToken = authorization && authorization.split(' ')[1]; // 유저 엑세스 토큰
 
