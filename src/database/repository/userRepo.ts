@@ -11,7 +11,7 @@ const createUser = async (inputData: SignUpUserInput): Promise<number> => {
     const createValues = Object.values(inputData)
       .map((value) => {
         if (value === null) return 'DEFAULT';
-        // else if (typeof value === 'object') return `'${JSON.stringify(value)}'`;
+        else if (typeof value === 'object') return `'${JSON.stringify(value)}'`;
         else return `'${value}'`;
       })
       .join(', ');
