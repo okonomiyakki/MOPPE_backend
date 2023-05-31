@@ -9,9 +9,6 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
   try {
     const { user_id } = req.user;
 
-    if (isNaN(Number(user_id)))
-      throw new AppError(400, '정상적인 접근이 아닙니다. 로그인을 다시 해주세요.');
-
     const reqBodyFields = [
       'project_type',
       'project_title',
@@ -45,6 +42,29 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
     } else {
       console.log(error);
       next(new AppError(500, '[ HTTP 요청 에러 ] 모집글 등록 실패'));
+    }
+  }
+};
+
+/* 모집 역할별 모집글 목록 조회 */
+export const getProjectsByRoleHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { project_role } = req.params;
+
+    if (!project_role) throw new AppError(400, 'project_role를 입력해주세요.');
+
+    const foundProjectsByRole = await projectService.getProjectsByRole(project_role);
+
+    res
+      .status(201)
+      .json({ message: '모집 역할별 모집글 목록 성공', data: { project_id: foundProjectsByRole } });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 모집 역할별 모집글 목록 실패'));
     }
   }
 };
