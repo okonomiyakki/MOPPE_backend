@@ -35,10 +35,10 @@ export const createUser = async (inputData: U.SignUpUserInput): Promise<number> 
 /* 회원 user_email 조회 */
 export const findUserByEmail = async (user_email: string): Promise<U.Email> => {
   try {
-    const selectColums = 'user_email';
+    const selectColumns = 'user_email';
 
     const SQL = `
-    SELECT ${selectColums}
+    SELECT ${selectColumns}
     FROM user
     WHERE user_email = ?
     `;
@@ -55,10 +55,10 @@ export const findUserByEmail = async (user_email: string): Promise<U.Email> => {
 /* 회원 payload, 기본 필드 조회  */
 export const findUserPayloadByEmail = async (user_email: string): Promise<U.InfoWithPayload> => {
   try {
-    const selectColums = 'user_id, user_email, user_name, user_img, user_password';
+    const selectColumns = 'user_id, user_email, user_name, user_img, user_password';
 
     const SQL = `
-    SELECT ${selectColums}
+    SELECT ${selectColumns}
     FROM user
     WHERE user_email = ?
     `;

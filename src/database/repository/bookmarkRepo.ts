@@ -7,10 +7,10 @@ export const findBookmarkedProjectsById = async (
   user_id: number
 ): Promise<B.UserBookmarkedProjects> => {
   try {
-    const selectColum = 'project_id';
+    const selectColumn = 'project_id';
 
     const SQL = `
-    SELECT ${selectColum}
+    SELECT ${selectColumn}
     FROM bookmark
     WHERE bookmark.user_id = ?
     `;
