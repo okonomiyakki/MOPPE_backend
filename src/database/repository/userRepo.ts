@@ -1,6 +1,6 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../utils/errorHandler';
-import { FoundUser } from '../types/UserType';
+import { Email, UserInfoWithPayload } from '../types/UserType';
 import { SignUpUserInput } from '../types/UserType';
 
 /* 회원 가입 */
@@ -33,30 +33,10 @@ export const createUser = async (inputData: SignUpUserInput): Promise<number> =>
   }
 };
 
-/* 로그인 */
-//export const findUser = async (user_email: string, user_password: string) => {
-//   try {
-//     const selectColums = 'user_email, user_name, user_password';
-
-//     const SQL = `
-//       SELECT ${selectColums}
-//       FROM user
-//       WHERE user_email = ? and user_password = ?
-//       `;
-
-//     const [user]: any = await db.query(SQL, [user_email, user_password]);
-
-//     return user[0];
-//   } catch (error) {
-//     console.log(error);
-//     throw new AppError(500, '[ DB 에러 ] 로그인 실패');
-//   }
-// };
-
-/* 회원 조회 - 유효성 검사용 */
-export const findUserByEmail = async (user_email: string): Promise<FoundUser> => {
+/* 회원 user_email 조회 */
+export const findUserByEmail = async (user_email: string): Promise<Email> => {
   try {
-    const selectColums = 'user_id, user_email, user_name, user_password';
+    const selectColums = 'user_email';
 
     const SQL = `
     SELECT ${selectColums}
@@ -64,11 +44,31 @@ export const findUserByEmail = async (user_email: string): Promise<FoundUser> =>
     WHERE user_email = ?
     `;
 
-    const [user]: any = await db.query(SQL, [user_email]);
+    const [foundUserEmail]: any = await db.query(SQL, [user_email]);
 
-    return user[0];
+    return foundUserEmail[0];
   } catch (error) {
     console.log(error);
     throw new AppError(500, '[ DB 에러 ] 회원 조회 실패');
+  }
+};
+
+/* 회원 payload, 기본 필드 조회  */
+export const findUserPayloadByEmail = async (user_email: string): Promise<UserInfoWithPayload> => {
+  try {
+    const selectColums = 'user_id, user_email, user_name, user_img, user_password';
+
+    const SQL = `
+    SELECT ${selectColums}
+    FROM user
+    WHERE user_email = ?
+    `;
+
+    const [foundUserInfoWithPayload]: any = await db.query(SQL, [user_email]);
+
+    return foundUserInfoWithPayload[0];
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, '[ DB 에러 ] 회원 payload 조회 실패');
   }
 };
