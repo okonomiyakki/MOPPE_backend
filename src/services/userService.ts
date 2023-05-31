@@ -12,7 +12,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 /* 회원 가입 */
-const signUpUser = async (inputData: SignUpUserInput) => {
+export const signUpUser = async (inputData: SignUpUserInput) => {
   try {
     const foundUser: PayloadInfo = await userRepo.findUserByEmail(inputData.user_email);
 
@@ -39,7 +39,7 @@ const signUpUser = async (inputData: SignUpUserInput) => {
 };
 
 /* 로그인 */
-const logInUser = async (inputData: LogInUserInput): Promise<TokenInfo> => {
+export const logInUser = async (inputData: LogInUserInput): Promise<TokenInfo> => {
   try {
     const foundUser: PayloadInfo = await userRepo.findUserByEmail(inputData.user_email);
 
@@ -81,5 +81,3 @@ const logInUser = async (inputData: LogInUserInput): Promise<TokenInfo> => {
     }
   }
 };
-
-export { signUpUser, logInUser };

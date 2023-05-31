@@ -6,15 +6,7 @@ import * as userService from '../services/userService';
 
 /* 회원 가입 */
 export const signUpUserHandler = async (
-  req: Request<
-    {},
-    {},
-    {
-      user_email: string;
-      user_name: string;
-      user_password: string;
-    }
-  >,
+  req: Request,
   res: Response<{ message: string; data: { user_id: number } }>,
   next: NextFunction
 ) => {
@@ -45,18 +37,7 @@ export const signUpUserHandler = async (
 };
 
 /* 로그인 */
-export const logInUserHandler = async (
-  req: Request<
-    {},
-    {},
-    {
-      user_email: string;
-      user_password: string;
-    }
-  >,
-  res: Response<{ message: string }>,
-  next: NextFunction
-) => {
+export const logInUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { user_email, user_password } = req.body;
 

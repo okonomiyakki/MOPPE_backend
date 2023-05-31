@@ -4,7 +4,7 @@ import { FoundUser } from '../types/UserType';
 import { SignUpUserInput } from '../types/UserType';
 
 /* 회원 가입 */
-const createUser = async (inputData: SignUpUserInput): Promise<number> => {
+export const createUser = async (inputData: SignUpUserInput): Promise<number> => {
   try {
     const createColums = 'user_email, user_name, user_password';
 
@@ -34,7 +34,7 @@ const createUser = async (inputData: SignUpUserInput): Promise<number> => {
 };
 
 /* 로그인 */
-// const findUser = async (user_email: string, user_password: string) => {
+//export const findUser = async (user_email: string, user_password: string) => {
 //   try {
 //     const selectColums = 'user_email, user_name, user_password';
 
@@ -54,7 +54,7 @@ const createUser = async (inputData: SignUpUserInput): Promise<number> => {
 // };
 
 /* 회원 조회 - 유효성 검사용 */
-const findUserByEmail = async (user_email: string): Promise<FoundUser> => {
+export const findUserByEmail = async (user_email: string): Promise<FoundUser> => {
   try {
     const selectColums = 'user_id, user_email, user_name, user_password';
 
@@ -71,10 +71,4 @@ const findUserByEmail = async (user_email: string): Promise<FoundUser> => {
     console.log(error);
     throw new AppError(500, '[ DB 에러 ] 회원 조회 실패');
   }
-};
-
-export {
-  createUser,
-  // findUser,
-  findUserByEmail,
 };
