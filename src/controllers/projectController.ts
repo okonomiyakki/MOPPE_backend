@@ -8,43 +8,31 @@ import * as projectService from '../services/projectService';
 export const addProjectHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
-    const {
-      project_type,
-      project_title,
-      project_summary,
-      project_recruitment_role,
-      project_required_stacks,
-      project_goal,
-      project_participation_time,
-      project_introduction,
-      project_img,
-    } = req.body;
 
     if (isNaN(Number(user_id)))
       throw new AppError(400, '정상적인 접근이 아닙니다. 로그인을 다시 해주세요.');
 
-    if (
-      !project_type ||
-      !project_title ||
-      !project_summary ||
-      !project_recruitment_role ||
-      !project_goal ||
-      !project_participation_time ||
-      !project_introduction
-    )
-      throw new AppError(400, '요청 body에 모든 정보를 입력해주세요.');
+    const reqBodyFields = [
+      'project_type',
+      'project_title',
+      'project_summary',
+      'project_recruitment_role',
+      'project_required_stacks',
+      'project_goal',
+      'project_participation_time',
+      'project_introduction',
+    ];
+
+    if (isNaN(Number(user_id)))
+      throw new AppError(400, '정상적인 접근이 아닙니다. 로그인을 다시 해주세요.');
+
+    for (const field of reqBodyFields) {
+      if (!req.body[field]) throw new AppError(400, '요청 body에 모든 정보를 입력해주세요.');
+    }
 
     const inputData: CreateProjectInput = {
       user_id,
-      project_type,
-      project_title,
-      project_summary,
-      project_recruitment_role,
-      project_required_stacks,
-      project_goal,
-      project_participation_time,
-      project_introduction,
-      project_img,
+      ...req.body,
     };
 
     const createdProjectId = await projectService.addProject(inputData);
