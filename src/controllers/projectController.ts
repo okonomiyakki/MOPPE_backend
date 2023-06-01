@@ -50,6 +50,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
 export const getProjectsByRoleHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { project_role } = req.params;
+    // user_id 받기 post
 
     if (!project_role) throw new AppError(400, 'project_role를 입력해주세요.');
 
