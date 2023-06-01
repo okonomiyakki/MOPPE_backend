@@ -28,7 +28,7 @@ export type InfoWithPayload = Pick<
   'user_id' | 'user_email' | 'user_name' | 'user_img' | 'user_password'
 >;
 
-export type PayloadInfo = Pick<UserProfile, 'user_id' | 'user_email' | 'user_password'>;
+export type PayloadInfo = Pick<UserProfile, 'user_id' | 'user_email'>;
 
 export type Info = Pick<UserProfile, 'user_id' | 'user_name' | 'user_img'>;
 

@@ -53,7 +53,6 @@ export const logInUser = async (inputData: U.LogInUserInput): Promise<U.InfoWith
     const payload: U.PayloadInfo = {
       user_id: foundUserInfoWithPayload.user_id,
       user_email: foundUserInfoWithPayload.user_email,
-      user_password: foundUserInfoWithPayload.user_password, // 뺴기
     };
 
     const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_ACCESS_TOKEN_SECRET';
