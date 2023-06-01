@@ -10,7 +10,7 @@ export const createProject = async (inputData: CreateProjectInput) => {
       project_type,
       project_title, 
       project_summary,
-      project_recruitment_role,
+      project_recruitment_roles,
       project_required_stacks,
       project_goal,
       project_participation_time,
