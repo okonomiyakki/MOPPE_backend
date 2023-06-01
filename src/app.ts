@@ -13,6 +13,7 @@ const allowedOrigin = env.HOST;
 const corsOptions = {
   origin: allowedOrigin,
   credentials: true, // 쿠키 허용
+  exposedHeaders: ['Authorization'], // 헤더 허용
 };
 
 app.use(cors(corsOptions));
