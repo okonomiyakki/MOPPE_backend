@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/errorHandler';
 import { AuthRequest } from '../database/types/RequestType';
-import { CreateProjectInput } from '../database/types/ProjectType';
+import * as P from '../database/types/ProjectType';
 import * as projectService from '../services/projectService';
 
 /* 모집글 등록 */
@@ -27,12 +27,12 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
       if (!req.body[field]) throw new AppError(400, '요청 body에 모든 정보를 입력해주세요.');
     }
 
-    const inputData: CreateProjectInput = {
+    const inputData: P.CreateProjectInput = {
       user_id,
       ...req.body,
     };
 
-    const createdProjectId = await projectService.addProject(inputData);
+    const createdProjectId: P.Id = await projectService.addProject(inputData);
 
     res.status(201).json({ message: '모집글 등록 성공', data: { project_id: createdProjectId } });
   } catch (error) {
@@ -46,7 +46,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
   }
 };
 
-/* 모집 역할별 모집글 목록 조회 */
+/* 역할별 모집글 목록 조회 */
 export const getProjectsByRoleHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { project_role } = req.params;
@@ -54,18 +54,20 @@ export const getProjectsByRoleHandler = async (req: Request, res: Response, next
 
     if (!project_role) throw new AppError(400, 'project_role를 입력해주세요.');
 
-    const foundProjectsByRole = await projectService.getProjectsByRole(project_role);
+    const foundProjectsByRole: P.ListByRole[] = await projectService.getProjectsByRole(
+      project_role
+    );
 
     res
-      .status(201)
-      .json({ message: '모집 역할별 모집글 목록 성공', data: { project_id: foundProjectsByRole } });
+      .status(200)
+      .json({ message: '역할별 모집글 목록 성공', data: { project_id: foundProjectsByRole } });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);
       next(error);
     } else {
       console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 모집 역할별 모집글 목록 실패'));
+      next(new AppError(500, '[ HTTP 요청 에러 ] 역할별 모집글 목록 실패'));
     }
   }
 };
