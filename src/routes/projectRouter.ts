@@ -8,6 +8,6 @@ const projectRouter = Router();
 projectRouter.post('/recruitment', AuthenticateHandler, addProjectHandler);
 
 /* 역할별 모집글 목록 조회 */
-projectRouter.get('/role/:project_role', getProjectsByRoleHandler);
+projectRouter.get('/role/:project_role', AuthenticateHandler, getProjectsByRoleHandler);
 
 export default projectRouter;
