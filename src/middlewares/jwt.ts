@@ -7,9 +7,10 @@ import env from '../config/envconfig';
 
 const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const authorization = req.cookies.Authorization;
+    // const authorization = req.cookies.Authorization;
+    const authHeader = req.headers['authorization'];
 
-    const accessToken = authorization && authorization.split(' ')[1]; // 유저 엑세스 토큰
+    const accessToken = authHeader && authHeader.split(' ')[1]; // 유저 엑세스 토큰
 
     if (!accessToken || accessToken === undefined)
       throw new AppError(401, 'AccessToken을 제시해 주세요.');

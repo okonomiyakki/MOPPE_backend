@@ -62,10 +62,12 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
       user_img: foundInfoWithTokens.user_img,
     };
 
-    res.cookie('Authorization', `Bearer ${foundTokens.accessToken}`, {
-      httpOnly: false,
-      // secure: true,
-    });
+    res.setHeader('Authorization', `Bearer ${foundTokens.accessToken}`);
+
+    // res.cookie('Authorization', `Bearer ${foundTokens.accessToken}`, {
+    //   httpOnly: false,
+    //   // secure: true,
+    // });
 
     res.cookie('RefreshToken', foundTokens.refreshToken, {
       httpOnly: false,
