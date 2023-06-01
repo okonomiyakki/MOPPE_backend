@@ -33,7 +33,7 @@ export const signUpUser = async (inputData: U.SignUpUserInput): Promise<U.Id> =>
   }
 };
 
-/* 로그인 - 토큰을 발급, 회원 */
+/* 로그인 - 토큰 발급하고, 프론트 헤더바에 사용할 회원 필수 정보도 불러오기 */
 export const logInUser = async (inputData: U.LogInUserInput): Promise<U.InfoWithTokens> => {
   try {
     const foundUserInfoWithPayload: U.InfoWithPayload = await userRepo.findUserPayloadByEmail(
