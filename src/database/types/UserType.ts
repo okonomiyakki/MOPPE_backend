@@ -21,6 +21,8 @@ export type UpdatUserInput = Partial<
   >
 >;
 
+export type Id = number;
+
 export type Email = Pick<UserProfile, 'user_email'>;
 
 export type InfoWithPayload = Pick<
