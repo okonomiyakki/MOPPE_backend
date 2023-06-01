@@ -5,11 +5,7 @@ import * as U from '../database/types/UserType';
 import * as userService from '../services/userService';
 
 /* 회원 가입 */
-export const signUpUserHandler = async (
-  req: Request,
-  res: Response<{ message: string; data: { user_id: number } }>,
-  next: NextFunction
-) => {
+export const signUpUserHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { user_email, user_name, user_password } = req.body;
 
@@ -22,7 +18,7 @@ export const signUpUserHandler = async (
       user_password,
     };
 
-    const createdUserId = await userService.signUpUser(inputData);
+    const createdUserId: U.Id = await userService.signUpUser(inputData);
 
     res.status(201).json({ message: '회원 가입 성공', data: { user_id: createdUserId } });
   } catch (error) {

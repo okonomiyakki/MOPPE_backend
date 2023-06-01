@@ -3,7 +3,7 @@ import { AppError } from '../../utils/errorHandler';
 import * as U from '../types/UserType';
 
 /* 회원 가입 */
-export const createUser = async (inputData: U.SignUpUserInput): Promise<number> => {
+export const createUser = async (inputData: U.SignUpUserInput): Promise<U.Id> => {
   try {
     const createColums = 'user_email, user_name, user_password';
 
@@ -23,7 +23,7 @@ export const createUser = async (inputData: U.SignUpUserInput): Promise<number> 
 
     const [createdInfo, _] = await db.query(SQL);
 
-    const createdUserId = (createdInfo as { insertId: number }).insertId;
+    const createdUserId: U.Id = (createdInfo as { insertId: number }).insertId;
 
     return createdUserId;
   } catch (error) {
