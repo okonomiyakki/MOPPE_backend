@@ -7,7 +7,7 @@ import * as U from '../database/types/UserType';
 import * as userRepo from '../database/repository/userRepo';
 
 /* 회원 가입 */
-export const signUpUser = async (inputData: U.SignUpUserInput) => {
+export const signUpUser = async (inputData: U.SignUpUserInput): Promise<U.Id> => {
   try {
     const foundUserEmail: U.Email = await userRepo.findUserByEmail(inputData.user_email);
 
@@ -19,7 +19,7 @@ export const signUpUser = async (inputData: U.SignUpUserInput) => {
 
     inputData.user_password = hashedPassword; // 해싱된 비밀번호
 
-    const createdUserId: number = await userRepo.createUser(inputData);
+    const createdUserId: U.Id = await userRepo.createUser(inputData);
 
     return createdUserId;
   } catch (error) {
