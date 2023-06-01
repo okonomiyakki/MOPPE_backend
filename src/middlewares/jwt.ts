@@ -12,6 +12,18 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
 
     const accessToken = authHeader && authHeader.split(' ')[1]; // 유저 엑세스 토큰
 
+    /* 그냥 방문자인 경우 통과*/
+    if (accessToken === undefined && req.method === 'GET') {
+      req.user = {
+        user_id: 0,
+        user_email: 'GUEST',
+      };
+      console.log('방문자임');
+      return next();
+    }
+
+    console.log('회원임');
+
     if (!accessToken || accessToken === undefined)
       throw new AppError(401, 'AccessToken을 제시해 주세요.');
 
