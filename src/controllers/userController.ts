@@ -47,30 +47,30 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
 
     const foundInfoWithTokens: U.InfoWithTokens = await userService.logInUser(inputData);
 
-    const foundTokens: U.Tokens = {
-      accessToken: foundInfoWithTokens.accessToken,
-      refreshToken: foundInfoWithTokens.refreshToken,
-    };
+    // const foundTokens: U.Tokens = {
+    //   accessToken: foundInfoWithTokens.accessToken,
+    //   refreshToken: foundInfoWithTokens.refreshToken,
+    // };
 
-    const foundUserInfo: U.Info = {
-      user_id: foundInfoWithTokens.user_id,
-      user_name: foundInfoWithTokens.user_name,
-      user_img: foundInfoWithTokens.user_img,
-    };
+    // const foundLoginInfo: U.Info = {
+    //   user_id: foundInfoWithTokens.user_id,
+    //   user_name: foundInfoWithTokens.user_name,
+    //   user_img: foundInfoWithTokens.user_img,
+    // };
 
-    res.setHeader('Authorization', `Bearer ${foundTokens.accessToken}`);
+    // res.setHeader('Authorization', `Bearer ${foundTokens.accessToken}`);
 
     // res.cookie('Authorization', `Bearer ${foundTokens.accessToken}`, {
     //   httpOnly: false,
     //   // secure: true,
     // });
 
-    res.cookie('RefreshToken', foundTokens.refreshToken, {
-      httpOnly: false,
-      // secure: true,
-    });
+    // res.cookie('RefreshToken', foundTokens.refreshToken, {
+    //   httpOnly: false,
+    //   // secure: true,
+    // });
 
-    res.status(200).json({ message: '로그인 성공', data: foundUserInfo });
+    res.status(200).json({ message: '로그인 성공', data: foundInfoWithTokens });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 404 || error.statusCode === 400) console.log(error);
