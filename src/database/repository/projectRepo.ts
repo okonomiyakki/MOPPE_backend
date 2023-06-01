@@ -1,9 +1,9 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../utils/errorHandler';
-import { CreateProjectInput } from '../types/ProjectType';
+import * as P from '../types/ProjectType';
 
 /* 모집글 등록 */
-export const createProject = async (inputData: CreateProjectInput) => {
+export const createProject = async (inputData: P.CreateProjectInput): Promise<P.Id> => {
   try {
     const createColumns = `
       user_id,
@@ -34,7 +34,7 @@ export const createProject = async (inputData: CreateProjectInput) => {
 
     const [createdInfo, _] = await db.query(SQL);
 
-    const createdProjectId = (createdInfo as { insertId: number }).insertId;
+    const createdProjectId: P.Id = (createdInfo as { insertId: number }).insertId;
 
     return createdProjectId;
   } catch (error) {
@@ -45,38 +45,39 @@ export const createProject = async (inputData: CreateProjectInput) => {
 
 /* 전체 모집글 목록 조회 */
 
-/* 모집 역할별 모집글 목록 조회 */
-export const findProjectByRole = async (project_role: string) => {
+/* 역할별 모집글 목록 조회 */
+export const findProjectByRole = async (project_role: string): Promise<P.ListByRole[]> => {
   try {
     const selectColumns = `
-    project_id,
-    project_type,
-    project_recruitment_status,
-    project_title,
-    project_summary,
-    project_recruitment_roles,
-    project_required_stacks,
-    project_goal,
-    project_participation_time,
-    project_views_count,
-    project_created_at
+    project.project_id,
+    project.project_type,
+    project.project_recruitment_status,
+    project.project_title,
+    project.project_summary,
+    project.project_recruitment_roles,
+    project.project_required_stacks,
+    project.project_goal,
+    project.project_participation_time,
+    COUNT(bookmark.project_id) AS project_bookmark_count,
+    COUNT(comment.project_id) AS project_comments_count,
+    project.project_views_count,
+    project.project_created_at
     `;
-
-    // project_bookmark_count,
-    // project_comments_count,
 
     const SQL = `
     SELECT ${selectColumns}
     FROM project
-    WHERE JSON_CONTAINS(project_recruitment_roles->'$.roleList', ?)
+    LEFT JOIN bookmark ON bookmark.project_id = project.project_id
+    LEFT JOIN comment ON comment.project_id = project.project_id
+    WHERE JSON_CONTAINS(project.project_recruitment_roles->'$.roleList', ?)
     `;
 
-    const [projects] = await db.query(SQL, [project_role]);
+    const [projects]: any = await db.query(SQL, [project_role]);
 
     return projects;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 모집 역할별 모집글 목록 실패');
+    throw new AppError(500, '[ DB 에러 ] 역할별 모집글 목록 실패');
   }
 };
 
