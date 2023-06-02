@@ -11,6 +11,7 @@ type EnvConfig = {
   DB_NAME: string | undefined;
   DB_USERNAME: string | undefined;
   DB_PASSWORD: string | undefined;
+  JWT_SECRET_KEY_LENGTH: string | undefined;
   ACCESS_TOKEN_SECRET: string | undefined;
   ACCESS_TOKEN_EXPIRES_IN: string | undefined;
   REFRESH_TOKEN_SECRET: string | undefined;
@@ -28,6 +29,8 @@ const env: EnvConfig = {
   DB_NAME: process.env.DB_NAME,
   DB_USERNAME: process.env.DB_USERNAME,
   DB_PASSWORD: process.env.DB_PASSWORD,
+
+  JWT_SECRET_KEY_LENGTH: process.env.JWT_SECRET_KEY_LENGTH,
 
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
   ACCESS_TOKEN_EXPIRES_IN: process.env.ACCESS_TOKEN_EXPIRES_IN,
