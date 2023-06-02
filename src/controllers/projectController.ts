@@ -46,6 +46,31 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
   }
 };
 
+/* 전체 모집글 목록 조회 */
+export const getAllProjectsHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+
+    console.log('user_id: ', user_id);
+
+    const foundProjects = await projectService.getAllProjects(user_id);
+
+    res.status(200).json({ message: '전체 모집글 목록 조회 성공', data: foundProjects });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 전체 모집글 목록 조회 실패'));
+    }
+  }
+};
+
 /* 역할별 모집글 목록 조회 */
 export const getProjectsByRoleHandler = async (
   req: AuthRequest,
