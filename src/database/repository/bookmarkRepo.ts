@@ -1,6 +1,6 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../utils/errorHandler';
-import * as B from '../types/BookmarkType';
+import * as B from '../../types/BookmarkType';
 
 /* 회원이 북마크한 project_id 리스트 조회 */
 export const findBookmarkedProjectsById = async (

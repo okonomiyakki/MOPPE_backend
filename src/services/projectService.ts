@@ -1,7 +1,7 @@
 import { AppError } from '../utils/errorHandler';
-import { CreateProjectInput } from '../database/types/ProjectType';
-import * as P from '../database/types/ProjectType';
-import * as B from '../database/types/BookmarkType';
+import { CreateProjectInput } from '../types/ProjectType';
+import * as P from '../types/ProjectType';
+import * as B from '../types/BookmarkType';
 import * as projectRepo from '../database/repository/projectRepo';
 import * as bookmarkRepo from '../database/repository/bookmarkRepo';
 

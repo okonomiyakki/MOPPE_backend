@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/errorHandler';
-import { AuthRequest } from '../database/types/RequestType';
-import * as U from '../database/types/UserType';
+import { AuthRequest } from '../types/RequestType';
+import * as U from '../types/UserType';
 import * as userService from '../services/userService';
 
 /* 회원 가입 */

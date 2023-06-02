@@ -1,6 +1,6 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../utils/errorHandler';
-import * as P from '../types/ProjectType';
+import * as P from '../../types/ProjectType';
 
 /* 모집글 등록 */
 export const createProject = async (inputData: P.CreateProjectInput): Promise<P.Id> => {

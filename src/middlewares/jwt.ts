@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/errorHandler';
-import { PayloadInfo } from '../database/types/UserType';
-import { AuthRequest } from '../database/types/RequestType';
+import { PayloadInfo } from '../types/UserType';
+import { AuthRequest } from '../types/RequestType';
 import jwt from 'jsonwebtoken';
 import env from '../config/envconfig';
 

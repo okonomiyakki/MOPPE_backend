@@ -3,7 +3,7 @@ import hashPassword from '../utils/hashPassword';
 import env from '../config/envconfig';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import * as U from '../database/types/UserType';
+import * as U from '../types/UserType';
 import * as userRepo from '../database/repository/userRepo';
 
 /* 회원 가입 */

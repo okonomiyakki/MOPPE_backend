@@ -1,6 +1,6 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../utils/errorHandler';
-import * as U from '../types/UserType';
+import * as U from '../../types/UserType';
 
 /* 회원 가입 */
 export const createUser = async (inputData: U.SignUpUserInput): Promise<U.Id> => {
