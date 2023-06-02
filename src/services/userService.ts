@@ -1,5 +1,5 @@
 import { AppError } from '../utils/errorHandler';
-import hashPassword from '../utils/hashPassword';
+import hashPassword from '../utils/passwordHasher';
 import env from '../config/envconfig';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
