@@ -21,7 +21,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
     ];
 
     if (isNaN(Number(user_id)))
-      throw new AppError(400, '정상적인 접근이 아닙니다. 로그인을 다시 해주세요.');
+      throw new AppError(403, '정상적인 접근이 아닙니다. 로그인을 다시 해주세요.');
 
     for (const field of reqBodyFields) {
       if (!req.body[field]) throw new AppError(400, '요청 body에 모든 정보를 입력해주세요.');
