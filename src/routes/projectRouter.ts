@@ -3,6 +3,7 @@ import {
   addProjectHandler,
   getProjectsByRoleHandler,
   getAllProjectsHandler,
+  getProjectByIdHandler,
 } from '../controllers/projectController';
 import AuthenticateHandler from '../middlewares/jwt';
 
@@ -16,5 +17,8 @@ projectRouter.get('/', AuthenticateHandler, getAllProjectsHandler);
 
 /* 역할별 모집글 목록 조회 */
 projectRouter.get('/role/:project_role', AuthenticateHandler, getProjectsByRoleHandler);
+
+/* 모집글 상세 정보 조회 */
+projectRouter.get('/info/:project_id', AuthenticateHandler, getProjectByIdHandler);
 
 export default projectRouter;
