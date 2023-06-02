@@ -37,6 +37,7 @@ back-end/.env
 ```
 BCRYPT_SALT_ROUNDS=
 
+HOST=
 PORT=
 
 DB_HOST=
