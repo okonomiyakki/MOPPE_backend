@@ -46,7 +46,7 @@ export const createProject = async (inputData: P.CreateProjectInput): Promise<P.
 /* 전체 모집글 목록 조회 */
 
 /* 역할별 모집글 목록 조회 */
-export const findProjectByRole = async (project_role: string): Promise<P.ListByRole[]> => {
+export const findProjectsByRole = async (project_role: string): Promise<any> => {
   try {
     const selectColumns = `
     project.project_id,
@@ -70,6 +70,7 @@ export const findProjectByRole = async (project_role: string): Promise<P.ListByR
     LEFT JOIN bookmark ON bookmark.project_id = project.project_id
     LEFT JOIN comment ON comment.project_id = project.project_id
     WHERE JSON_CONTAINS(project.project_recruitment_roles->'$.roleList', ?)
+    GROUP BY project.project_id
     `;
 
     const [projects]: any = await db.query(SQL, [project_role]);
@@ -80,19 +81,3 @@ export const findProjectByRole = async (project_role: string): Promise<P.ListByR
     throw new AppError(500, '[ DB 에러 ] 역할별 모집글 목록 실패');
   }
 };
-
-// {
-// "project_id": 1,
-// "project_type": "사이드 프로젝트",
-// "project_recruitment_status": "모집 중",
-// "project_title": "Web Development project Group",
-// "project_summary": "Join us to learn and collaborate on web development projects.",
-// "project_recruitment_roles": { "roleList": ["프론트엔드", "백엔드"] },
-// "project_required_stacks": { "stackList": ["HTML", "CSS", "JavaScript"] },
-// "project_goal": "포트폴리오/직무 역량 강화",
-// "project_participation_time": "매주 4시간 이하",
-// "project_bookmark_count": 0,
-// "project_comments_count": 0,
-// "project_views_count": 0,
-// "project_created_at": "2023-05-01 15:21:41"
-// },
