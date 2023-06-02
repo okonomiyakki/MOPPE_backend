@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppError } from '../utils/errorHandler';
+import { AppError } from '../middlewares/errorHandler';
 import * as stackService from '../services/stackService';
 
 /* 전체 기술 스택 리스트 조회 */

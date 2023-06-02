@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import env from './config/envconfig';
 import db from './config/dbconfig';
 import router from './routes';
-import { errorHandlerMiddleware } from './utils/errorHandler';
+import { errorHandlerMiddleware } from './middlewares/errorHandler';
 
 const app = express();
 const port = Number(env.PORT || 3000);

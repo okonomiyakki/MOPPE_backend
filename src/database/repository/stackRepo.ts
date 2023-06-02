@@ -1,5 +1,5 @@
 import db from '../../config/dbconfig';
-import { AppError } from '../../utils/errorHandler';
+import { AppError } from '../../middlewares/errorHandler';
 
 /* 전체 기술 스택 리스트 조회 */
 export const findAllStacks = async (): Promise<any[]> => {

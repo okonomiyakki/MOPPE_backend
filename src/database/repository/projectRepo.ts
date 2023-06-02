@@ -1,5 +1,5 @@
 import db from '../../config/dbconfig';
-import { AppError } from '../../utils/errorHandler';
+import { AppError } from '../../middlewares/errorHandler';
 import * as P from '../../types/ProjectType';
 
 /* 모집글 등록 */

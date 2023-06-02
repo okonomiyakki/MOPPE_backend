@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppError } from '../utils/errorHandler';
+import { AppError } from './errorHandler';
 import { PayloadInfo } from '../types/UserType';
 import { AuthRequest } from '../types/RequestType';
 import jwt from 'jsonwebtoken';

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppError } from '../utils/errorHandler';
+import { AppError } from '../middlewares/errorHandler';
 import { AuthRequest } from '../types/RequestType';
 import * as P from '../types/ProjectType';
 import * as projectService from '../services/projectService';

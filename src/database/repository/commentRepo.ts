@@ -1,2 +1,2 @@
 import db from '../../config/dbconfig';
-import { AppError } from '../../utils/errorHandler';
+import { AppError } from '../../middlewares/errorHandler';

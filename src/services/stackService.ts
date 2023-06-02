@@ -1,4 +1,4 @@
-import { AppError } from '../utils/errorHandler';
+import { AppError } from '../middlewares/errorHandler';
 import * as stackRepo from '../database/repository/stackRepo';
 
 /* 전체 기술 스택 리스트 조회 */

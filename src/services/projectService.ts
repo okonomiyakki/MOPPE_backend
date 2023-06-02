@@ -1,4 +1,4 @@
-import { AppError } from '../utils/errorHandler';
+import { AppError } from '../middlewares/errorHandler';
 import { CreateProjectInput } from '../types/ProjectType';
 import * as P from '../types/ProjectType';
 import * as B from '../types/BookmarkType';

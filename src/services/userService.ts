@@ -1,4 +1,4 @@
-import { AppError } from '../utils/errorHandler';
+import { AppError } from '../middlewares/errorHandler';
 import hashPassword from '../utils/passwordHasher';
 import env from '../config/envconfig';
 import bcrypt from 'bcrypt';
