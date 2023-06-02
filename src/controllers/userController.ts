@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppError } from '../utils/errorHandler';
+import { AppError } from '../middlewares/errorHandler';
 import { AuthRequest } from '../types/RequestType';
 import * as U from '../types/UserType';
 import * as userService from '../services/userService';
@@ -58,17 +58,17 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
     //   user_img: foundInfoWithTokens.user_img,
     // };
 
-    // res.setHeader('Authorization', `Bearer ${foundTokens.accessToken}`);
+    // res.setHeader('Authorization', `Bearer ${foundInfoWithTokens.accessToken}`);
 
-    // res.cookie('Authorization', `Bearer ${foundTokens.accessToken}`, {
+    // res.cookie('Authorization', `Bearer ${foundInfoWithTokens.accessToken}`, {
     //   httpOnly: false,
     //   // secure: true,
     // });
 
-    res.cookie('RefreshToken', foundInfoWithTokens.refreshToken, {
-      httpOnly: false,
-      // secure: true,
-    });
+    // res.cookie('RefreshToken', foundInfoWithTokens.refreshToken, {
+    //   httpOnly: false,
+    //   // secure: true,
+    // });
 
     res.status(200).json({ message: '로그인 성공', data: foundInfoWithTokens });
   } catch (error) {
