@@ -87,8 +87,6 @@ export const logOutUserHandler = async (req: AuthRequest, res: Response, next: N
   try {
     const { user_id } = req.user;
 
-    if (isNaN(Number(user_id))) throw new AppError(403, '정상적인 로그인 상태가 아닙니다.');
-
     res.clearCookie('Authorization');
 
     res.clearCookie('RefreshToken');
