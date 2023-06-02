@@ -55,23 +55,21 @@ export const getProjectsByRoleHandler = async (
   try {
     const { project_role } = req.params;
     const { user_id } = req.user;
-    console.log(user_id);
+
+    console.log('user_id: ', user_id);
 
     if (!project_role) throw new AppError(400, 'project_role를 입력해주세요.');
 
-    const foundProjectsByRole: P.BookmarkWithListByRole = await projectService.getProjectsByRole(
-      user_id,
-      project_role
-    );
+    const foundProjectsByRole = await projectService.getProjectsByRole(user_id, project_role);
 
-    res.status(200).json({ message: '역할별 모집글 목록 성공', data: foundProjectsByRole });
+    res.status(200).json({ message: '역할별 모집글 목록 조회 성공', data: foundProjectsByRole });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);
       next(error);
     } else {
       console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 역할별 모집글 목록 실패'));
+      next(new AppError(500, '[ HTTP 요청 에러 ] 역할별 모집글 목록 조회 실패'));
     }
   }
 };
