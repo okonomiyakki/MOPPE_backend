@@ -32,6 +32,11 @@ export type InfoWithPayload = Pick<
 
 export type PayloadInfo = Pick<UserProfile, 'user_id' | 'user_email'>;
 
+export type decodedToken = PayloadInfo & {
+  iat: number;
+  exp: number;
+};
+
 export type Info = Pick<UserProfile, 'user_id' | 'user_name' | 'user_img'>;
 
 export type Tokens = { accessToken: string; refreshToken: string };
