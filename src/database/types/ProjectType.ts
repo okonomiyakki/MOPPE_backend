@@ -1,3 +1,4 @@
+import * as B from '../types/BookmarkType';
 interface ProjectProfile {
   project_id: number;
   user_id: number;
