@@ -1,7 +1,9 @@
 import { AppError } from '../utils/errorHandler';
 import { CreateProjectInput } from '../database/types/ProjectType';
 import * as P from '../database/types/ProjectType';
+import * as B from '../database/types/BookmarkType';
 import * as projectRepo from '../database/repository/projectRepo';
+import * as bookmarkRepo from '../database/repository/bookmarkRepo';
 
 /* 모집글 등록 */
 export const addProject = async (inputData: CreateProjectInput): Promise<P.Id> => {
@@ -22,14 +24,24 @@ export const addProject = async (inputData: CreateProjectInput): Promise<P.Id> =
   }
 };
 
-/* 역할별 모집글 목록 조회 */
-export const getProjectsByRole = async (project_role: string): Promise<P.ListByRole[]> => {
+/* 역할별 모집글 목록 조회 - 로그인 유저가 북마크한 정보도 불러오기 */
+export const getProjectsByRole = async (user_id: number, project_role: string): Promise<any> => {
   try {
-    const foundProjectsByRole: P.ListByRole[] = await projectRepo.findProjectByRole(project_role);
+    const foundProjects = await projectRepo.findProjectsByRole(project_role);
+
+    const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
 
     // 게시글이 존재하는지 확인 후 없으면 에러 처리
 
-    return foundProjectsByRole;
+    const BookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
+
+    const projectsByRole: any = foundProjects.map((project: any) => {
+      if (BookmarkedProjectIds.includes(project.project_id))
+        return { ...project, is_bookmarked: true };
+      else return { ...project, is_bookmarked: false };
+    });
+
+    return projectsByRole;
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 500) console.log(error);
