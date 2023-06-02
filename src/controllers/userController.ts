@@ -65,10 +65,10 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
     //   // secure: true,
     // });
 
-    // res.cookie('RefreshToken', foundTokens.refreshToken, {
-    //   httpOnly: false,
-    //   // secure: true,
-    // });
+    res.cookie('RefreshToken', foundInfoWithTokens.refreshToken, {
+      httpOnly: false,
+      // secure: true,
+    });
 
     res.status(200).json({ message: '로그인 성공', data: foundInfoWithTokens });
   } catch (error) {
