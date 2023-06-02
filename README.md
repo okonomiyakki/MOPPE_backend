@@ -9,7 +9,7 @@
 ### 서버 실행 방법
 
 ```bash
-git clone https://kdt-gitlab.elice.io/sw_track/class_04/web_2_project/team07/back-end.git
+git clone
 
 cd back-end
 
