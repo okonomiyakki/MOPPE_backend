@@ -4,4 +4,6 @@ interface BookmarkProfile {
   user_id: number;
 }
 
-export type UserBookmarkedProjects = Pick<BookmarkProfile, 'project_id'>;
+export type BookmarkedProjects = Pick<BookmarkProfile, 'project_id'>;
+
+export type BookmarkedProjectIds = number;
