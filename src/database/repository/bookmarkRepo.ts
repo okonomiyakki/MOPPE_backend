@@ -5,7 +5,7 @@ import * as B from '../types/BookmarkType';
 /* 회원이 북마크한 project_id 리스트 조회 */
 export const findBookmarkedProjectsById = async (
   user_id: number
-): Promise<B.UserBookmarkedProjects> => {
+): Promise<B.BookmarkedProjects[]> => {
   try {
     const selectColumn = 'project_id';
 
@@ -17,7 +17,7 @@ export const findBookmarkedProjectsById = async (
 
     const [bookmarks]: any = await db.query(SQL, [user_id]);
 
-    return bookmarks[0];
+    return bookmarks;
   } catch (error) {
     console.log(error);
     throw new AppError(500, '[ DB 에러 ] 회원 북마크 모집글 리스트 조회 실패');
