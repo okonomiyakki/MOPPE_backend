@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/errorHandler';
 import { PayloadInfo } from '../database/types/UserType';
 import { AuthRequest } from '../database/types/RequestType';
-import jwt, { JsonWebTokenError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import env from '../config/envconfig';
 
 const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -16,7 +16,7 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
     if (accessToken === undefined && req.method === 'GET') {
       req.user = {
         user_id: 0,
-        user_email: 'GUEST',
+        user_email: 'GUEST@gmail.com',
       };
       console.log('방문자임');
       return next();
@@ -41,7 +41,7 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
       const refreshToken = req.cookies.RefreshToken; // 유저 리프레시 토큰
 
       if (!refreshToken || refreshToken === undefined)
-        throw new AppError(401, 'RefreshToken을 제시해 주세요.');
+        throw new AppError(401, 'AccessToken이 만료되었습니다. RefreshToken을 제시해 주세요.');
 
       try {
         const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_ACCESS_TOKEN_SECRET';
