@@ -2,7 +2,7 @@ import db from '../../config/dbconfig';
 import { AppError } from '../../middlewares/errorHandler';
 import * as P from '../../types/ProjectType';
 
-/* 모집글 등록 */
+/* 모집 글 등록 */
 export const createProject = async (inputData: P.CreateProjectInput): Promise<P.Id> => {
   try {
     const createColumns = `
@@ -39,11 +39,11 @@ export const createProject = async (inputData: P.CreateProjectInput): Promise<P.
     return createdProjectId;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 모집글 등록 실패');
+    throw new AppError(500, '[ DB 에러 ] 모집 글 등록 실패');
   }
 };
 
-/* 전체 모집글 목록 조회 */
+/* 전체 모집 글 목록 조회 */
 export const findAllProjects = async (): Promise<any> => {
   try {
     const selectColumns = `
@@ -75,11 +75,11 @@ export const findAllProjects = async (): Promise<any> => {
     return projects;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 전체 모집글 목록 조회 실패');
+    throw new AppError(500, '[ DB 에러 ] 전체 모집 글 목록 조회 실패');
   }
 };
 
-/* 역할별 모집글 목록 조회 */
+/* 역할 별 모집 글 목록 조회 */
 export const findProjectsByRole = async (project_role: string): Promise<any> => {
   try {
     const selectColumns = `
@@ -112,11 +112,11 @@ export const findProjectsByRole = async (project_role: string): Promise<any> => 
     return projects;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 역할별 모집글 목록 조회 실패');
+    throw new AppError(500, '[ DB 에러 ] 역할 별 모집 글 목록 조회 실패');
   }
 };
 
-/* 모집글 상세 정보 조회 */
+/* 모집 글 상세 정보 조회 */
 export const findProjectById = async (project_id: number): Promise<any> => {
   try {
     const selectColumns = `
@@ -165,7 +165,7 @@ export const findProjectById = async (project_id: number): Promise<any> => {
     return project[0];
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 모집글 상세 정보 조회 실패');
+    throw new AppError(500, '[ DB 에러 ] 모집 글 상세 정보 조회 실패');
   }
 };
 

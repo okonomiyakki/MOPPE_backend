@@ -91,7 +91,7 @@ export const logInUser = async (inputData: U.LogInUserInput): Promise<U.InfoWith
   }
 };
 
-/* 회원 마이페이지 정보 조회 */
+/* 회원 마이페이지 상세 정보 조회 */
 export const getUserInfoById = async (user_id: number): Promise<any> => {
   try {
     const foundUserInfo = await userRepo.findUserInfoById(user_id);
@@ -103,7 +103,7 @@ export const getUserInfoById = async (user_id: number): Promise<any> => {
       throw error;
     } else {
       console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 회원 마이페이지 정보 조회 실패');
+      throw new AppError(500, '[ 서버 에러 ] 회원 마이페이지 정보 상세 조회 실패');
     }
   }
 };

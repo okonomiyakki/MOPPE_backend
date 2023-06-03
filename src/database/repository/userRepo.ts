@@ -72,7 +72,7 @@ export const findUserPayloadByEmail = async (user_email: string): Promise<U.Info
   }
 };
 
-/* 회원 마이페이지 정보 조회  */
+/* 회원 마이페이지 상세 정보 조회  */
 export const findUserInfoById = async (user_id: number): Promise<any> => {
   try {
     const selectColumns = 'user_name, user_career_goal, user_stacks, user_introduction, user_img';
@@ -88,6 +88,6 @@ export const findUserInfoById = async (user_id: number): Promise<any> => {
     return foundUserInfo[0];
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 회원 마이페이지 정보 조회 실패');
+    throw new AppError(500, '[ DB 에러 ] 회원 마이페이지 상세 정보 조회 실패');
   }
 };

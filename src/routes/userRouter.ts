@@ -18,7 +18,7 @@ userRouter.post('/login', logInUserHandler);
 /* 로그아웃 */
 userRouter.post('/logout', logOutUserHandler);
 
-/* 회원 마이페이지 정보 조회 */
+/* 회원 마이페이지 상세 정보 조회 */
 userRouter.get('/profile', AuthenticateHandler, getUserInfoByIdHandler);
 
 export default userRouter;

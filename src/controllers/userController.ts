@@ -110,7 +110,7 @@ export const logOutUserHandler = async (req: AuthRequest, res: Response, next: N
   }
 };
 
-/* 회원 마이페이지 정보 조회 */
+/* 회원 마이페이지 상세 정보 조회 */
 export const getUserInfoByIdHandler = async (
   req: AuthRequest,
   res: Response,
@@ -131,7 +131,7 @@ export const getUserInfoByIdHandler = async (
       next(error);
     } else {
       console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 회원 마이페이지 정보 조회 실패'));
+      next(new AppError(500, '[ HTTP 요청 에러 ] 회원 마이페이지 상세 정보 조회 실패'));
     }
   }
 };
