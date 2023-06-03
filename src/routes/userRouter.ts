@@ -3,6 +3,7 @@ import {
   signUpUserHandler,
   logInUserHandler,
   logOutUserHandler,
+  getUserInfoByIdHandler,
 } from '../controllers/userController';
 import AuthenticateHandler from '../middlewares/authHandler';
 
@@ -16,5 +17,8 @@ userRouter.post('/login', logInUserHandler);
 
 /* 로그아웃 */
 userRouter.post('/logout', AuthenticateHandler, logOutUserHandler);
+
+/* 회원 마이페이지 정보 조회 */
+userRouter.get('/profile', AuthenticateHandler, getUserInfoByIdHandler);
 
 export default userRouter;

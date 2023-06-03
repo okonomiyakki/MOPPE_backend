@@ -71,3 +71,23 @@ export const findUserPayloadByEmail = async (user_email: string): Promise<U.Info
     throw new AppError(500, '[ DB 에러 ] 회원 payload 조회 실패');
   }
 };
+
+/* 회원 마이페이지 정보 조회  */
+export const findUserInfoById = async (user_id: number): Promise<any> => {
+  try {
+    const selectColumns = 'user_name, user_career_goal, user_stacks, user_introduction, user_img';
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM user
+    WHERE user_id = ?
+    `;
+
+    const [foundUserInfo]: any = await db.query(SQL, [user_id]);
+
+    return foundUserInfo[0];
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, '[ DB 에러 ] 회원 마이페이지 정보 조회 실패');
+  }
+};

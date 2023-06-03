@@ -109,3 +109,29 @@ export const logOutUserHandler = async (req: AuthRequest, res: Response, next: N
     }
   }
 };
+
+/* 회원 마이페이지 정보 조회 */
+export const getUserInfoByIdHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.user.user_id === 0)
+      return res.status(403).json({ message: '로그인 후 이용해 주세요.' });
+
+    const { user_id } = req.user;
+
+    const foundUserInfo = await userService.getUserInfoById(user_id);
+
+    res.status(200).json({ message: '회원 마이페이지 정보 조회 성공', data: foundUserInfo });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 회원 마이페이지 정보 조회 실패'));
+    }
+  }
+};
