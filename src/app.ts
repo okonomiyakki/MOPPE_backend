@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import env from './config/envconfig';
 import db from './config/dbconfig';
 import router from './routes';
-import { errorHandlerMiddleware } from './middlewares/errorHandler';
+import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 const port = Number(env.PORT || 3000);
@@ -33,7 +33,7 @@ app.use(express.json()); // json 파싱
 app.use(express.urlencoded({ extended: true })); // 폼데이터 파싱
 
 app.use('/api', router);
-app.use(errorHandlerMiddleware);
+app.use(errorHandler);
 
 db.getConnection()
   .then(async () => {

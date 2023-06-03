@@ -10,7 +10,7 @@ class AppError extends Error {
   }
 }
 
-const errorHandlerMiddleware = (err: AppError, req: Request, res: Response, next: NextFunction) => {
+const errorHandler = (err: AppError, req: Request, res: Response, next: NextFunction) => {
   const { statusCode, message } = err;
   res.status(statusCode || 500).json({
     status: 'Error',
@@ -19,4 +19,4 @@ const errorHandlerMiddleware = (err: AppError, req: Request, res: Response, next
   });
 };
 
-export { AppError, errorHandlerMiddleware };
+export { AppError, errorHandler };
