@@ -8,10 +8,18 @@ import { errorHandlerMiddleware } from './middlewares/errorHandler';
 
 const app = express();
 const port = Number(env.PORT || 3000);
-const allowedOrigin = env.HOST;
+const allowedOrigins = [
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:3001',
+  'http://127.0.0.1:3002',
+  'http://34.64.242.119',
+  'http://34.64.242.119:80',
+  'https://34.64.242.119',
+  'https://34.64.242.119:80',
+];
 
 const corsOptions = {
-  origin: allowedOrigin,
+  origin: allowedOrigins,
   credentials: true, // 쿠키 허용
   exposedHeaders: ['Authorization'], // 헤더 허용
 };
