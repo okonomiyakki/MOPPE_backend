@@ -16,7 +16,7 @@ userRouter.post('/signup', signUpUserHandler);
 userRouter.post('/login', logInUserHandler);
 
 /* 로그아웃 */
-userRouter.post('/logout', AuthenticateHandler, logOutUserHandler);
+userRouter.post('/logout', logOutUserHandler);
 
 /* 회원 마이페이지 정보 조회 */
 userRouter.get('/profile', AuthenticateHandler, getUserInfoByIdHandler);
