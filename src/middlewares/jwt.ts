@@ -1,11 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
-import { AppError } from './errorHandler';
-import * as U from '../types/UserType';
+import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
-import jwt from 'jsonwebtoken';
-import env from '../config/envconfig';
+import { AppError } from './errorHandler';
+import { verifyAccessToken, verifyRefreshToken, generateNewAccessToken } from '../utils/tokenUtils';
 
-const nextForGuest = (req: AuthRequest, next: NextFunction) => {
+const nextForGuest = (req: AuthRequest, res: Response, next: NextFunction) => {
   req.user = {
     user_id: 0,
     user_email: 'GUEST@gmail.com',
@@ -13,71 +11,61 @@ const nextForGuest = (req: AuthRequest, next: NextFunction) => {
   return next();
 };
 
-const verifyAccessToken = (accessToken: any) => {
-  const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_ACCESS_TOKEN_SECRET';
-
-  const decodedAccessToken = jwt.verify(accessToken, accessTokenSecret) as U.decodedToken;
-
-  return decodedAccessToken;
-};
-
-const verifyRefreshToken = (refreshToken: any) => {
-  const refreshTokenSecret = env.REFRESH_TOKEN_SECRET || 'MOGAKPPO_REFRESH_TOKEN_SECRET';
-
-  const decodedRefreshToken = jwt.verify(refreshToken, refreshTokenSecret) as U.decodedToken;
-
-  return decodedRefreshToken;
-};
-
 /* jwt 미들웨어 수정본 - 23/06/03 */
 const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     // const authcookie = req.cookies.Authorization;
     const authHeader = req.headers['authorization'];
-    const refreshToken = req.cookies.RT;
-    console.log('refreshToken : ', refreshToken);
+    // const refreshToken = req.cookies.RT;
+    // console.log('refreshToken : ', refreshToken);
 
-    const accessToken = authHeader && authHeader.split('Bearer ')[1]; // 유저 엑세스 토큰
+    const accessToken = authHeader && authHeader.split('Bearer ')[1];
     console.log('accessToken : ', accessToken);
 
-    if (accessToken === undefined && req.method === 'GET') return nextForGuest(req, next);
+    if (accessToken === undefined && req.method === 'GET') return nextForGuest(req, res, next);
 
     if (accessToken === undefined) throw new AppError(401, 'AccessToken을 제시해 주세요.');
 
+    /* AccessToken 검증 */
     const decodedAccessToken = verifyAccessToken(accessToken);
 
+    /* AccessToken이 유효하면 */
     if (decodedAccessToken) {
       const currentTime = Math.floor(Date.now() / 1000);
-      if (decodedAccessToken.exp < currentTime) {
+
+      /* AccessToken 만료시간 검사 */
+      if (decodedAccessToken.exp > currentTime) {
+        req.user = decodedAccessToken;
+
+        /* AccessToken이 만료되지 않았으면 바로 통과 */
+        next();
+      } else {
+        /* AccessToken이 만료되었으면 RefreshToken 추출 */
         const refreshToken = req.cookies.RT;
 
-        if (refreshToken === undefined) throw new AppError(401, 'RefreshToken을 제시해 주세요.');
+        if (refreshToken === undefined)
+          throw new AppError(401, 'RefreshToken이 존재하지 않습니다. 다시 로그인해 주세요.');
 
+        /* RefreshToken 검증 */
         const decodedRefreshToken = verifyRefreshToken(refreshToken);
 
-        const newPayload: U.PayloadInfo = {
-          user_id: decodedRefreshToken.user_id,
-          user_email: decodedRefreshToken.user_email,
-        };
+        /* RefreshToken이 유효하면 */
+        if (decodedRefreshToken) {
+          const currentTime = Math.floor(Date.now() / 1000);
 
-        const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_ACCESS_TOKEN_SECRET';
+          /* RefreshToken 만료시간 검사 */
+          if (decodedRefreshToken.exp > currentTime) {
+            /* RefreshToken이 만료되지 않았으면  AccessToken 재발급*/
+            const newAccessTokenInfo = generateNewAccessToken(decodedRefreshToken);
 
-        const newAccessToken = jwt.sign(newPayload, accessTokenSecret, {
-          expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
-        });
-
-        const newAccessTokenInfo = {
-          newAccessToken,
-        };
-
-        /* accessToken이 만료 되었으면 refreshToken으로 검증 후 재발급 */
-        res.status(401).json({ message: 'accessToken 재발급', data: newAccessTokenInfo });
-      } else {
-        /* accessToken이 만료되지 않았으면 바로 통과 */
-        req.user = decodedAccessToken;
-        next();
+            /* 응답 바디로 AccessToken 재발급 */
+            res.status(401).json({ message: 'accessToken 재발급', data: newAccessTokenInfo });
+          } else {
+            throw new AppError(401, 'RefreshToken이 만료되었습니다. 다시 로그인해 주세요.');
+          }
+        }
       }
-    } else throw new AppError(401, 'AccessToken이 유효하지 않습니다.');
+    }
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 401) console.log(error);
@@ -90,106 +78,3 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
 };
 
 export default AuthenticateHandler;
-
-// const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
-//   try {
-//     // const authorization = req.cookies.Authorization;
-//     const authHeader = req.headers['authorization'];
-
-//     console.log(authHeader);
-
-//     const accessToken = authHeader && authHeader.split(' ')[1]; // 유저 엑세스 토큰
-
-//     console.log(accessToken);
-
-//     /* 그냥 방문자인 경우 통과*/
-//     if (accessToken === undefined && req.method === 'GET') {
-//       req.user = {
-//         user_id: 0,
-//         user_email: 'GUEST@gmail.com',
-//       };
-//       console.log('지금 방문자임');
-//       return next();
-//     }
-
-//     console.log('지금 회원임');
-
-//     if (!accessToken || accessToken === undefined)
-//       throw new AppError(401, 'AccessToken을 제시해 주세요.');
-
-//     const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_ACCESS_TOKEN_SECRET';
-
-//     const decodedAccessToken = jwt.verify(accessToken, accessTokenSecret) as U.decodedToken;
-
-//     console.log(decodedAccessToken);
-//     req.user = decodedAccessToken;
-
-//     /* 엑세스 토큰 유효 시 통과 */
-//     console.log('엑세스 토큰 유효 시 통과');
-//     next();
-//   } catch (accessTokenError: any) {
-//     // 엑세스 토큰 만료
-//     console.log('엑세스 토큰 만료');
-//     if (accessTokenError.name === 'TokenExpiredError') {
-//       const refreshToken = req.cookies.RefreshToken; // 유저 리프레시 토큰
-
-//       if (!refreshToken || refreshToken === undefined)
-//         throw new AppError(401, 'AccessToken이 만료되었습니다. RefreshToken을 제시해 주세요.');
-
-//       try {
-//         const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_ACCESS_TOKEN_SECRET';
-
-//         const refreshTokenSecret = env.REFRESH_TOKEN_SECRET || 'MOGAKPPO_REFRESH_TOKEN_SECRET';
-
-//         const decodedRefreshToken = jwt.verify(refreshToken, refreshTokenSecret) as U.decodedToken;
-
-//         const accessToken = jwt.sign({ user_id: decodedRefreshToken.user_id }, accessTokenSecret, {
-//           expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
-//         });
-
-//         console.log('엑세스 재발급: ', accessToken);
-//         // res.setHeader('Authorization', `Bearer ${accessToken}`);
-
-//         /* 엑세스 토큰 재발급 후 통과 */
-//         next();
-//       } catch (RefreshTokenError: any) {
-//         // 리프레시 토큰 만료
-//         if (RefreshTokenError.message === 'TokenExpiredError') {
-//           console.log('리프레시 토큰 만료');
-//           res.clearCookie('refreshToken');
-//           next(new AppError(401, 'RefreshToken이 만료되었습니다. 다시 로그인해 주세요.'));
-//         }
-//         // 리프레시 토큰 유효성 문제
-//         else if (RefreshTokenError.name === 'JsonWebTokenError') {
-//           console.log(RefreshTokenError);
-//           next(new AppError(401, 'RefreshToken이 유효하지 않습니다. 토큰을 확인해 주세요.'));
-//         }
-//         // 리프레시 토큰 없는 경우
-//         else if (RefreshTokenError instanceof AppError) {
-//           if (RefreshTokenError.statusCode === 401) console.log(RefreshTokenError);
-//           next(RefreshTokenError);
-//         }
-//         // 서버 에러
-//         else {
-//           console.log(RefreshTokenError);
-//           next(new AppError(500, '[ 접근 불가 ] 사용자 인증 실패'));
-//         }
-//       }
-//     }
-//     // 엑세스 토큰 유효성 문제
-//     else if (accessTokenError.name === 'JsonWebTokenError') {
-//       console.log(accessTokenError);
-//       next(new AppError(401, 'AccessToken이 유효하지 않습니다. 토큰을 확인해 주세요.'));
-//     }
-//     // 엑세스 토큰 없는 경우
-//     else if (accessTokenError instanceof AppError) {
-//       if (accessTokenError.statusCode === 401) console.log(accessTokenError);
-//       next(accessTokenError);
-//     }
-//     // 서버 에러
-//     else {
-//       console.log(accessTokenError);
-//       next(new AppError(500, '[ 접근 불가 ] 사용자 인증 실패'));
-//     }
-//   }
-// };
