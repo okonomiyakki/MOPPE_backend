@@ -34,8 +34,11 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
   try {
     // const authcookie = req.cookies.Authorization;
     const authHeader = req.headers['authorization'];
+    const refreshToken = req.cookies.RT;
+    console.log('refreshToken : ', refreshToken);
 
-    const accessToken = authHeader && authHeader.split(' ')[1]; // 유저 엑세스 토큰
+    const accessToken = authHeader && authHeader.split('Bearer ')[1]; // 유저 엑세스 토큰
+    console.log('accessToken : ', accessToken);
 
     if (accessToken === undefined && req.method === 'GET') return nextForGuest(req, next);
 
@@ -46,7 +49,7 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
     if (decodedAccessToken) {
       const currentTime = Math.floor(Date.now() / 1000);
       if (decodedAccessToken.exp < currentTime) {
-        const refreshToken = req.cookies.Rd;
+        const refreshToken = req.cookies.RT;
 
         if (refreshToken === undefined) throw new AppError(401, 'RefreshToken을 제시해 주세요.');
 
@@ -63,8 +66,12 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
           expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
         });
 
+        const newAccessTokenInfo = {
+          newAccessToken,
+        };
+
         /* accessToken이 만료 되었으면 refreshToken으로 검증 후 재발급 */
-        res.status(200).json({ message: 'accessToken 재발급 성공', data: newAccessToken });
+        res.status(401).json({ message: 'accessToken 재발급', data: newAccessTokenInfo });
       } else {
         /* accessToken이 만료되지 않았으면 바로 통과 */
         req.user = decodedAccessToken;
@@ -73,7 +80,7 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
     } else throw new AppError(401, 'AccessToken이 유효하지 않습니다.');
   } catch (error) {
     if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
+      if (error.statusCode === 401) console.log(error);
       next(error);
     } else {
       console.log(error);
