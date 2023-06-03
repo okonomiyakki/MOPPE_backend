@@ -46,9 +46,12 @@ const generateNewAccessTokenHandler = async (
       next(error);
     } else if (error.message === 'jwt expired') {
       next(new AppError(401, '[ 토큰 만료 ] RefreshToken이 만료되었습니다. 다시 로그인해 주세요.'));
-    } else {
+    } else if (error.message === 'jwt malformed') {
       console.log(error);
       next(new AppError(401, '[ 검증 실패 ] RefreshToken이 유효하지 않습니다.'));
+    } else {
+      console.log(error);
+      next(new AppError(401, '[ 서버 에러 ] 사용자 인증 실패'));
     }
   }
 };
@@ -87,9 +90,9 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
     } else if (error.message === 'jwt expired') {
       /* AccessToken 만료 시 재발급 함수 호출 */
       generateNewAccessTokenHandler(req, res, next);
-    } else {
+    } else if (error.message === 'jwt malformed') {
       console.log(error);
-      next(new AppError(500, '[ 서버 에러 ] 사용자 인증 실패'));
+      next(new AppError(401, '[ 검증 실패 ] AccessToken이 유효하지 않습니다.'));
     }
   }
 };

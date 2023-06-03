@@ -118,7 +118,7 @@ export const getUserInfoByIdHandler = async (
 ) => {
   try {
     if (req.user.user_id === 0)
-      return res.status(403).json({ message: '로그인 후 이용해 주세요.' });
+      throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.user;
 
@@ -127,7 +127,7 @@ export const getUserInfoByIdHandler = async (
     res.status(200).json({ message: '회원 마이페이지 정보 조회 성공', data: foundUserInfo });
   } catch (error) {
     if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
+      if (error.statusCode === 400 || error.statusCode === 403) console.log(error);
       next(error);
     } else {
       console.log(error);
