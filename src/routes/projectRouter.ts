@@ -5,6 +5,7 @@ import {
   getAllProjectsHandler,
   getProjectByIdHandler,
   getMyProjectsByIdHandler,
+  getMyBookmarkedProjectsByIdHandler,
 } from '../controllers/projectController';
 import AuthenticateHandler from '../middlewares/authHandler';
 
@@ -24,5 +25,8 @@ projectRouter.get('/info/:project_id', AuthenticateHandler, getProjectByIdHandle
 
 /* 마이페이지 회원 별 작성 모집 글 목록 조회 */
 projectRouter.get('/user', AuthenticateHandler, getMyProjectsByIdHandler);
+
+/* 마이페이지 회원 별 북마크 모집 글 목록 조회 */
+projectRouter.get('/user/bookmark', AuthenticateHandler, getMyBookmarkedProjectsByIdHandler);
 
 export default projectRouter;
