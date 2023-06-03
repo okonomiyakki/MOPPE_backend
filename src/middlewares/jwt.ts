@@ -16,8 +16,6 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
   try {
     // const authcookie = req.cookies.Authorization;
     const authHeader = req.headers['authorization'];
-    // const refreshToken = req.cookies.RT;
-    // console.log('refreshToken : ', refreshToken);
 
     const accessToken = authHeader && authHeader.split('Bearer ')[1];
     console.log('accessToken : ', accessToken);
@@ -38,7 +36,7 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
         req.user = decodedAccessToken;
 
         /* AccessToken이 만료되지 않았으면 바로 통과 */
-        next();
+        return next();
       } else {
         /* AccessToken이 만료되었으면 RefreshToken 추출 */
         const refreshToken = req.cookies.RT;
