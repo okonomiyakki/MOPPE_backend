@@ -96,7 +96,7 @@ export const logOutUserHandler = async (req: AuthRequest, res: Response, next: N
   try {
     // res.clearCookie('Authorization');
 
-    res.clearCookie('RefreshToken');
+    res.clearCookie('RT');
 
     res.status(200).json({ message: '로그아웃 성공' });
   } catch (error) {
