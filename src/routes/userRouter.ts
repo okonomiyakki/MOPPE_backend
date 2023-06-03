@@ -4,7 +4,7 @@ import {
   logInUserHandler,
   logOutUserHandler,
 } from '../controllers/userController';
-import AuthenticateHandler from '../middlewares/jwt';
+import AuthenticateHandler from '../middlewares/authHandler';
 
 const userRouter = Router();
 

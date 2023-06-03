@@ -5,7 +5,7 @@ import {
   getAllProjectsHandler,
   getProjectByIdHandler,
 } from '../controllers/projectController';
-import AuthenticateHandler from '../middlewares/jwt';
+import AuthenticateHandler from '../middlewares/authHandler';
 
 const projectRouter = Router();
 
