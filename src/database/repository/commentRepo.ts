@@ -62,6 +62,23 @@ export const updateComment = async (
   }
 };
 
+/* 댓글 삭제 */
+export const deleteCommentById = async (comment_id: number): Promise<boolean> => {
+  try {
+    const SQL = `
+    DELETE FROM comment
+    WHERE comment_id = ?
+    `;
+
+    await db.query(SQL, [comment_id]);
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, '[ DB 에러 ] 댓글 삭제 실패');
+  }
+};
+
 /* 댓글 조회 */
 export const findCommentById = async (comment_id: number): Promise<any> => {
   try {

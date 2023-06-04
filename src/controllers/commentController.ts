@@ -11,7 +11,9 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
     const { project_id, comment_content } = req.body;
     /* const { project_id, qna_id, comment_content } = req.body; // qna 기능 추가 시 할당 */
 
-    if (!comment_content) throw new AppError(400, 'comment_content를 입력해주세요.');
+    if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
+
+    if (!comment_content) throw new AppError(400, 'comment_content를 입력해 주세요.');
 
     const commentLocation = project_id !== 0 ? '모집 글' : 'QnA';
 
@@ -39,14 +41,16 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
   }
 };
 
-/* 댓글 수정 - 기능 추가 시 수정 필요 */
+/* 댓글 수정 */
 export const editCommentHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
     const { comment_id } = req.params;
     const { comment_content } = req.body;
 
-    if (!comment_content) throw new AppError(400, 'comment_content를 입력해주세요.');
+    if (!comment_id) throw new AppError(400, 'comment_id를 입력해 주세요.');
+
+    if (!comment_content) throw new AppError(400, 'comment_content를 입력해 주세요.');
 
     const inputData: C.UpdateCommentInput = {
       comment_content,
@@ -66,6 +70,28 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
     } else {
       console.log(error);
       next(new AppError(500, '[ HTTP 요청 에러 ] 댓글 수정 실패'));
+    }
+  }
+};
+
+/* 댓글 삭제 */
+export const removeCommentHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { user_id } = req.user;
+    const { comment_id } = req.params;
+
+    if (!comment_id) throw new AppError(400, 'comment_id를 입력해 주세요.');
+
+    const isDeletedComment = await commentService.removeComment(user_id, Number(comment_id));
+
+    if (isDeletedComment) res.status(201).json({ message: '댓글 삭제 성공', data: {} });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 댓글 삭제 실패'));
     }
   }
 };

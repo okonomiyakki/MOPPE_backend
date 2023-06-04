@@ -30,7 +30,7 @@ export const editComment = async (
   try {
     // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
 
-    // comment_id에 해당하는 user_id 일치 여부 에러 처리
+    // comment_id에 해당하는 user_id 일치 여부 에러 처리 (본인만 수정 가능)
 
     const foundUpdatedCommenttId = await commentRepo.updateComment(comment_id, inputData);
 
@@ -44,6 +44,27 @@ export const editComment = async (
     } else {
       console.log(error);
       throw new AppError(500, '[ 서버 에러 ] 댓글 수정 실패');
+    }
+  }
+};
+
+/* 댓글 삭제 */
+export const removeComment = async (user_id: number, comment_id: number): Promise<boolean> => {
+  try {
+    // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
+
+    // comment_id에 해당하는 user_id 일치 여부 에러 처리 (본인만 삭제 가능)
+
+    const isDeletedComment = await commentRepo.deleteCommentById(comment_id);
+
+    return isDeletedComment;
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 500) console.log(error);
+      throw error;
+    } else {
+      console.log(error);
+      throw new AppError(500, '[ 서버 에러 ] 댓글 삭제 실패');
     }
   }
 };
