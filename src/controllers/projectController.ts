@@ -13,7 +13,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
       'project_type',
       'project_title',
       'project_summary',
-      'project_recruitment_role',
+      'project_recruitment_roles',
       'project_required_stacks',
       'project_goal',
       'project_participation_time',
