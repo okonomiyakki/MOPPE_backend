@@ -18,25 +18,24 @@ export const createProject = async (inputData: P.CreateProjectInput): Promise<P.
       project_img
       `;
 
-    const createValues = Object.values(inputData)
-      .map((value) => {
-        if (value === null || undefined) return 'DEFAULT';
-        else if (typeof value === 'object') return `'${JSON.stringify(value)}'`;
-        else return `'${value}'`;
-      })
-      .join(', ');
+    const createValues = Object.values(inputData);
+    // const createValues = Object.values(inputData)
+    //   .map((value) => {
+    //     if (value === null || undefined) return 'DEFAULT';
+    //     else if (typeof value === 'object') return `'${JSON.stringify(value)}'`;
+    //     else return `'${value}'`;
+    //   })
+    //   .join(', ');
 
     const SQL = `
     INSERT INTO
     project (${createColumns}) 
-    VALUES (${createValues})
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    const [createdInfo, _] = await db.query(SQL);
+    const [result, _]: any = await db.execute(SQL, createValues);
 
-    const createdProjectId: P.Id = (createdInfo as { insertId: number }).insertId;
-
-    return createdProjectId;
+    return result.insertId;
   } catch (error) {
     console.log(error);
     throw new AppError(500, '[ DB 에러 ] 모집 글 등록 실패');
@@ -70,9 +69,9 @@ export const findAllProjects = async (): Promise<any> => {
     GROUP BY project.project_id
     `;
 
-    const [projects]: any = await db.query(SQL);
+    const [projects] = await db.query(SQL);
 
-    return projects;
+    return projects; // TODO] as P.ListByRole[]; 명시적으로 타입 선언
   } catch (error) {
     console.log(error);
     throw new AppError(500, '[ DB 에러 ] 전체 모집 글 목록 조회 실패');

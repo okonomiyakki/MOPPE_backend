@@ -7,21 +7,22 @@ export const createUser = async (inputData: U.SignUpUserInput): Promise<U.Id> =>
   try {
     const createColums = 'user_email, user_name, user_password';
 
-    const createValues = Object.values(inputData)
-      .map((value) => {
-        if (value === null || undefined) return 'DEFAULT';
-        else if (typeof value === 'object') return `'${JSON.stringify(value)}'`;
-        else return `'${value}'`;
-      })
-      .join(', ');
+    const createValues = Object.values(inputData);
+    // const createValues = Object.values(inputData)
+    //   .map((value) => {
+    //     if (value === null || undefined) return 'DEFAULT';
+    //     else if (typeof value === 'object') return `'${JSON.stringify(value)}'`;
+    //     else return `'${value}'`;
+    //   })
+    //   .join(', ');
 
     const SQL = `
     INSERT INTO
     user (${createColums}) 
-    VALUES (${createValues})
+    VALUES (?, ?, ?)
     `;
 
-    const [createdInfo, _] = await db.query(SQL);
+    const [createdInfo, _] = await db.execute(SQL, createValues);
 
     const createdUserId: U.Id = (createdInfo as { insertId: number }).insertId;
 

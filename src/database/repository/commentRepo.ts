@@ -11,21 +11,22 @@ export const createComment = async (inputData: C.CreateCommentInput): Promise<C.
     comment_content
     `;
 
-    const createValues = Object.values(inputData)
-      .map((value) => {
-        if (value === null || undefined) return 'DEFAULT';
-        else if (typeof value === 'object') return `'${JSON.stringify(value)}'`;
-        else return `'${value}'`;
-      })
-      .join(', ');
+    const createValues = Object.values(inputData);
+    // const createValues = Object.values(inputData)
+    //   .map((value) => {
+    //     if (value === null || undefined) return 'DEFAULT';
+    //     else if (typeof value === 'object') return `'${JSON.stringify(value)}'`;
+    //     else return `'${value}'`;
+    //   })
+    //   .join(', ');
 
     const SQL = `
     INSERT INTO
     comment (${createColumn}) 
-    VALUES (${createValues})
+    VALUES (?, ?, ?)
     `;
 
-    const [createdInfo, _] = await db.query(SQL);
+    const [createdInfo, _] = await db.execute(SQL, createValues);
 
     const createdCommentId: C.Id = (createdInfo as { insertId: number }).insertId;
 
@@ -43,9 +44,14 @@ export const updateComment = async (
 ): Promise<number> => {
   try {
     const updateColums = Object.entries(inputData)
-      .filter(([_, value]) => value !== undefined)
-      .map(([key, value]) => `${key}='${value}'`)
+      .map(([key, _]) => `${key} = ?`)
       .join(', ');
+
+    const updateValues = Object.values(inputData);
+    // const updateColums = Object.entries(inputData)
+    //   .filter(([_, value]) => value !== undefined)
+    //   .map(([key, value]) => `${key}='${value}'`)
+    //   .join(', ');
 
     const SQL = `
       UPDATE comment
@@ -53,7 +59,7 @@ export const updateComment = async (
       WHERE comment_id = ?
     `;
 
-    await db.query(SQL, [comment_id]);
+    await db.execute(SQL, [...updateValues, comment_id]);
 
     return comment_id;
   } catch (error) {
