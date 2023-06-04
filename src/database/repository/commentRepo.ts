@@ -36,6 +36,34 @@ export const createComment = async (inputData: C.CreateCommentInput): Promise<C.
   }
 };
 
+/* 모집 글 별 댓글 목록 조회 */
+export const findProjectCommentsById = async (project_id: number): Promise<any> => {
+  try {
+    const selectColumns = `
+    comment.comment_id,
+    user.user_id,
+    user.user_name,
+    user.user_img,
+    comment.comment_content,
+    comment.comment_created_at
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM comment
+    LEFT JOIN user ON user.user_id = comment.user_id
+    WHERE comment.project_id = ?
+    `;
+
+    const [comments]: any = await db.query(SQL, [project_id]);
+
+    return comments;
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, '[ DB 에러 ] 모집 글 별 댓글 목록 조회 실패');
+  }
+};
+
 /* 마이페이지 회원 별 작성 댓글 목록 조회 */
 export const findMyCommentsById = async (user_id: number): Promise<any> => {
   try {
@@ -56,9 +84,9 @@ export const findMyCommentsById = async (user_id: number): Promise<any> => {
     WHERE comment.user_id = ?
     `;
 
-    const [projects]: any = await db.query(SQL, [user_id]);
+    const [comments]: any = await db.query(SQL, [user_id]);
 
-    return projects;
+    return comments;
   } catch (error) {
     console.log(error);
     throw new AppError(500, '[ DB 에러 ] 마이페이지 회원 별 작성 댓글 목록 조회 실패');

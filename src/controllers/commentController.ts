@@ -39,6 +39,31 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
   }
 };
 
+/* 모집 글 별 댓글 목록 조회 */
+export const getProjectCommentsByIdHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { project_id } = req.params;
+
+    if (!project_id) throw new AppError(400, 'project_id를 입력해주세요.');
+
+    const foundComments = await commentService.getProjectCommentsById(Number(project_id));
+
+    res.status(200).json({ message: '모집 글 별 댓글 목록 조회 성공', data: foundComments });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 모집 글 별 댓글 목록 조회 실패'));
+    }
+  }
+};
+
 /* 마이페이지 회원 별 작성 댓글 목록 조회 */
 export const getMyCommentsByIdHandler = async (
   req: AuthRequest,
