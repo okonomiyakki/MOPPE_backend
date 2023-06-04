@@ -1,11 +1,11 @@
 import { Router } from 'express';
+import AuthenticateHandler from '../middlewares/authHandler';
 import {
   signUpUserHandler,
   logInUserHandler,
   logOutUserHandler,
   getUserInfoByIdHandler,
 } from '../controllers/userController';
-import AuthenticateHandler from '../middlewares/authHandler';
 
 const userRouter = Router();
 

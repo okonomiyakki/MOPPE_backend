@@ -1,10 +1,10 @@
-import { AppError } from '../middlewares/errorHandler';
-import hashPassword from '../utils/passwordHasher';
-import env from '../config/envconfig';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import * as U from '../types/UserType';
+import env from '../config/envconfig';
+import { AppError } from '../middlewares/errorHandler';
+import hashPassword from '../utils/passwordHasher';
 import * as userRepo from '../database/repository/userRepo';
+import * as U from '../types/UserType';
 
 /* 회원 가입 */
 export const signUpUser = async (inputData: U.SignUpUserInput): Promise<U.Id> => {

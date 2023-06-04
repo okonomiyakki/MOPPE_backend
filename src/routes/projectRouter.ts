@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import AuthenticateHandler from '../middlewares/authHandler';
 import {
   addProjectHandler,
   getProjectsByRoleHandler,
@@ -7,7 +8,6 @@ import {
   getMyProjectsByIdHandler,
   getMyBookmarkedProjectsByIdHandler,
 } from '../controllers/projectController';
-import AuthenticateHandler from '../middlewares/authHandler';
 
 const projectRouter = Router();
 

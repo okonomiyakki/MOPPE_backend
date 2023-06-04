@@ -1,12 +1,11 @@
 import { AppError } from '../middlewares/errorHandler';
-import { CreateProjectInput } from '../types/ProjectType';
-import * as P from '../types/ProjectType';
-import * as B from '../types/BookmarkType';
 import * as projectRepo from '../database/repository/projectRepo';
 import * as bookmarkRepo from '../database/repository/bookmarkRepo';
+import * as P from '../types/ProjectType';
+import * as B from '../types/BookmarkType';
 
 /* 모집 글 등록 */
-export const addProject = async (inputData: CreateProjectInput): Promise<P.Id> => {
+export const addProject = async (inputData: P.CreateProjectInput): Promise<P.Id> => {
   try {
     const createdProjectId: P.Id = await projectRepo.createProject(inputData);
 
