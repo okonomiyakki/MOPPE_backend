@@ -10,7 +10,7 @@ export const signUpUserHandler = async (req: Request, res: Response, next: NextF
     const { user_email, user_name, user_password } = req.body;
 
     if (!user_email || !user_name || !user_password)
-      throw new AppError(400, '요청 body에 모든 정보를 입력해주세요.');
+      throw new AppError(400, '요청 body에 모든 정보를 입력해 주세요.');
 
     const inputData: U.SignUpUserInput = {
       user_email,
@@ -38,7 +38,7 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
     const { user_email, user_password } = req.body;
 
     if (!user_email || !user_password)
-      throw new AppError(400, '요청 body에 모든 정보를 입력해주세요.');
+      throw new AppError(400, '요청 body에 모든 정보를 입력해 주세요.');
 
     const inputData: U.LogInUserInput = {
       user_email,

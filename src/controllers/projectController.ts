@@ -21,7 +21,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
     ];
 
     for (const field of reqBodyFields) {
-      if (!req.body[field]) throw new AppError(400, '요청 body에 모든 정보를 입력해주세요.');
+      if (!req.body[field]) throw new AppError(400, '요청 body에 모든 정보를 입력해 주세요.');
     }
 
     const inputData: P.CreateProjectInput = {
@@ -80,7 +80,7 @@ export const getProjectsByRoleHandler = async (
 
     console.log('user_id: ', user_id);
 
-    if (!project_role) throw new AppError(400, 'project_role를 입력해주세요.');
+    if (!project_role) throw new AppError(400, 'project_role를 입력해 주세요.');
 
     const foundProjectsByRole = await projectService.getProjectsByRole(user_id, project_role);
 
@@ -108,7 +108,7 @@ export const getProjectByIdHandler = async (
 
     console.log('user_id: ', user_id);
 
-    if (!project_id) throw new AppError(400, 'project_id를 입력해주세요.');
+    if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
 
     if (isNaN(Number(project_id))) throw new AppError(400, '유효한 project_id를 입력해주세요.');
 
