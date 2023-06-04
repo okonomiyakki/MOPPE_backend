@@ -67,7 +67,11 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
     /* 방문자 통과 */
     if (accessToken === undefined && req.method === 'GET') return nextForGuest(req, next);
 
-    if (accessToken === undefined) throw new AppError(401, 'AccessToken을 제시해 주세요.');
+    if (accessToken === undefined)
+      throw new AppError(
+        401,
+        'AccessToken이 존재하지 않습니다. 회원가입 및 로그인 후 이용해 주세요.'
+      );
 
     const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_ACCESS_TOKEN_SECRET';
 

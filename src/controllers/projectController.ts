@@ -34,7 +34,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
     res.status(201).json({ message: '모집 글 등록 성공', data: { project_id: createdProjectId } });
   } catch (error) {
     if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error); // 서비스 에러 404 추가
+      if (error.statusCode === 400 || error.statusCode === 400) console.log(error);
       next(error);
     } else {
       console.log(error);
