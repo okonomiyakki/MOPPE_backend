@@ -39,6 +39,37 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
   }
 };
 
+/* 댓글 수정 - 기능 추가 시 수정 필요 */
+export const editCommentHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { user_id } = req.user;
+    const { comment_id } = req.params;
+    const { comment_content } = req.body;
+
+    if (!comment_content) throw new AppError(400, 'comment_content를 입력해주세요.');
+
+    const inputData: C.UpdateCommentInput = {
+      comment_content,
+    };
+
+    const updatedComment: C.Id = await commentService.editComment(
+      user_id,
+      Number(comment_id),
+      inputData
+    );
+
+    res.status(201).json({ message: '댓글 수정 성공', data: updatedComment });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 댓글 수정 실패'));
+    }
+  }
+};
+
 /* 모집 글 별 댓글 목록 조회 */
 export const getProjectCommentsByIdHandler = async (
   req: AuthRequest,

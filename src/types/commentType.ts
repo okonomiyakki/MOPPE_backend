@@ -9,4 +9,6 @@ interface CommentProfile {
 
 export type CreateCommentInput = Pick<CommentProfile, 'user_id' | 'project_id' | 'comment_content'>;
 
+export type UpdateCommentInput = Partial<Pick<CommentProfile, 'comment_content'>>;
+
 export type Id = number;

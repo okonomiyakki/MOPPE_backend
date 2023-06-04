@@ -36,6 +36,50 @@ export const createComment = async (inputData: C.CreateCommentInput): Promise<C.
   }
 };
 
+/* 댓글 수정 */
+export const updateComment = async (
+  comment_id: number,
+  inputData: C.UpdateCommentInput
+): Promise<number> => {
+  try {
+    const updateColums = Object.entries(inputData)
+      .filter(([_, value]) => value !== undefined)
+      .map(([key, value]) => `${key}='${value}'`)
+      .join(', ');
+
+    const SQL = `
+      UPDATE comment
+      SET ${updateColums}
+      WHERE comment_id = ?
+    `;
+
+    await db.query(SQL, [comment_id]);
+
+    return comment_id;
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, '[ DB 에러 ] 댓글 수정 실패');
+  }
+};
+
+/* 댓글 조회 */
+export const findCommentById = async (comment_id: number): Promise<any> => {
+  try {
+    const SQL = `
+    SELECT *
+    FROM comment
+    WHERE comment_id = ?
+    `;
+
+    const [comments]: any = await db.query(SQL, [comment_id]);
+
+    return comments;
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, '[ DB 에러 ] 댓글 조회 실패');
+  }
+};
+
 /* 모집 글 별 댓글 목록 조회 */
 export const findProjectCommentsById = async (project_id: number): Promise<any> => {
   try {
