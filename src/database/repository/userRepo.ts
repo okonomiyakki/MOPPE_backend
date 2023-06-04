@@ -9,7 +9,7 @@ export const createUser = async (inputData: U.SignUpUserInput): Promise<U.Id> =>
 
     const createValues = Object.values(inputData)
       .map((value) => {
-        if (value === null) return 'DEFAULT';
+        if (value === null || undefined) return 'DEFAULT';
         else if (typeof value === 'object') return `'${JSON.stringify(value)}'`;
         else return `'${value}'`;
       })
