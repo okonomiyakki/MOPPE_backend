@@ -56,13 +56,13 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
       comment_content,
     };
 
-    const updatedComment: C.Id = await commentService.editComment(
+    const updatedCommentId: C.Id = await commentService.editComment(
       user_id,
       Number(comment_id),
       inputData
     );
 
-    res.status(201).json({ message: '댓글 수정 성공', data: updatedComment });
+    res.status(201).json({ message: '댓글 수정 성공', data: { comment_id: updatedCommentId } });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);

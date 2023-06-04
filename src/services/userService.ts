@@ -15,9 +15,9 @@ export const signUpUser = async (inputData: U.SignUpUserInput): Promise<U.Id> =>
       if (foundUserEmail.user_email === inputData.user_email)
         throw new AppError(404, '이미 가입된 이메일입니다. 다른 이메일을 사용해 주세요.');
 
-    const hashedPassword = await hashPassword(inputData.user_password);
+    const foundHashedPassword = await hashPassword(inputData.user_password);
 
-    inputData.user_password = hashedPassword; // 해싱된 비밀번호
+    inputData.user_password = foundHashedPassword; // 해싱된 비밀번호
 
     const createdUserId: U.Id = await userRepo.createUser(inputData);
 

@@ -47,7 +47,7 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
 
     const foundInfoWithTokens: U.InfoWithTokens = await userService.logInUser(inputData);
 
-    const infoWithAT = {
+    const userInfoWithAT = {
       accessToken: foundInfoWithTokens.accessToken,
       user_id: foundInfoWithTokens.user_id,
       user_name: foundInfoWithTokens.user_name,
@@ -79,7 +79,7 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
       // secure: true, /* https 에서만 쿠키 전송 가능 */
     });
 
-    res.status(200).json({ message: '로그인 성공', data: infoWithAT });
+    res.status(200).json({ message: '로그인 성공', data: userInfoWithAT });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 404 || error.statusCode === 400) console.log(error);
@@ -122,9 +122,9 @@ export const getUserInfoByIdHandler = async (
 
     const { user_id } = req.user;
 
-    const foundUserInfo = await userService.getUserInfoById(user_id);
+    const userInfo = await userService.getUserInfoById(user_id);
 
-    res.status(200).json({ message: '회원 마이페이지 정보 조회 성공', data: foundUserInfo });
+    res.status(200).json({ message: '회원 마이페이지 정보 조회 성공', data: userInfo });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400 || error.statusCode === 403) console.log(error);

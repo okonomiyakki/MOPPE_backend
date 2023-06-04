@@ -32,15 +32,15 @@ export const getAllProjects = async (user_id: number): Promise<any> => {
 
     // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
 
-    const BookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
+    const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
-    const projects: any = foundProjects.map((project: any) => {
-      if (BookmarkedProjectIds.includes(project.project_id))
+    const allprojects: any = foundProjects.map((project: any) => {
+      if (bookmarkedProjectIds.includes(project.project_id))
         return { ...project, is_bookmarked: true };
       else return { ...project, is_bookmarked: false };
     });
 
-    return projects;
+    return allprojects;
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 500) console.log(error);
@@ -61,10 +61,10 @@ export const getProjectsByRole = async (user_id: number, project_role: string): 
 
     // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
 
-    const BookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
+    const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
     const projectsByRole: any = foundProjects.map((project: any) => {
-      if (BookmarkedProjectIds.includes(project.project_id))
+      if (bookmarkedProjectIds.includes(project.project_id))
         return { ...project, is_bookmarked: true };
       else return { ...project, is_bookmarked: false };
     });
@@ -90,9 +90,9 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
 
     // 모집 글이 존재하는지 확인 후 없으면 에러 처리
 
-    const BookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
+    const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
-    const projectInfo = BookmarkedProjectIds.includes(project_id)
+    const projectInfo = bookmarkedProjectIds.includes(project_id)
       ? { ...foundProject, is_bookmarked: true }
       : { ...foundProject, is_bookmarked: false };
 
@@ -111,11 +111,11 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
 /* 마이페이지 회원 별 작성 모집 글 목록 조회 */
 export const getMyProjectsById = async (user_id: number): Promise<any> => {
   try {
-    const foundProjects = await projectRepo.findMyProjectsById(user_id);
+    const foundMyProjects = await projectRepo.findMyProjectsById(user_id);
 
     // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
 
-    return foundProjects;
+    return foundMyProjects;
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 500) console.log(error);
@@ -130,11 +130,11 @@ export const getMyProjectsById = async (user_id: number): Promise<any> => {
 /* 마이페이지 회원 별 북마크 모집 글 목록 조회 */
 export const getMyBookmarkedProjectsById = async (user_id: number): Promise<any> => {
   try {
-    const foundProjects = await projectRepo.findMyBookmarkedProjectsById(user_id);
+    const foundMyBookmarkedProjects = await projectRepo.findMyBookmarkedProjectsById(user_id);
 
     // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
 
-    return foundProjects;
+    return foundMyBookmarkedProjects;
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 500) console.log(error);

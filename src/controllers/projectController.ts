@@ -9,24 +9,40 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
   try {
     const { user_id } = req.user;
 
-    const reqBodyFields = [
-      'project_type',
-      'project_title',
-      'project_summary',
-      'project_recruitment_roles',
-      'project_required_stacks',
-      'project_goal',
-      'project_participation_time',
-      'project_introduction',
-    ];
+    const {
+      project_type,
+      project_title,
+      project_summary,
+      project_recruitment_roles,
+      project_required_stacks,
+      project_goal,
+      project_participation_time,
+      project_introduction,
+      project_img,
+    } = req.body;
 
-    for (const field of reqBodyFields) {
-      if (!req.body[field]) throw new AppError(400, '요청 body에 모든 정보를 입력해 주세요.');
-    }
+    if (
+      !project_type ||
+      !project_title ||
+      !project_summary ||
+      !project_recruitment_roles ||
+      !project_goal ||
+      !project_participation_time ||
+      !project_introduction
+    )
+      throw new AppError(400, '요청 body에 모든 정보를 입력해 주세요.');
 
     const inputData: P.CreateProjectInput = {
       user_id,
-      ...req.body,
+      project_type,
+      project_title,
+      project_summary,
+      project_recruitment_roles,
+      project_required_stacks,
+      project_goal,
+      project_participation_time,
+      project_introduction,
+      project_img,
     };
 
     const createdProjectId: P.Id = await projectService.addProject(inputData);
@@ -52,9 +68,9 @@ export const getAllProjectsHandler = async (
   try {
     const { user_id } = req.user;
 
-    const foundProjects = await projectService.getAllProjects(user_id);
+    const allProjects = await projectService.getAllProjects(user_id);
 
-    res.status(200).json({ message: '전체 모집 글 목록 조회 성공', data: foundProjects });
+    res.status(200).json({ message: '전체 모집 글 목록 조회 성공', data: allProjects });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);
@@ -78,9 +94,9 @@ export const getProjectsByRoleHandler = async (
 
     if (!project_role) throw new AppError(400, 'project_role를 입력해 주세요.');
 
-    const foundProjectsByRole = await projectService.getProjectsByRole(user_id, project_role);
+    const projectsByRole = await projectService.getProjectsByRole(user_id, project_role);
 
-    res.status(200).json({ message: '역할별 모집 글 목록 조회 성공', data: foundProjectsByRole });
+    res.status(200).json({ message: '역할별 모집 글 목록 조회 성공', data: projectsByRole });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);
@@ -106,9 +122,9 @@ export const getProjectByIdHandler = async (
 
     if (isNaN(Number(project_id))) throw new AppError(400, '유효한 project_id를 입력해주세요.');
 
-    const foundProjectInfo = await projectService.getProjectById(user_id, Number(project_id));
+    const projectInfo = await projectService.getProjectById(user_id, Number(project_id));
 
-    res.status(200).json({ message: '모집 글 상세 정보 조회 성공', data: foundProjectInfo });
+    res.status(200).json({ message: '모집 글 상세 정보 조회 성공', data: projectInfo });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);
@@ -132,11 +148,11 @@ export const getMyProjectsByIdHandler = async (
 
     const { user_id } = req.user;
 
-    const foundMyProjects = await projectService.getMyProjectsById(user_id);
+    const myProjects = await projectService.getMyProjectsById(user_id);
 
     res.status(200).json({
       message: '마이페이지 회원 별 작성 모집 글 목록 조회 성공',
-      data: { user_projects: [...foundMyProjects] },
+      data: { user_projects: [...myProjects] },
     });
   } catch (error) {
     if (error instanceof AppError) {
@@ -161,11 +177,11 @@ export const getMyBookmarkedProjectsByIdHandler = async (
 
     const { user_id } = req.user;
 
-    const foundMyProjects = await projectService.getMyBookmarkedProjectsById(user_id);
+    const myProjects = await projectService.getMyBookmarkedProjectsById(user_id);
 
     res.status(200).json({
       message: '마이페이지 회원 별 북마크 모집 글 목록 조회 성공',
-      data: { user_projects: [...foundMyProjects] },
+      data: { user_projects: [...myProjects] },
     });
   } catch (error) {
     if (error instanceof AppError) {
