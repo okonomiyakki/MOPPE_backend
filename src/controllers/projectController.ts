@@ -52,8 +52,6 @@ export const getAllProjectsHandler = async (
   try {
     const { user_id } = req.user;
 
-    console.log('user_id: ', user_id);
-
     const foundProjects = await projectService.getAllProjects(user_id);
 
     res.status(200).json({ message: '전체 모집 글 목록 조회 성공', data: foundProjects });
@@ -77,8 +75,6 @@ export const getProjectsByRoleHandler = async (
   try {
     const { project_role } = req.params;
     const { user_id } = req.user;
-
-    console.log('user_id: ', user_id);
 
     if (!project_role) throw new AppError(400, 'project_role를 입력해 주세요.');
 
@@ -105,8 +101,6 @@ export const getProjectByIdHandler = async (
   try {
     const { project_id } = req.params;
     const { user_id } = req.user;
-
-    console.log('user_id: ', user_id);
 
     if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
 

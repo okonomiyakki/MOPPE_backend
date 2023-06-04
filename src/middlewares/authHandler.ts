@@ -21,7 +21,6 @@ const generateNewAccessTokenHandler = async (
 ) => {
   try {
     const refreshToken = req.cookies.RT;
-    console.log('refreshToken : ', refreshToken);
 
     if (refreshToken === undefined)
       throw new AppError(401, 'RefreshToken이 존재하지 않습니다. 다시 로그인해 주세요.');
