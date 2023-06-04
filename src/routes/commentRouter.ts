@@ -22,7 +22,4 @@ commentRouter.delete('/:comment_id', AuthenticateHandler, removeCommentHandler);
 /* 마이페이지 회원 별 작성 모집 글 목록 조회 */
 commentRouter.get('/user', AuthenticateHandler, getMyCommentsByIdHandler);
 
-/* 모집 글 별 댓글 목록 조회 */
-commentRouter.get('/:project_id', AuthenticateHandler, getProjectCommentsByIdHandler);
-
 export default commentRouter;
