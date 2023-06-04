@@ -38,7 +38,7 @@ const generateNewAccessTokenHandler = async (
       const newAccessTokenInfo = generateNewAccessToken(decodedRefreshToken);
 
       /* 응답 바디로 AccessToken 재발급 */
-      res.status(401).json({ message: 'generate new AccessToken', data: newAccessTokenInfo });
+      res.status(200).json({ message: 'generate new AccessToken', data: newAccessTokenInfo });
     }
   } catch (error: any) {
     if (error instanceof AppError) {
