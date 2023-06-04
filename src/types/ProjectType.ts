@@ -6,7 +6,7 @@ interface ProjectProfile {
   project_recruitment_status: string;
   project_title: string;
   project_summary: string;
-  project_recruitment_role: { roleList: string[] };
+  project_recruitment_roles: { roleList: string[] };
   project_required_stacks: { stackList: string[] } | null;
   project_goal: string;
   project_participation_time: string;
@@ -22,7 +22,7 @@ export type CreateProjectInput = Pick<
   | 'project_type'
   | 'project_title'
   | 'project_summary'
-  | 'project_recruitment_role'
+  | 'project_recruitment_roles'
   | 'project_required_stacks'
   | 'project_goal'
   | 'project_participation_time'
@@ -37,7 +37,7 @@ export type ListByRole = Pick<
   | 'project_recruitment_status'
   | 'project_title'
   | 'project_summary'
-  | 'project_recruitment_role'
+  | 'project_recruitment_roles'
   | 'project_required_stacks'
   | 'project_goal'
   | 'project_participation_time'
