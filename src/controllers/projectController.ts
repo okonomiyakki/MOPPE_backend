@@ -82,7 +82,7 @@ export const editProjectStatusHandler = async (
     );
 
     res
-      .status(201)
+      .status(200)
       .json({ message: '모집 글 모집 상태 수정 성공', data: { project_id: updatedPeojectId } });
   } catch (error) {
     if (error instanceof AppError) {
@@ -105,7 +105,7 @@ export const removeProjectHandler = async (req: AuthRequest, res: Response, next
 
     const isDeletedProject = await projectService.removeProject(user_id, Number(project_id));
 
-    if (isDeletedProject) res.status(201).json({ message: '모집 글 삭제 성공', data: {} });
+    if (isDeletedProject) res.status(200).json({ message: '모집 글 삭제 성공', data: {} });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);

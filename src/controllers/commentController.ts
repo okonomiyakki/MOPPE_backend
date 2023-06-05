@@ -64,7 +64,7 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
       inputData
     );
 
-    res.status(201).json({ message: '댓글 수정 성공', data: { comment_id: updatedCommentId } });
+    res.status(200).json({ message: '댓글 수정 성공', data: { comment_id: updatedCommentId } });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);
@@ -86,7 +86,7 @@ export const removeCommentHandler = async (req: AuthRequest, res: Response, next
 
     const isDeletedComment = await commentService.removeComment(user_id, Number(comment_id));
 
-    if (isDeletedComment) res.status(201).json({ message: '댓글 삭제 성공', data: {} });
+    if (isDeletedComment) res.status(200).json({ message: '댓글 삭제 성공', data: {} });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);
