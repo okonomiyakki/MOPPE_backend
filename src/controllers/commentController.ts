@@ -9,7 +9,9 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
   try {
     const { user_id } = req.user;
     const { project_id, comment_content } = req.body;
-    /* const { project_id, qna_id, comment_content } = req.body; // qna 기능 추가 시 할당 */
+    //  const { project_id, qna_id, comment_content } = req.body;
+    // TODO] qna 기능 추가 시 할당
+    // (project 댓글일때는 validator 에서 qna_id = undefiend | null 체크 후 컨트롤러에서 0으로 바꾸기)
 
     if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
 
