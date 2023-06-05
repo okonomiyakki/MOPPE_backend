@@ -42,6 +42,33 @@ export const createProject = async (inputData: Project.CreateProjectInput): Prom
   }
 };
 
+/* 모집 글 모집 상태 수정 */
+export const updateProjectStatus = async (
+  user_id: number,
+  project_id: number,
+  project_recruitment_status: string
+): Promise<number> => {
+  const SQL = `
+      UPDATE project
+      SET project_recruitment_status = ?
+      WHERE project_id = ? AND user_id = ?
+    `;
+
+  const [result, _] = await db.execute(SQL, [project_recruitment_status, project_id, user_id]);
+
+  const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+  const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;
+  const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
+
+  if (isAffected && isMatched && !isChanged)
+    throw new AppError(500, '[ DB 에러 ] 수정하실 내용이 현재 상태와 동일합니다.');
+
+  if (!isAffected && !isMatched && !isChanged)
+    throw new AppError(500, '[ DB 에러 ] 모집 글 작성자만 상태를 변경할 수 있습니다.');
+
+  return project_id;
+};
+
 /* 전체 모집 글 목록 조회 */
 export const findAllProjects = async (): Promise<any> => {
   try {

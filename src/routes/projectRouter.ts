@@ -2,6 +2,7 @@ import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
 import {
   addProjectHandler,
+  editProjectStatusHandler,
   getProjectsByRoleHandler,
   getAllProjectsHandler,
   getProjectByIdHandler,
@@ -14,6 +15,13 @@ const projectRouter = Router();
 
 /* 모집 글 등록 */
 projectRouter.post('/recruitment', AuthenticateHandler, addProjectHandler);
+
+/* 모집 글 모집 상태 수정 */
+projectRouter.patch(
+  '/recruitment/status/:project_id',
+  AuthenticateHandler,
+  editProjectStatusHandler
+);
 
 /* 전체 모집 글 목록 조회 */
 projectRouter.get('/', AuthenticateHandler, getAllProjectsHandler);
