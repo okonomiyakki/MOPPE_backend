@@ -183,6 +183,8 @@ export const findProjectById = async (project_id: number): Promise<any> => {
     project.project_recruitment_roles,
     project.project_required_stacks,
     project.project_goal,
+    project.project_introduction,
+    project.project_img,
     project.project_participation_time,
     COUNT(bookmark.project_id) AS project_bookmark_count,
     COUNT(comment.project_id) AS project_comments_count,
