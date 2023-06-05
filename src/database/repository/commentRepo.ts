@@ -76,7 +76,7 @@ export const deleteCommentById = async (comment_id: number): Promise<boolean> =>
     WHERE comment_id = ?
     `;
 
-    await db.query(SQL, [comment_id]);
+    await db.execute(SQL, [comment_id]);
 
     return true;
   } catch (error) {
