@@ -132,6 +132,8 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
 
     // 모집 글이 존재하는지 확인 후 없으면 에러 처리
 
+    // TODD] 조회수 증가 로직 작성
+
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
     const projectInfo = bookmarkedProjectIds.includes(project_id)
