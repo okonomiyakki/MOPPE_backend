@@ -30,11 +30,6 @@ export const editProjectStatus = async (
   project_recruitment_status: string
 ): Promise<any> => {
   try {
-    // 모집 글이 존재하는지 확인 후 없으면 에러 처리 ? 테이블에서 한번에 하자
-
-    // project_id에 해당하는 user_id 일치 여부 에러 처리 (본인만 수정 가능)
-    // 댓글 수정도 같은 방식으로 하기
-
     const foundUpdatedProjectId = await projectRepo.updateProjectStatus(
       user_id,
       project_id,
@@ -49,6 +44,23 @@ export const editProjectStatus = async (
     } else {
       console.log(error);
       throw new AppError(500, '[ 서버 에러 ] 모집 글 모집 상태 수정 실패');
+    }
+  }
+};
+
+/* 모집 글 삭제 */
+export const removeProject = async (user_id: number, project_id: number): Promise<boolean> => {
+  try {
+    const isDeletedProject = await projectRepo.deleteProjectById(user_id, project_id);
+
+    return isDeletedProject;
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 500) console.log(error);
+      throw error;
+    } else {
+      console.log(error);
+      throw new AppError(500, '[ 서버 에러 ] 모집 글 삭제 실패');
     }
   }
 };

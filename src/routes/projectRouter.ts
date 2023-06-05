@@ -3,6 +3,7 @@ import AuthenticateHandler from '../middlewares/authHandler';
 import {
   addProjectHandler,
   editProjectStatusHandler,
+  removeProjectHandler,
   getProjectsByRoleHandler,
   getAllProjectsHandler,
   getProjectByIdHandler,
@@ -22,6 +23,9 @@ projectRouter.patch(
   AuthenticateHandler,
   editProjectStatusHandler
 );
+
+/* 모집 글 삭제 */
+projectRouter.delete('/recruitment/:project_id', AuthenticateHandler, removeProjectHandler);
 
 /* 전체 모집 글 목록 조회 */
 projectRouter.get('/', AuthenticateHandler, getAllProjectsHandler);

@@ -95,6 +95,28 @@ export const editProjectStatusHandler = async (
   }
 };
 
+/* 모집 글 삭제 */
+export const removeProjectHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { user_id } = req.user;
+    const { project_id } = req.params;
+
+    if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
+
+    const isDeletedProject = await projectService.removeProject(user_id, Number(project_id));
+
+    if (isDeletedProject) res.status(201).json({ message: '모집 글 삭제 성공', data: {} });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 모집 글 삭제 실패'));
+    }
+  }
+};
+
 /* 전체 모집 글 목록 조회 */
 export const getAllProjectsHandler = async (
   req: AuthRequest,
