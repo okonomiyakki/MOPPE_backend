@@ -32,9 +32,9 @@ export const editComment = async (
 
     // comment_id에 해당하는 user_id 일치 여부 에러 처리 (본인만 수정 가능)
 
-    const foundUpdatedCommentId = await commentRepo.updateComment(comment_id, inputData);
+    const updatedCommentId = await commentRepo.updateComment(comment_id, inputData);
 
-    return foundUpdatedCommentId;
+    return updatedCommentId;
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 500) console.log(error);

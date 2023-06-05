@@ -44,10 +44,11 @@ export const updateComment = async (
 ): Promise<number> => {
   try {
     const updateColums = Object.entries(inputData)
+      .filter(([_, value]) => value !== undefined)
       .map(([key, _]) => `${key} = ?`)
       .join(', ');
 
-    const updateValues = Object.values(inputData);
+    const updateValues = Object.values(inputData).filter((value) => value !== undefined);
     // const updateColums = Object.entries(inputData)
     //   .filter(([_, value]) => value !== undefined)
     //   .map(([key, value]) => `${key}='${value}'`)
@@ -60,6 +61,8 @@ export const updateComment = async (
     `;
 
     await db.execute(SQL, [...updateValues, comment_id]);
+
+    // TODO] 에러 처리 추가해야함
 
     return comment_id;
   } catch (error) {
