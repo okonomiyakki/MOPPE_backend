@@ -23,6 +23,27 @@ export const addProject = async (inputData: Project.CreateProjectInput): Promise
   }
 };
 
+/* 모집 글 상세 정보 수정 */
+export const editProjectInfo = async (
+  user_id: number,
+  project_id: number,
+  inputData: Project.UpdateInput
+): Promise<any> => {
+  try {
+    const updatedProjectId = await projectRepo.updateProjectInfo(user_id, project_id, inputData);
+
+    return updatedProjectId;
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 500) console.log(error);
+      throw error;
+    } else {
+      console.log(error);
+      throw new AppError(500, '[ 서버 에러 ] 모집 글 상세 정보 수정 실패');
+    }
+  }
+};
+
 /* 모집 글 모집 상태 수정 */
 export const editProjectStatus = async (
   user_id: number,
@@ -30,13 +51,13 @@ export const editProjectStatus = async (
   project_recruitment_status: string
 ): Promise<any> => {
   try {
-    const foundUpdatedProjectId = await projectRepo.updateProjectStatus(
+    const updatedProjectId = await projectRepo.updateProjectStatus(
       user_id,
       project_id,
       project_recruitment_status
     );
 
-    return foundUpdatedProjectId;
+    return updatedProjectId;
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 500) console.log(error);
@@ -130,12 +151,7 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
 
     const foundBookmarkedUsers = await bookmarkRepo.findBookmarkedUsersById(project_id);
 
-    console.log(foundBookmarkedUsers);
-
     const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
-
-    console.log(foundProject.project_bookmark_count);
-    console.log(foundProject.project_comments_count);
 
     // 모집 글이 존재하는지 확인 후 없으면 에러 처리
 

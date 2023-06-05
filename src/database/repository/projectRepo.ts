@@ -44,6 +44,45 @@ export const createProject = async (inputData: Project.CreateProjectInput): Prom
   }
 };
 
+/* 모집 글 상세 정보 수정 */
+export const updateProjectInfo = async (
+  user_id: number,
+  project_id: number,
+  inputData: Project.UpdateInput
+): Promise<number> => {
+  try {
+    const updateColums = Object.entries(inputData)
+      .filter(([_, value]) => value !== undefined)
+      .map(([key, _]) => `${key} = ?`)
+      .join(', ');
+
+    const updateValues = Object.values(inputData).filter((value) => value !== undefined);
+
+    const SQL = `
+      UPDATE project
+      SET ${updateColums}
+      WHERE project_id = ? AND user_id = ?
+    `;
+
+    const [result, _] = await db.execute(SQL, [...updateValues, project_id, user_id]);
+
+    const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+    const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;
+    const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
+
+    if (isAffected && isMatched && !isChanged)
+      throw new AppError(400, '[ DB 에러 ] 수정하실 내용이 현재 상태와 동일합니다.');
+
+    if (!isAffected && !isMatched && !isChanged)
+      throw new AppError(403, '[ DB 에러 ] 해당 모집 글 작성자만 상태를 변경할 수 있습니다.');
+
+    return project_id;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 /* 모집 글 모집 상태 수정 */
 export const updateProjectStatus = async (
   user_id: number,

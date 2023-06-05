@@ -30,6 +30,21 @@ export type CreateProjectInput = Pick<
   | 'project_img'
 >;
 
+export type UpdateInput = Partial<
+  Pick<
+    ProjectProfile,
+    | 'project_type'
+    | 'project_title'
+    | 'project_summary'
+    | 'project_recruitment_roles'
+    | 'project_required_stacks'
+    | 'project_goal'
+    | 'project_participation_time'
+    | 'project_introduction'
+    | 'project_img'
+  >
+>;
+
 export type ListByRole = Pick<
   ProjectProfile,
   | 'project_id'

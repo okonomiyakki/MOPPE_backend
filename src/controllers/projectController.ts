@@ -8,7 +8,6 @@ import * as projectService from '../services/projectService';
 export const addProjectHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
-
     const {
       project_type,
       project_title,
@@ -55,6 +54,74 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
     } else {
       console.log(error);
       next(new AppError(500, '[ HTTP 요청 에러 ] 모집 글 등록 실패'));
+    }
+  }
+};
+
+/* 모집 글 상세 정보 수정 */
+export const editProjectInfoHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { project_id } = req.params;
+    const {
+      project_type,
+      project_title,
+      project_summary,
+      project_recruitment_roles,
+      project_required_stacks,
+      project_goal,
+      project_participation_time,
+      project_introduction,
+      project_img,
+    } = req.body;
+
+    if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
+
+    if (
+      !project_type &&
+      !project_title &&
+      !project_summary &&
+      !project_recruitment_roles &&
+      !project_required_stacks &&
+      !project_goal &&
+      !project_participation_time &&
+      !project_introduction &&
+      !project_img
+    )
+      throw new AppError(400, '수정하실 정보를 하나 이상 입력해 주세요.');
+
+    const inputData: Project.UpdateInput = {
+      project_type,
+      project_title,
+      project_summary,
+      project_recruitment_roles,
+      project_required_stacks,
+      project_goal,
+      project_participation_time,
+      project_introduction,
+      project_img,
+    };
+
+    const updatedPeojectId: Project.Id = await projectService.editProjectInfo(
+      user_id,
+      Number(project_id),
+      inputData
+    );
+
+    res
+      .status(200)
+      .json({ message: '모집 글 상세 정보 수정 성공', data: { project_id: updatedPeojectId } });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 모집 글 상세 정보 수정 실패'));
     }
   }
 };
