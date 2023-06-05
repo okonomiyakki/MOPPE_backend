@@ -111,8 +111,8 @@ export const findAllProjects = async (): Promise<any> => {
     project.project_required_stacks,
     project.project_goal,
     project.project_participation_time,
-    COUNT(bookmark.project_id) AS project_bookmark_count,
-    COUNT(comment.project_id) AS project_comments_count,
+    COUNT(DISTINCT bookmark.user_id) AS project_bookmark_count,
+    COUNT(DISTINCT comment.comment_id) AS project_comments_count,
     project.project_views_count,
     project.project_created_at
     `;
@@ -147,8 +147,8 @@ export const findProjectsByRole = async (project_role: string): Promise<any> => 
     project.project_required_stacks,
     project.project_goal,
     project.project_participation_time,
-    COUNT(bookmark.project_id) AS project_bookmark_count,
-    COUNT(comment.project_id) AS project_comments_count,
+    COUNT(DISTINCT bookmark.user_id) AS project_bookmark_count,
+    COUNT(DISTINCT comment.comment_id) AS project_comments_count,
     project.project_views_count,
     project.project_created_at
     `;
@@ -186,20 +186,15 @@ export const findProjectById = async (project_id: number): Promise<any> => {
     project.project_introduction,
     project.project_img,
     project.project_participation_time,
-    COUNT(bookmark.project_id) AS project_bookmark_count,
-    COUNT(comment.project_id) AS project_comments_count,
+    COUNT(DISTINCT bookmark.user_id) AS project_bookmark_count,
+    COUNT(DISTINCT comment.comment_id) AS project_comments_count,
     project.project_views_count,
     project.project_created_at,
     user.user_id,
     user.user_name,
     user.user_introduction,
-    user.user_img,
-    JSON_ARRAYAGG(
-      JSON_OBJECT('user_id', user_bookmark.user_id, 'user_name', user_bookmark.user_name, 'user_img', user_bookmark.user_img)
-    ) AS project_bookmark_users
+    user.user_img
     `;
-
-    const selectJoinColumns = `bookmark.project_id, user.user_id, user.user_name, user.user_img`;
 
     const SQL = `
     SELECT ${selectColumns}
@@ -207,16 +202,9 @@ export const findProjectById = async (project_id: number): Promise<any> => {
     LEFT JOIN bookmark ON bookmark.project_id = project.project_id
     LEFT JOIN comment ON comment.project_id = project.project_id
     JOIN user ON user.user_id = project.user_id
-    LEFT JOIN (
-    SELECT DISTINCT ${selectJoinColumns}
-    FROM bookmark
-    INNER JOIN user ON bookmark.user_id = user.user_id
-    ) AS user_bookmark ON project.project_id = user_bookmark.project_id
     WHERE project.project_id = ?
-    GROUP BY bookmark.user_id
     `;
-    // GROUP BY bookmark.user_id
-    // DISTINCT;
+
     const [project]: any = await db.query(SQL, [project_id]);
 
     return project[0];
@@ -236,8 +224,8 @@ export const findMyProjectsById = async (user_id: number): Promise<any> => {
     project.project_goal,
     project.project_title,
     project.project_participation_time,
-    COUNT(bookmark.project_id) AS project_bookmark_count,
-    COUNT(comment.project_id) AS project_comments_count,
+    COUNT(DISTINCT bookmark.user_id) AS project_bookmark_count,
+    COUNT(DISTINCT comment.comment_id) AS project_comments_count,
     project.project_views_count,
     project.project_created_at
     `;
@@ -270,8 +258,8 @@ export const findMyBookmarkedProjectsById = async (user_id: number): Promise<any
     project.project_goal,
     project.project_title,
     project.project_participation_time,
-    COUNT(bookmark.project_id) AS project_bookmark_count,
-    COUNT(comment.project_id) AS project_comments_count,
+    COUNT(DISTINCT bookmark.user_id) AS project_bookmark_count,
+    COUNT(DISTINCT comment.comment_id) AS project_comments_count,
     project.project_views_count,
     project.project_created_at
     `;

@@ -71,3 +71,24 @@ export const findBookmarkedProjectsById = async (
     throw new AppError(500, '[ DB 에러 ] 회원 북마크 모집글 리스트 조회 실패');
   }
 };
+
+/* 모집글 별 북마크한 회원 정보 조회 */
+export const findBookmarkedUsersById = async (project_id: number): Promise<any> => {
+  try {
+    const selectColumns = `user.user_id, user.user_name, user.user_img`;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM bookmark
+    INNER JOIN user ON bookmark.user_id = user.user_id
+    WHERE bookmark.project_id = ?
+    `;
+
+    const [bookmarks]: any = await db.query(SQL, [project_id]);
+
+    return bookmarks;
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, '[ DB 에러 ] 모집글 별 북마크한 회원 정보 조회 실패');
+  }
+};

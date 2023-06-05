@@ -128,7 +128,14 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
   try {
     const foundProject = await projectRepo.findProjectById(project_id);
 
+    const foundBookmarkedUsers = await bookmarkRepo.findBookmarkedUsersById(project_id);
+
+    console.log(foundBookmarkedUsers);
+
     const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
+
+    console.log(foundProject.project_bookmark_count);
+    console.log(foundProject.project_comments_count);
 
     // 모집 글이 존재하는지 확인 후 없으면 에러 처리
 
@@ -137,8 +144,8 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
     const projectInfo = bookmarkedProjectIds.includes(project_id)
-      ? { ...foundProject, is_bookmarked: true }
-      : { ...foundProject, is_bookmarked: false };
+      ? { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
+      : { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
 
     return projectInfo;
   } catch (error) {
