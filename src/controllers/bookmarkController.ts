@@ -39,3 +39,29 @@ export const addBookmarkHandler = async (req: AuthRequest, res: Response, next: 
     }
   }
 };
+
+/* 북마크 삭제 */
+export const removeBookmarkHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { project_id } = req.params;
+
+    if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
+
+    const isDeletedBookmark = await bookmarkService.removeBookmark(user_id, Number(project_id));
+
+    if (isDeletedBookmark) res.status(200).json({ message: '북마크 삭제 성공', data: {} });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 북마크 삭제 실패'));
+    }
+  }
+};

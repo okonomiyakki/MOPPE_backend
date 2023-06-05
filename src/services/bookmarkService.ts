@@ -28,3 +28,22 @@ export const addBookmark = async (inputData: Bookmark.CreateInput): Promise<any>
     }
   }
 };
+
+/* 북마크 삭제 */
+export const removeBookmark = async (user_id: number, project_id: number): Promise<boolean> => {
+  try {
+    // TODO] 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
+
+    const isDeletedBookmark = await bookmarkRepo.deleteBookmarkById(user_id, project_id);
+
+    return isDeletedBookmark;
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 500) console.log(error);
+      throw error;
+    } else {
+      console.log(error);
+      throw new AppError(500, '[ 서버 에러 ] 북마크 삭제 실패');
+    }
+  }
+};
