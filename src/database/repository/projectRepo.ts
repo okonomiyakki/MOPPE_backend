@@ -320,3 +320,42 @@ export const findMyBookmarkedProjectsById = async (user_id: number): Promise<any
     throw new AppError(500, '[ DB 에러 ] 마이페이지 회원 별 북마크 모집 글 목록 조회 실패');
   }
 };
+
+/* 모집 글에 조회한 유저의 조회 날짜가 현재인지 조회 */
+export const findUserViewDateById = async (
+  user_id: number,
+  project_id: number,
+  currentDate: string
+): Promise<any> => {
+  const SQL = `
+    SELECT COUNT(*) AS project_view_count
+    FROM project_view
+    WHERE user_id = ? AND project_id = ? AND project_view_date = ?
+    `;
+
+  const [date]: any = await db.query(SQL, [user_id, project_id, currentDate]);
+
+  return Number(date[0].project_view_count);
+};
+
+/* 모집 글 클릭 시 조회 수 증가 */
+export const updateProjectViewsCount = async (
+  user_id: number,
+  project_id: number,
+  currentDate: string
+): Promise<any> => {
+  const SQL1 = `
+    UPDATE project
+    SET project_views_count = project_views_count + 1
+    WHERE project_id = ?
+    `;
+
+  await db.query(SQL1, [project_id]);
+
+  const SQL2 = `
+    INSERT INTO project_view (user_id, project_id, project_view_date)
+    VALUES (?, ?, ?)
+    `;
+
+  await db.query(SQL2, [user_id, project_id, currentDate]);
+};

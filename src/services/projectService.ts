@@ -147,15 +147,29 @@ export const getProjectsByRole = async (user_id: number, project_role: string): 
 /* 모집 글 상세 정보 조회 */
 export const getProjectById = async (user_id: number, project_id: number): Promise<any> => {
   try {
+    // 모집 글이 존재하는지 확인 후 없으면 에러 처리
+
     const foundProject = await projectRepo.findProjectById(project_id);
 
     const foundBookmarkedUsers = await bookmarkRepo.findBookmarkedUsersById(project_id);
 
     const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
 
-    // 모집 글이 존재하는지 확인 후 없으면 에러 처리
+    const currentDate = new Date().toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
 
-    // TODD] 조회수 증가 로직 작성
+    const splitDate = currentDate.split('. ');
+
+    const currentKorDate = `${splitDate[0]}-${splitDate[1]}-${splitDate[2]}`;
+
+    const isUserEnteredCurrentDate = await projectRepo.findUserViewDateById(
+      user_id,
+      project_id,
+      currentKorDate
+    );
+
+    if (!isUserEnteredCurrentDate) {
+      await projectRepo.updateProjectViewsCount(user_id, project_id, currentKorDate);
+    }
 
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
