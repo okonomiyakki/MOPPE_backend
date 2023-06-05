@@ -3,6 +3,7 @@ import * as projectRepo from '../database/repository/projectRepo';
 import * as bookmarkRepo from '../database/repository/bookmarkRepo';
 import * as Project from '../types/ProjectType';
 import * as Bookmark from '../types/BookmarkType';
+import { paginateList } from '../utils/paginator';
 
 /* 모집 글 등록 */
 export const addProject = async (inputData: Project.CreateProjectInput): Promise<Project.Id> => {
@@ -87,7 +88,7 @@ export const removeProject = async (user_id: number, project_id: number): Promis
 };
 
 /* 전체 모집 글 목록 조회 */
-export const getAllProjects = async (user_id: number): Promise<any> => {
+export const getAllProjects = async (user_id: number, page: number): Promise<any> => {
   try {
     const foundProjects = await projectRepo.findAllProjects();
 
@@ -103,7 +104,16 @@ export const getAllProjects = async (user_id: number): Promise<any> => {
       else return { ...project, is_bookmarked: false };
     });
 
-    return allprojects;
+    const pagenatedProjects = paginateList(allprojects, page);
+
+    const pageSize = Math.ceil(allprojects.length / 10);
+
+    const pagenatedProjectsInfo = {
+      pageSize,
+      pagenatedProjects: pagenatedProjects,
+    };
+
+    return pagenatedProjectsInfo;
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 500) console.log(error);
