@@ -33,9 +33,11 @@ export const createProject = async (inputData: Project.CreateProjectInput): Prom
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    const [result, _]: any = await db.execute(SQL, createValues);
+    const [result, _] = await db.execute(SQL, createValues);
 
-    return result.insertId;
+    const createdProjectId = (result as { insertId: number }).insertId;
+
+    return createdProjectId;
   } catch (error) {
     console.log(error);
     throw new AppError(500, '[ DB 에러 ] 모집 글 등록 실패');

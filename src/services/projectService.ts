@@ -2,7 +2,7 @@ import { AppError } from '../middlewares/errorHandler';
 import * as projectRepo from '../database/repository/projectRepo';
 import * as bookmarkRepo from '../database/repository/bookmarkRepo';
 import * as Project from '../types/ProjectType';
-import * as B from '../types/BookmarkType';
+import * as Bookmark from '../types/BookmarkType';
 
 /* 모집 글 등록 */
 export const addProject = async (inputData: Project.CreateProjectInput): Promise<Project.Id> => {
