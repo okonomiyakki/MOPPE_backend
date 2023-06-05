@@ -110,6 +110,37 @@ export const logOutUserHandler = async (req: AuthRequest, res: Response, next: N
   }
 };
 
+/* 회원 상세 정보 수정 */
+export const editUserInfoHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { user_id } = req.user;
+    const { user_name, user_career_goal, user_stacks, user_introduction, user_img } = req.body;
+
+    if (!user_name && !user_career_goal && !user_stacks && !user_introduction && !user_img)
+      throw new AppError(400, '수정하실 정보를 하나 이상 입력해 주세요.');
+
+    const inputData: User.UpdatUserInput = {
+      user_name,
+      user_career_goal,
+      user_stacks,
+      user_introduction,
+      user_img,
+    };
+
+    const updatedUserId: User.Id = await userService.editUserInfo(user_id, inputData);
+
+    res.status(200).json({ message: '회원 상세 정보 수정 성공', data: { user_id: updatedUserId } });
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 400) console.log(error);
+      next(error);
+    } else {
+      console.log(error);
+      next(new AppError(500, '[ HTTP 요청 에러 ] 회원 상세 정보 수정 실패'));
+    }
+  }
+};
+
 /* 회원 마이페이지 상세 정보 조회 */
 export const getUserInfoByIdHandler = async (
   req: AuthRequest,

@@ -92,6 +92,26 @@ export const logInUser = async (inputData: User.LogInUserInput): Promise<User.In
   }
 };
 
+/* 회원 상세 정보 수정 */
+export const editUserInfo = async (
+  user_id: number,
+  inputData: User.UpdatUserInput
+): Promise<any> => {
+  try {
+    const updatedUserId = await userRepo.updateUserInfo(user_id, inputData);
+
+    return updatedUserId;
+  } catch (error) {
+    if (error instanceof AppError) {
+      if (error.statusCode === 500) console.log(error);
+      throw error;
+    } else {
+      console.log(error);
+      throw new AppError(500, '[ 서버 에러 ] 회원 상세 정보 수정 실패');
+    }
+  }
+};
+
 /* 회원 마이페이지 상세 정보 조회 */
 export const getUserInfoById = async (user_id: number): Promise<any> => {
   try {
