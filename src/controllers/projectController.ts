@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { AppError } from '../middlewares/errorHandler';
 import { AuthRequest } from '../types/RequestType';
-import * as P from '../types/ProjectType';
+import * as Project from '../types/ProjectType';
 import * as projectService from '../services/projectService';
 
 /* 모집 글 등록 */
@@ -32,7 +32,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
     )
       throw new AppError(400, '요청 body에 모든 정보를 입력해 주세요.');
 
-    const inputData: P.CreateProjectInput = {
+    const inputData: Project.CreateProjectInput = {
       user_id,
       project_type,
       project_title,
@@ -45,7 +45,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
       project_img,
     };
 
-    const createdProjectId: P.Id = await projectService.addProject(inputData);
+    const createdProjectId: Project.Id = await projectService.addProject(inputData);
 
     res.status(201).json({ message: '모집 글 등록 성공', data: { project_id: createdProjectId } });
   } catch (error) {

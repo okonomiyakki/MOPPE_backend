@@ -1,13 +1,13 @@
 import { AppError } from '../middlewares/errorHandler';
 import * as projectRepo from '../database/repository/projectRepo';
 import * as bookmarkRepo from '../database/repository/bookmarkRepo';
-import * as P from '../types/ProjectType';
+import * as Project from '../types/ProjectType';
 import * as B from '../types/BookmarkType';
 
 /* 모집 글 등록 */
-export const addProject = async (inputData: P.CreateProjectInput): Promise<P.Id> => {
+export const addProject = async (inputData: Project.CreateProjectInput): Promise<Project.Id> => {
   try {
-    const createdProjectId: P.Id = await projectRepo.createProject(inputData);
+    const createdProjectId: Project.Id = await projectRepo.createProject(inputData);
 
     // 같은 아이디로 연속적인 모집 글 등록 요청 에러 반환 추가하기
 

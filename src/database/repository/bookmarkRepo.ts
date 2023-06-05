@@ -1,11 +1,11 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../middlewares/errorHandler';
-import * as B from '../../types/BookmarkType';
+import * as Bookmark from '../../types/BookmarkType';
 
 /* 회원이 북마크한 project_id 리스트 조회 */
 export const findBookmarkedProjectsById = async (
   user_id: number
-): Promise<B.BookmarkedProjects[]> => {
+): Promise<Bookmark.BookmarkedProjects[]> => {
   try {
     const selectColumn = 'project_id';
 

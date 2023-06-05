@@ -1,9 +1,9 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../middlewares/errorHandler';
-import * as U from '../../types/UserType';
+import * as User from '../../types/UserType';
 
 /* 회원 가입 */
-export const createUser = async (inputData: U.SignUpUserInput): Promise<U.Id> => {
+export const createUser = async (inputData: User.SignUpUserInput): Promise<User.Id> => {
   try {
     const createColums = 'user_email, user_name, user_password';
 
@@ -24,7 +24,7 @@ export const createUser = async (inputData: U.SignUpUserInput): Promise<U.Id> =>
 
     const [createdInfo, _] = await db.execute(SQL, createValues);
 
-    const createdUserId: U.Id = (createdInfo as { insertId: number }).insertId;
+    const createdUserId: User.Id = (createdInfo as { insertId: number }).insertId;
 
     return createdUserId;
   } catch (error) {
@@ -34,7 +34,7 @@ export const createUser = async (inputData: U.SignUpUserInput): Promise<U.Id> =>
 };
 
 /* 회원 user_email 조회 */
-export const findUserByEmail = async (user_email: string): Promise<U.Email> => {
+export const findUserByEmail = async (user_email: string): Promise<User.Email> => {
   try {
     const selectColumns = 'user_email';
 
@@ -54,7 +54,7 @@ export const findUserByEmail = async (user_email: string): Promise<U.Email> => {
 };
 
 /* 회원 payload, 기본 필드 조회  */
-export const findUserPayloadByEmail = async (user_email: string): Promise<U.InfoWithPayload> => {
+export const findUserPayloadByEmail = async (user_email: string): Promise<User.InfoWithPayload> => {
   try {
     const selectColumns = 'user_id, user_email, user_name, user_img, user_password';
 

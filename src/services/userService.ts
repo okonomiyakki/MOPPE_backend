@@ -4,12 +4,12 @@ import env from '../config/envconfig';
 import { AppError } from '../middlewares/errorHandler';
 import hashPassword from '../utils/passwordHasher';
 import * as userRepo from '../database/repository/userRepo';
-import * as U from '../types/UserType';
+import * as User from '../types/UserType';
 
 /* 회원 가입 */
-export const signUpUser = async (inputData: U.SignUpUserInput): Promise<U.Id> => {
+export const signUpUser = async (inputData: User.SignUpUserInput): Promise<User.Id> => {
   try {
-    const foundUserEmail: U.Email = await userRepo.findUserByEmail(inputData.user_email);
+    const foundUserEmail: User.Email = await userRepo.findUserByEmail(inputData.user_email);
 
     if (foundUserEmail)
       if (foundUserEmail.user_email === inputData.user_email)
@@ -19,7 +19,7 @@ export const signUpUser = async (inputData: U.SignUpUserInput): Promise<U.Id> =>
 
     inputData.user_password = foundHashedPassword; // 해싱된 비밀번호
 
-    const createdUserId: U.Id = await userRepo.createUser(inputData);
+    const createdUserId: User.Id = await userRepo.createUser(inputData);
 
     return createdUserId;
   } catch (error) {
@@ -34,9 +34,9 @@ export const signUpUser = async (inputData: U.SignUpUserInput): Promise<U.Id> =>
 };
 
 /* 로그인 - 토큰 발급하고, 프론트 헤더바에 사용할 회원 필수 정보도 불러오기 */
-export const logInUser = async (inputData: U.LogInUserInput): Promise<U.InfoWithTokens> => {
+export const logInUser = async (inputData: User.LogInUserInput): Promise<User.InfoWithTokens> => {
   try {
-    const foundUserInfoWithPayload: U.InfoWithPayload = await userRepo.findUserPayloadByEmail(
+    const foundUserInfoWithPayload: User.InfoWithPayload = await userRepo.findUserPayloadByEmail(
       inputData.user_email
     );
 
@@ -50,7 +50,7 @@ export const logInUser = async (inputData: U.LogInUserInput): Promise<U.InfoWith
 
     if (!isPasswordMatch) throw new AppError(404, '비밀번호가 일치하지 않습니다.');
 
-    const payload: U.PayloadInfo = {
+    const payload: User.PayloadInfo = {
       user_id: foundUserInfoWithPayload.user_id,
       user_email: foundUserInfoWithPayload.user_email,
     };
@@ -67,13 +67,13 @@ export const logInUser = async (inputData: U.LogInUserInput): Promise<U.InfoWith
       expiresIn: env.REFRESH_TOKEN_EXPIRES_IN,
     });
 
-    const userInfo: U.Info = {
+    const userInfo: User.Info = {
       user_id: foundUserInfoWithPayload.user_id,
       user_name: foundUserInfoWithPayload.user_name,
       user_img: foundUserInfoWithPayload.user_img,
     };
 
-    const userInfoWithTokens: U.InfoWithTokens = {
+    const userInfoWithTokens: User.InfoWithTokens = {
       accessToken,
       refreshToken,
       ...userInfo,

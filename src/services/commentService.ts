@@ -1,11 +1,11 @@
 import { AppError } from '../middlewares/errorHandler';
 import * as commentRepo from '../database/repository/commentRepo';
-import * as C from '../types/commentType';
+import * as Comment from '../types/commentType';
 
 /* 댓글 등록 */
-export const addComment = async (inputData: C.CreateCommentInput): Promise<C.Id> => {
+export const addComment = async (inputData: Comment.CreateCommentInput): Promise<Comment.Id> => {
   try {
-    const createdCommentId: C.Id = await commentRepo.createComment(inputData);
+    const createdCommentId: Comment.Id = await commentRepo.createComment(inputData);
 
     // 같은 아이디로 연속적인 댓글 등록 요청 에러 반환 추가하기
 
@@ -25,7 +25,7 @@ export const addComment = async (inputData: C.CreateCommentInput): Promise<C.Id>
 export const editComment = async (
   user_id: number,
   comment_id: number,
-  inputData: C.UpdateCommentInput
+  inputData: Comment.UpdateCommentInput
 ): Promise<any> => {
   try {
     // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리

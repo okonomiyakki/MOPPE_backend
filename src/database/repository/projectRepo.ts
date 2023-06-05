@@ -1,9 +1,9 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../middlewares/errorHandler';
-import * as P from '../../types/ProjectType';
+import * as Project from '../../types/ProjectType';
 
 /* 모집 글 등록 */
-export const createProject = async (inputData: P.CreateProjectInput): Promise<P.Id> => {
+export const createProject = async (inputData: Project.CreateProjectInput): Promise<Project.Id> => {
   try {
     const createColumns = `
       user_id,
@@ -71,7 +71,7 @@ export const findAllProjects = async (): Promise<any> => {
 
     const [projects] = await db.query(SQL);
 
-    return projects; // TODO] as P.ListByRole[]; 명시적으로 타입 선언
+    return projects; // TODO] as Project.ListByRole[]; 명시적으로 타입 선언
   } catch (error) {
     console.log(error);
     throw new AppError(500, '[ DB 에러 ] 전체 모집 글 목록 조회 실패');

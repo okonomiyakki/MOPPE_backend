@@ -1,9 +1,9 @@
 import db from '../../config/dbconfig';
 import { AppError } from '../../middlewares/errorHandler';
-import * as C from '../../types/commentType';
+import * as Comment from '../../types/commentType';
 
 /* 댓글 등록 */
-export const createComment = async (inputData: C.CreateCommentInput): Promise<C.Id> => {
+export const createComment = async (inputData: Comment.CreateCommentInput): Promise<Comment.Id> => {
   try {
     const createColumn = `
     user_id,
@@ -28,7 +28,7 @@ export const createComment = async (inputData: C.CreateCommentInput): Promise<C.
 
     const [createdInfo, _] = await db.execute(SQL, createValues);
 
-    const createdCommentId: C.Id = (createdInfo as { insertId: number }).insertId;
+    const createdCommentId: Comment.Id = (createdInfo as { insertId: number }).insertId;
 
     return createdCommentId;
   } catch (error) {
@@ -40,7 +40,7 @@ export const createComment = async (inputData: C.CreateCommentInput): Promise<C.
 /* 댓글 수정 */
 export const updateComment = async (
   comment_id: number,
-  inputData: C.UpdateCommentInput
+  inputData: Comment.UpdateCommentInput
 ): Promise<number> => {
   try {
     const updateColums = Object.entries(inputData)

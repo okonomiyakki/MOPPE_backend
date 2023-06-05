@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
 import { AppError } from '../middlewares/errorHandler';
 import * as commentService from '../services/commentService';
-import * as C from '../types/commentType';
+import * as Comment from '../types/commentType';
 
 /* 댓글 등록 - 기능 추가 시 수정 필요 */
 export const addCommentHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -17,14 +17,14 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
 
     const commentLocation = project_id !== 0 ? '모집 글' : 'QnA';
 
-    const inputData: C.CreateCommentInput = {
+    const inputData: Comment.CreateCommentInput = {
       user_id,
       project_id: project_id || 0,
       /* qna_id: qna_id || 0, // qna 기능 추가 시 할당 */
       comment_content,
     };
 
-    const createdCommentId: C.Id = await commentService.addComment(inputData);
+    const createdCommentId: Comment.Id = await commentService.addComment(inputData);
 
     res.status(201).json({
       message: `${commentLocation} 댓글 등록 성공`,
@@ -52,11 +52,11 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
 
     if (!comment_content) throw new AppError(400, 'comment_content를 입력해 주세요.');
 
-    const inputData: C.UpdateCommentInput = {
+    const inputData: Comment.UpdateCommentInput = {
       comment_content,
     };
 
-    const updatedCommentId: C.Id = await commentService.editComment(
+    const updatedCommentId: Comment.Id = await commentService.editComment(
       user_id,
       Number(comment_id),
       inputData

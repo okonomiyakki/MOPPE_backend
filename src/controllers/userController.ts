@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../middlewares/errorHandler';
 import { AuthRequest } from '../types/RequestType';
-import * as U from '../types/UserType';
+import * as User from '../types/UserType';
 import * as userService from '../services/userService';
 
 /* 회원 가입 */
@@ -12,13 +12,13 @@ export const signUpUserHandler = async (req: Request, res: Response, next: NextF
     if (!user_email || !user_name || !user_password)
       throw new AppError(400, '요청 body에 모든 정보를 입력해 주세요.');
 
-    const inputData: U.SignUpUserInput = {
+    const inputData: User.SignUpUserInput = {
       user_email,
       user_name,
       user_password,
     };
 
-    const createdUserId: U.Id = await userService.signUpUser(inputData);
+    const createdUserId: User.Id = await userService.signUpUser(inputData);
 
     res.status(201).json({ message: '회원 가입 성공', data: { user_id: createdUserId } });
   } catch (error) {
@@ -40,12 +40,12 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
     if (!user_email || !user_password)
       throw new AppError(400, '요청 body에 모든 정보를 입력해 주세요.');
 
-    const inputData: U.LogInUserInput = {
+    const inputData: User.LogInUserInput = {
       user_email,
       user_password,
     };
 
-    const foundInfoWithTokens: U.InfoWithTokens = await userService.logInUser(inputData);
+    const foundInfoWithTokens: User.InfoWithTokens = await userService.logInUser(inputData);
 
     const userInfoWithAT = {
       accessToken: foundInfoWithTokens.accessToken,
@@ -54,12 +54,12 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
       user_img: foundInfoWithTokens.user_img,
     };
 
-    // const foundTokens: U.Tokens = {
+    // const foundTokens: User.Tokens = {
     //   accessToken: foundInfoWithTokens.accessToken,
     //   refreshToken: foundInfoWithTokens.refreshToken,
     // };
 
-    // const foundLoginInfo: U.Info = {
+    // const foundLoginInfo: User.Info = {
     //   user_id: foundInfoWithTokens.user_id,
     //   user_name: foundInfoWithTokens.user_name,
     //   user_img: foundInfoWithTokens.user_img,
