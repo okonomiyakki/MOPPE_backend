@@ -297,6 +297,7 @@ export const getMyProjectsById = async (user_id: number, page: number): Promise<
     const pageSize = Math.ceil(foundMyProjects.length / 10); // TODO] 유틸로 옮기기
 
     const pagenatedProjectsInfo = {
+      listLength: foundMyProjects.length,
       pageSize,
       pagenatedProjects,
     };
@@ -325,6 +326,7 @@ export const getMyBookmarkedProjectsById = async (user_id: number, page: number)
     const pageSize = Math.ceil(foundMyBookmarkedProjects.length / 10); // TODO] 유틸로 옮기기
 
     const pagenatedProjectsInfo = {
+      listLength: foundMyBookmarkedProjects.length,
       pageSize,
       pagenatedProjects,
     };

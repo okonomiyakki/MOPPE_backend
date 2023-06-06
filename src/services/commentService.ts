@@ -110,6 +110,7 @@ export const getMyCommentsById = async (user_id: number, page: number): Promise<
     const pageSize = Math.ceil(foundComments.length / 10); // TODO] 유틸로 옮기기
 
     const pagenatedCommentsInfo = {
+      listLength: foundComments.length,
       pageSize,
       pagenatedComments,
     };
