@@ -10,12 +10,7 @@ export const getAllStacks = async (): Promise<any> => {
 
     return stacks;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 전체 기술 스택 리스트 조회 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
