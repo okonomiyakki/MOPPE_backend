@@ -1,6 +1,7 @@
 import { AppError } from '../middlewares/errorHandler';
 import * as commentRepo from '../database/repository/commentRepo';
 import * as Comment from '../types/commentType';
+import { paginateList } from '../utils/paginator';
 
 /* 댓글 등록 */
 export const addComment = async (inputData: Comment.CreateCommentInput): Promise<Comment.Id> => {
@@ -68,7 +69,7 @@ export const removeComment = async (user_id: number, comment_id: number): Promis
 };
 
 /* 모집 글 별 댓글 목록 조회 */
-export const getProjectCommentsById = async (project_id: number): Promise<any> => {
+export const getProjectCommentsById = async (project_id: number, page: number): Promise<any> => {
   try {
     const foundComments = await commentRepo.findProjectCommentsById(project_id);
 
@@ -76,7 +77,16 @@ export const getProjectCommentsById = async (project_id: number): Promise<any> =
 
     // 댓글 목록이 존재하는지 확인 후 없으면 에러 처리
 
-    return foundComments;
+    const pagenatedComments = paginateList(foundComments, page);
+
+    const pageSize = Math.ceil(foundComments.length / 10); // TODO] 유틸로 옮기기
+
+    const pagenatedCommentsInfo = {
+      pageSize,
+      pagenatedComments,
+    };
+
+    return pagenatedCommentsInfo;
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 500) console.log(error);
@@ -89,13 +99,22 @@ export const getProjectCommentsById = async (project_id: number): Promise<any> =
 };
 
 /* 마이페이지 회원 별 작성 댓글 목록 조회 */
-export const getMyCommentsById = async (user_id: number): Promise<any> => {
+export const getMyCommentsById = async (user_id: number, page: number): Promise<any> => {
   try {
     const foundComments = await commentRepo.findMyCommentsById(user_id);
 
     // 댓글 목록이 존재하는지 확인 후 없으면 에러 처리
 
-    return foundComments;
+    const pagenatedComments = paginateList(foundComments, page);
+
+    const pageSize = Math.ceil(foundComments.length / 10); // TODO] 유틸로 옮기기
+
+    const pagenatedCommentsInfo = {
+      pageSize,
+      pagenatedComments,
+    };
+
+    return pagenatedCommentsInfo;
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 500) console.log(error);

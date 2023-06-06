@@ -177,8 +177,7 @@ export const getAllProjects = async (
   inputQuery: Project.QueryInput
 ): Promise<any> => {
   try {
-    // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
-    console.log(inputQuery);
+    // TODO] 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
 
     const foundProjects = await getProjectsByQuery(inputQuery); // TODO] 테스트 후 조건문 간소화 해야함
 
@@ -198,7 +197,7 @@ export const getAllProjects = async (
 
     const pagenatedProjectsInfo = {
       pageSize,
-      pagenatedProjects: pagenatedProjects,
+      pagenatedProjects,
     };
 
     return pagenatedProjectsInfo;
@@ -220,7 +219,7 @@ export const getProjectsByRole = async (user_id: number, project_role: string): 
 
     const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
 
-    // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
+    // TODO] 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
 
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
@@ -245,7 +244,7 @@ export const getProjectsByRole = async (user_id: number, project_role: string): 
 /* 모집 글 상세 정보 조회 */
 export const getProjectById = async (user_id: number, project_id: number): Promise<any> => {
   try {
-    // 모집 글이 존재하는지 확인 후 없으면 에러 처리
+    // TODO] 모집 글이 존재하는지 확인 후 없으면 에러 처리
 
     const foundProject = await projectRepo.findProjectById(project_id);
 
@@ -288,13 +287,21 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
 };
 
 /* 마이페이지 회원 별 작성 모집 글 목록 조회 */
-export const getMyProjectsById = async (user_id: number): Promise<any> => {
+export const getMyProjectsById = async (user_id: number, page: number): Promise<any> => {
   try {
+    // TODO] 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
     const foundMyProjects = await projectRepo.findMyProjectsById(user_id);
 
-    // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
+    const pagenatedProjects = paginateList(foundMyProjects, page);
 
-    return foundMyProjects;
+    const pageSize = Math.ceil(foundMyProjects.length / 10); // TODO] 유틸로 옮기기
+
+    const pagenatedProjectsInfo = {
+      pageSize,
+      pagenatedProjects,
+    };
+
+    return pagenatedProjectsInfo;
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 500) console.log(error);
@@ -307,13 +314,22 @@ export const getMyProjectsById = async (user_id: number): Promise<any> => {
 };
 
 /* 마이페이지 회원 별 북마크 모집 글 목록 조회 */
-export const getMyBookmarkedProjectsById = async (user_id: number): Promise<any> => {
+export const getMyBookmarkedProjectsById = async (user_id: number, page: number): Promise<any> => {
   try {
+    // TODO] 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
+
     const foundMyBookmarkedProjects = await projectRepo.findMyBookmarkedProjectsById(user_id);
 
-    // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
+    const pagenatedProjects = paginateList(foundMyBookmarkedProjects, page);
 
-    return foundMyBookmarkedProjects;
+    const pageSize = Math.ceil(foundMyBookmarkedProjects.length / 10); // TODO] 유틸로 옮기기
+
+    const pagenatedProjectsInfo = {
+      pageSize,
+      pagenatedProjects,
+    };
+
+    return pagenatedProjectsInfo;
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 500) console.log(error);

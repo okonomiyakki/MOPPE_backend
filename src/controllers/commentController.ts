@@ -106,10 +106,16 @@ export const getProjectCommentsByIdHandler = async (
 ) => {
   try {
     const { project_id } = req.params;
+    const { page } = req.query;
 
     if (!project_id) throw new AppError(400, 'project_id를 입력해주세요.');
 
-    const foundComments = await commentService.getProjectCommentsById(Number(project_id));
+    if (!page) throw new AppError(400, 'page를 입력해주세요.');
+
+    const foundComments = await commentService.getProjectCommentsById(
+      Number(project_id),
+      Number(page)
+    );
 
     res.status(200).json({ message: '모집 글 별 댓글 목록 조회 성공', data: foundComments });
   } catch (error) {
@@ -134,12 +140,15 @@ export const getMyCommentsByIdHandler = async (
       throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.user;
+    const { page } = req.query;
 
-    const foundMyComments = await commentService.getMyCommentsById(user_id);
+    if (!page) throw new AppError(400, 'page를 입력해주세요.');
+
+    const foundMyComments = await commentService.getMyCommentsById(user_id, Number(page));
 
     res.status(200).json({
       message: '마이페이지 회원 별 작성 댓글 목록 조회 성공',
-      data: { project_comments: [...foundMyComments] },
+      data: foundMyComments,
     });
   } catch (error) {
     if (error instanceof AppError) {

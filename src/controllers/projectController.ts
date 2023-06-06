@@ -287,13 +287,15 @@ export const getMyProjectsByIdHandler = async (
       throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.user;
+    const { page } = req.query;
 
-    const myProjects = await projectService.getMyProjectsById(user_id);
+    if (!page) throw new AppError(400, 'page를 입력해주세요.');
 
-    res.status(200).json({
-      message: '마이페이지 회원 별 작성 모집 글 목록 조회 성공',
-      data: { user_projects: [...myProjects] },
-    });
+    const myProjects = await projectService.getMyProjectsById(user_id, Number(page));
+
+    res
+      .status(200)
+      .json({ message: '마이페이지 회원 별 작성 모집 글 목록 조회 성공', data: myProjects });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);
@@ -316,13 +318,15 @@ export const getMyBookmarkedProjectsByIdHandler = async (
       throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.user;
+    const { page } = req.query;
 
-    const myProjects = await projectService.getMyBookmarkedProjectsById(user_id);
+    if (!page) throw new AppError(400, 'page를 입력해주세요.');
 
-    res.status(200).json({
-      message: '마이페이지 회원 별 북마크 모집 글 목록 조회 성공',
-      data: { user_projects: [...myProjects] },
-    });
+    const myProjects = await projectService.getMyBookmarkedProjectsById(user_id, Number(page));
+
+    res
+      .status(200)
+      .json({ message: '마이페이지 회원 별 북마크 모집 글 목록 조회 성공', data: myProjects });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 400) console.log(error);
