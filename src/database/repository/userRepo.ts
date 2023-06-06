@@ -33,10 +33,8 @@ export const createUser = async (inputData: User.SignUpUserInput): Promise<User.
 /*  user_id 유효성 검사 */
 export const isUserIdValid = async (user_id: number): Promise<void> => {
   try {
-    const selectColumns = 'COUNT(*) AS user_id_count';
-
     const SQL = `
-    SELECT ${selectColumns}
+    SELECT *
     FROM user
     WHERE user_id = ?
     `;
