@@ -9,40 +9,25 @@ import * as User from '../types/UserType';
 /* 회원 가입 */
 export const signUpUser = async (inputData: User.SignUpUserInput): Promise<User.Id> => {
   try {
-    const foundUserEmail: User.Email = await userRepo.findUserByEmail(inputData.user_email);
-
-    if (foundUserEmail)
-      if (foundUserEmail.user_email === inputData.user_email)
-        throw new AppError(404, '이미 가입된 이메일입니다. 다른 이메일을 사용해 주세요.');
-    // TODO] 레포지토리 레이어에서 유니크키로 유효성 검사하면 네트워크 요청 줄일 수 있음
-
     const foundHashedPassword = await hashPassword(inputData.user_password);
 
-    inputData.user_password = foundHashedPassword; // 해싱된 비밀번호
+    inputData.user_password = foundHashedPassword;
 
     const createdUserId: User.Id = await userRepo.createUser(inputData);
 
     return createdUserId;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 회원 가입 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
 
-/* 로그인 - 토큰 발급하고, 프론트 헤더바에 사용할 회원 필수 정보도 불러오기 */
+/* 로그인 */
 export const logInUser = async (inputData: User.LogInUserInput): Promise<User.InfoWithTokens> => {
   try {
     const foundUserInfoWithPayload: User.InfoWithPayload = await userRepo.findUserPayloadByEmail(
       inputData.user_email
     );
-
-    if (!foundUserInfoWithPayload)
-      throw new AppError(404, '존재하지 않는 이메일입니다. 회원 가입 후 이용해 주세요.');
 
     const isPasswordMatch = await bcrypt.compare(
       inputData.user_password,
@@ -82,13 +67,8 @@ export const logInUser = async (inputData: User.LogInUserInput): Promise<User.In
 
     return userInfoWithTokens;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 로그인 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
 
@@ -98,35 +78,27 @@ export const editUserInfo = async (
   inputData: User.UpdatUserInput
 ): Promise<any> => {
   try {
+    await userRepo.isUserIdValid(user_id);
+
     const updatedUserId = await userRepo.updateUserInfo(user_id, inputData);
 
     return updatedUserId;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 회원 상세 정보 수정 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
 
 /* 회원 마이페이지 상세 정보 조회 */
 export const getUserInfoById = async (user_id: number): Promise<any> => {
   try {
-    // TODO] 회원이 존재하는지 확인하는 로직
+    await userRepo.isUserIdValid(user_id);
 
     const foundUserInfo = await userRepo.findUserInfoById(user_id);
 
     return foundUserInfo;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 회원 마이페이지 정보 상세 조회 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };

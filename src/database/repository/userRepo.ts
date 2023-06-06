@@ -5,16 +5,13 @@ import * as User from '../../types/UserType';
 /* 회원 가입 */
 export const createUser = async (inputData: User.SignUpUserInput): Promise<User.Id> => {
   try {
-    const createColums = 'user_email, user_name, user_password';
+    const createColums = `
+    user_email,
+    user_name,
+    user_password
+    `;
 
     const createValues = Object.values(inputData);
-    // const createValues = Object.values(inputData)
-    //   .map((value) => {
-    //     if (value === null || undefined) return 'DEFAULT';
-    //     else if (typeof value === 'object') return `'${JSON.stringify(value)}'`;
-    //     else return `'${value}'`;
-    //   })
-    //   .join(', ');
 
     const SQL = `
     INSERT INTO
@@ -29,27 +26,29 @@ export const createUser = async (inputData: User.SignUpUserInput): Promise<User.
     return createdUserId;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 회원 가입 실패');
+    throw new AppError(400, '이미 가입된 이메일입니다. 다른 이메일을 사용해 주세요.');
   }
 };
 
-/* 회원 user_email 조회 */
-export const findUserByEmail = async (user_email: string): Promise<User.Email> => {
+/*  user_id 유효성 검사 */
+export const isUserIdValid = async (user_id: number): Promise<void> => {
   try {
-    const selectColumns = 'user_email';
+    const selectColumns = 'COUNT(*) AS user_id_count';
 
     const SQL = `
     SELECT ${selectColumns}
     FROM user
-    WHERE user_email = ?
+    WHERE user_id = ?
     `;
 
-    const [foundUserEmail]: any = await db.query(SQL, [user_email]);
+    const [user]: any = await db.query(SQL, [user_id]);
 
-    return foundUserEmail[0];
+    const isUserIdValid = user[0].user_id_count;
+
+    if (!isUserIdValid) throw new AppError(404, '존재하지 않는 회원입니다.');
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 회원 조회 실패');
+    throw error;
   }
 };
 
@@ -64,12 +63,17 @@ export const findUserPayloadByEmail = async (user_email: string): Promise<User.I
     WHERE user_email = ?
     `;
 
-    const [foundUserInfoWithPayload]: any = await db.query(SQL, [user_email]);
+    const [user]: any = await db.query(SQL, [user_email]);
 
-    return foundUserInfoWithPayload[0];
+    const userInfoWithPayload = user[0];
+
+    if (!userInfoWithPayload)
+      throw new AppError(404, '존재하지 않는 이메일입니다. 회원 가입 후 이용해 주세요.');
+
+    return userInfoWithPayload;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 회원 payload 조회 실패');
+    throw error;
   }
 };
 
@@ -122,11 +126,15 @@ export const findUserInfoById = async (user_id: number): Promise<any> => {
     WHERE user_id = ?
     `;
 
-    const [foundUserInfo]: any = await db.query(SQL, [user_id]);
+    const [user]: any = await db.query(SQL, [user_id]);
 
-    return foundUserInfo[0];
+    const userInfoWithPayload = user[0];
+
+    if (!userInfoWithPayload) throw new AppError(404, '존재하지 않는 회원 입니다.');
+
+    return userInfoWithPayload;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 회원 마이페이지 상세 정보 조회 실패');
+    throw error;
   }
 };
