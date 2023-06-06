@@ -115,6 +115,8 @@ export const editUserInfo = async (
 /* 회원 마이페이지 상세 정보 조회 */
 export const getUserInfoById = async (user_id: number): Promise<any> => {
   try {
+    // TODO] 회원이 존재하는지 확인하는 로직
+
     const foundUserInfo = await userRepo.findUserInfoById(user_id);
 
     return foundUserInfo;
