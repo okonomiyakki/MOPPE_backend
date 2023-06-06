@@ -191,7 +191,7 @@ export const getAllProjects = async (
       else return { ...project, is_bookmarked: false };
     });
 
-    const pagenatedProjects = paginateList(allprojects, inputQuery.page);
+    const pagenatedProjects = paginateList(allprojects, inputQuery.page, 10);
 
     const pageSize = Math.ceil(allprojects.length / 10); // TODO] 유틸로 옮기기
 
@@ -292,9 +292,9 @@ export const getMyProjectsById = async (user_id: number, page: number): Promise<
     // TODO] 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
     const foundMyProjects = await projectRepo.findMyProjectsById(user_id);
 
-    const pagenatedProjects = paginateList(foundMyProjects, page);
+    const pagenatedProjects = paginateList(foundMyProjects, page, 5);
 
-    const pageSize = Math.ceil(foundMyProjects.length / 10); // TODO] 유틸로 옮기기
+    const pageSize = Math.ceil(foundMyProjects.length / 5); // TODO] 유틸로 옮기기
 
     const pagenatedProjectsInfo = {
       listLength: foundMyProjects.length,
@@ -321,9 +321,9 @@ export const getMyBookmarkedProjectsById = async (user_id: number, page: number)
 
     const foundMyBookmarkedProjects = await projectRepo.findMyBookmarkedProjectsById(user_id);
 
-    const pagenatedProjects = paginateList(foundMyBookmarkedProjects, page);
+    const pagenatedProjects = paginateList(foundMyBookmarkedProjects, page, 5);
 
-    const pageSize = Math.ceil(foundMyBookmarkedProjects.length / 10); // TODO] 유틸로 옮기기
+    const pageSize = Math.ceil(foundMyBookmarkedProjects.length / 5); // TODO] 유틸로 옮기기
 
     const pagenatedProjectsInfo = {
       listLength: foundMyBookmarkedProjects.length,

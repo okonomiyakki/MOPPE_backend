@@ -1,7 +1,7 @@
-export const paginateList = (list: any, page: number) => {
-  const startIndex = (page - 1) * 10;
+export const paginateList = (list: any, page: number, offset: number) => {
+  const startIndex = (page - 1) * offset;
 
-  const endIndex = startIndex + 10;
+  const endIndex = startIndex + offset;
 
   const sortedList = list.slice().reverse();
 

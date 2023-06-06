@@ -77,7 +77,7 @@ export const getProjectCommentsById = async (project_id: number, page: number): 
 
     // 댓글 목록이 존재하는지 확인 후 없으면 에러 처리
 
-    const pagenatedComments = paginateList(foundComments, page);
+    const pagenatedComments = paginateList(foundComments, page, 10);
 
     const pageSize = Math.ceil(foundComments.length / 10); // TODO] 유틸로 옮기기
 
@@ -105,9 +105,9 @@ export const getMyCommentsById = async (user_id: number, page: number): Promise<
 
     // 댓글 목록이 존재하는지 확인 후 없으면 에러 처리
 
-    const pagenatedComments = paginateList(foundComments, page);
+    const pagenatedComments = paginateList(foundComments, page, 5);
 
-    const pageSize = Math.ceil(foundComments.length / 10); // TODO] 유틸로 옮기기
+    const pageSize = Math.ceil(foundComments.length / 5); // TODO] 유틸로 옮기기
 
     const pagenatedCommentsInfo = {
       listLength: foundComments.length,
