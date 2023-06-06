@@ -41,7 +41,7 @@ export const isUserIdValid = async (user_id: number): Promise<void> => {
 
     const [user]: any = await db.query(SQL, [user_id]);
 
-    const isUserIdValid = user[0].user_id_count;
+    const isUserIdValid = user[0];
 
     if (!isUserIdValid) throw new AppError(404, '존재하지 않는 회원입니다.');
   } catch (error) {
