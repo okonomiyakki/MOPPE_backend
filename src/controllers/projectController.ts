@@ -192,9 +192,23 @@ export const getAllProjectsHandler = async (
 ) => {
   try {
     const { user_id } = req.user;
-    const { page } = req.query;
+    const { cate, recruiting, keyword, page } = req.query;
 
-    const pagenatedProjectsInfo = await projectService.getAllProjects(user_id, Number(page));
+    const project_role = cate === 'all' ? undefined : (cate as string);
+    const project_status =
+      recruiting === 'true' ? 'RECRUITING' : recruiting === 'false' ? 'COMPLETE' : 'all';
+    const project_keyword = keyword === 'false' ? undefined : (keyword as string);
+
+    const inputQuery: Project.QueryInput = {
+      project_role,
+      project_status,
+      project_keyword,
+      page: Number(page),
+    };
+
+    // const pagenatedProjectsInfo = await projectService.getAllProjects(user_id, Number(page));
+
+    const pagenatedProjectsInfo = await projectService.getAllProjects(user_id, inputQuery);
 
     res.status(200).json({ message: '전체 모집 글 목록 조회 성공', data: pagenatedProjectsInfo });
   } catch (error) {

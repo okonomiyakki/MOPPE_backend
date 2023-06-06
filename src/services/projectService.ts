@@ -87,14 +87,102 @@ export const removeProject = async (user_id: number, project_id: number): Promis
   }
 };
 
-/* 전체 모집 글 목록 조회 */
-export const getAllProjects = async (user_id: number, page: number): Promise<any> => {
+const getProjectsByQuery = async (inputQuery: Project.QueryInput) => {
   try {
-    const foundProjects = await projectRepo.findAllProjects();
+    // 전체 조회
+    if (!inputQuery.project_role && !inputQuery.project_keyword) {
+      // 전체 모집 중
+      if (inputQuery.project_status === 'RECRUITING') {
+        const foundProjects = await projectRepo.findProjectsByStatus(inputQuery.project_status);
+        console.log(1);
+        return foundProjects;
+      }
+      // 전체 모집 완료
+      else if (inputQuery.project_status === 'COMPLETE') {
+        const foundProjects = await projectRepo.findProjectsByStatus(inputQuery.project_status);
+        console.log(2);
+        return foundProjects;
+      }
+      // 전체
+      else {
+        const foundProjects = await projectRepo.findAllProjects();
+        console.log(3);
+        return foundProjects;
+      }
+    }
+    // 역할 별 조회
+    else if (inputQuery.project_role && !inputQuery.project_keyword) {
+      // 역할 별 모집 중
+      if (inputQuery.project_status === 'RECRUITING') {
+        const foundProjects = await projectRepo.findProjectsByRoleWithStatus(
+          inputQuery.project_role,
+          inputQuery.project_status
+        );
+        console.log(4);
+        return foundProjects;
+      }
+      // 역할 별 모집 완료
+      else if (inputQuery.project_status === 'COMPLETE') {
+        const foundProjects = await projectRepo.findProjectsByRoleWithStatus(
+          inputQuery.project_role,
+          inputQuery.project_status
+        );
+        console.log(5);
+        return foundProjects;
+      }
+      // 역할 별 전체
+      else {
+        const foundProjects = await projectRepo.findProjectsByRole(inputQuery.project_role);
+        console.log(6);
+        return foundProjects;
+      }
+    }
+    // 키워드 별 조회
+    else if (!inputQuery.project_role && inputQuery.project_keyword) {
+      // 키워드 별 모집 중
+      if (inputQuery.project_status === 'RECRUITING') {
+        console.log(inputQuery.project_keyword);
+        const foundProjects = await projectRepo.findProjectsByKeywordWithStatus(
+          inputQuery.project_keyword,
+          inputQuery.project_status
+        );
+        console.log(7);
+        return foundProjects;
+      }
+      // 키워드 별 모집 완료
+      else if (inputQuery.project_status === 'COMPLETE') {
+        const foundProjects = await projectRepo.findProjectsByKeywordWithStatus(
+          inputQuery.project_keyword,
+          inputQuery.project_status
+        );
+        console.log(8);
+        return foundProjects;
+      }
+      // 키워드 별 전체
+      else {
+        const foundProjects = await projectRepo.findProjectsByKeyword(inputQuery.project_keyword);
+        console.log(9);
+        return foundProjects;
+      }
+    } else throw new AppError(500, '키워드와 모집 역할은 동시에 선택하실 수 없습니다.');
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/* 전체 모집 글 목록 조회 */
+export const getAllProjects = async (
+  user_id: number,
+  inputQuery: Project.QueryInput
+): Promise<any> => {
+  try {
+    // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
+    console.log(inputQuery);
+
+    const foundProjects = await getProjectsByQuery(inputQuery); // TODO] 테스트 후 조건문 간소화 해야함
 
     const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
-
-    // 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
 
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
@@ -104,9 +192,9 @@ export const getAllProjects = async (user_id: number, page: number): Promise<any
       else return { ...project, is_bookmarked: false };
     });
 
-    const pagenatedProjects = paginateList(allprojects, page);
+    const pagenatedProjects = paginateList(allprojects, inputQuery.page);
 
-    const pageSize = Math.ceil(allprojects.length / 10);
+    const pageSize = Math.ceil(allprojects.length / 10); // TODO] 유틸로 옮기기
 
     const pagenatedProjectsInfo = {
       pageSize,
@@ -120,7 +208,7 @@ export const getAllProjects = async (user_id: number, page: number): Promise<any
       throw error;
     } else {
       console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 전체 모집 글 목록 조회 실패');
+      throw error;
     }
   }
 };

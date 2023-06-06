@@ -1,3 +1,4 @@
+import { Query } from 'typeorm/driver/Query';
 import * as B from './BookmarkType';
 interface ProjectProfile {
   project_id: number;
@@ -44,6 +45,13 @@ export type UpdateInput = Partial<
     | 'project_img'
   >
 >;
+
+export type QueryInput = {
+  project_role?: string;
+  project_status?: string;
+  project_keyword?: string;
+  page: number;
+};
 
 export type ListByRole = Pick<
   ProjectProfile,

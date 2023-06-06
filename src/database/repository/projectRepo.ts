@@ -197,7 +197,7 @@ export const findProjectsByRole = async (project_role: string): Promise<any> => 
     FROM project
     LEFT JOIN bookmark ON bookmark.project_id = project.project_id
     LEFT JOIN comment ON comment.project_id = project.project_id
-    WHERE JSON_CONTAINS(project.project_recruitment_roles->'$.roleList', ?)
+    WHERE JSON_CONTAINS(project.project_recruitment_roles->'$.roleList', JSON_ARRAY(?))
     GROUP BY project.project_id
     `;
 
@@ -207,6 +207,185 @@ export const findProjectsByRole = async (project_role: string): Promise<any> => 
   } catch (error) {
     console.log(error);
     throw new AppError(500, '[ DB 에러 ] 역할 별 모집 글 목록 조회 실패');
+  }
+};
+
+/* 모집 상태 별 모집 글 목록 조회 */
+export const findProjectsByStatus = async (project_status: string): Promise<any> => {
+  try {
+    const selectColumns = `
+    project.project_id,
+    project.project_type,
+    project.project_recruitment_status,
+    project.project_title,
+    project.project_summary,
+    project.project_recruitment_roles,
+    project.project_required_stacks,
+    project.project_goal,
+    project.project_participation_time,
+    COUNT(DISTINCT bookmark.user_id) AS project_bookmark_count,
+    COUNT(DISTINCT comment.comment_id) AS project_comments_count,
+    project.project_views_count,
+    project.project_created_at
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM project
+    LEFT JOIN bookmark ON bookmark.project_id = project.project_id
+    LEFT JOIN comment ON comment.project_id = project.project_id
+    WHERE project.project_recruitment_status = ?
+    GROUP BY project.project_id
+    `;
+
+    const [projects]: any = await db.query(SQL, [project_status]);
+
+    return projects;
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, '[ DB 에러 ] 모집 상태 별 모집 글 목록 조회 실패');
+  }
+};
+
+/* 모집 역할 및 모집 상태 별 모집 글 목록 조회 */
+export const findProjectsByRoleWithStatus = async (
+  project_role: string,
+  project_status: string
+): Promise<any> => {
+  try {
+    const selectColumns = `
+    project.project_id,
+    project.project_type,
+    project.project_recruitment_status,
+    project.project_title,
+    project.project_summary,
+    project.project_recruitment_roles,
+    project.project_required_stacks,
+    project.project_goal,
+    project.project_participation_time,
+    COUNT(DISTINCT bookmark.user_id) AS project_bookmark_count,
+    COUNT(DISTINCT comment.comment_id) AS project_comments_count,
+    project.project_views_count,
+    project.project_created_at
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM project
+    LEFT JOIN bookmark ON bookmark.project_id = project.project_id
+    LEFT JOIN comment ON comment.project_id = project.project_id
+    WHERE JSON_CONTAINS(project.project_recruitment_roles->'$.roleList', JSON_ARRAY(?)) AND project.project_recruitment_status = ?
+    GROUP BY project.project_id
+    `;
+
+    const [projects]: any = await db.query(SQL, [project_role, project_status]);
+
+    return projects;
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, '[ DB 에러 ] 모집 역할 및 상태 별 모집 글 목록 조회 실패');
+  }
+};
+
+/* 키워드 별 모집 글 목록 조회 */
+export const findProjectsByKeyword = async (project_keyword: string): Promise<any> => {
+  try {
+    //제목, summary, 내용, 기술스택
+    const selectColumns = `
+    project.project_id,
+    project.project_type,
+    project.project_recruitment_status,
+    project.project_title,
+    project.project_summary,
+    project.project_recruitment_roles,
+    project.project_required_stacks,
+    project.project_goal,
+    project.project_participation_time,
+    COUNT(DISTINCT bookmark.user_id) AS project_bookmark_count,
+    COUNT(DISTINCT comment.comment_id) AS project_comments_count,
+    project.project_views_count,
+    project.project_created_at
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM project
+    LEFT JOIN bookmark ON bookmark.project_id = project.project_id
+    LEFT JOIN comment ON comment.project_id = project.project_id
+    WHERE project.project_title LIKE CONCAT('%', ?, '%') 
+    OR project.project_summary LIKE CONCAT('%', ?, '%') 
+    OR project.project_introduction LIKE CONCAT('%', ?, '%') 
+    OR JSON_CONTAINS(project.project_recruitment_roles->'$.roleList', JSON_ARRAY(?))
+    OR JSON_CONTAINS(project.project_required_stacks->'$.stackList', JSON_ARRAY(?))
+    GROUP BY project.project_id
+    `;
+
+    const [projects]: any = await db.query(SQL, [
+      project_keyword,
+      project_keyword,
+      project_keyword,
+      project_keyword,
+      project_keyword,
+    ]);
+
+    return projects;
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, '[ DB 에러 ] 키워드 별 모집 글 목록 조회 실패');
+  }
+};
+
+/* 키워드 및 모집 상태 별 모집 글 목록 조회 */
+export const findProjectsByKeywordWithStatus = async (
+  project_keyword: string,
+  project_status: string
+): Promise<any> => {
+  try {
+    //제목, summary, 내용, 기술스택
+    const selectColumns = `
+    project.project_id,
+    project.project_type,
+    project.project_recruitment_status,
+    project.project_title,
+    project.project_summary,
+    project.project_recruitment_roles,
+    project.project_required_stacks,
+    project.project_goal,
+    project.project_participation_time,
+    COUNT(DISTINCT bookmark.user_id) AS project_bookmark_count,
+    COUNT(DISTINCT comment.comment_id) AS project_comments_count,
+    project.project_views_count,
+    project.project_created_at
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM project
+    LEFT JOIN bookmark ON bookmark.project_id = project.project_id
+    LEFT JOIN comment ON comment.project_id = project.project_id
+    WHERE (project.project_title LIKE CONCAT('%', ?, '%')
+      OR project.project_summary LIKE CONCAT('%', ?, '%')
+      OR project.project_introduction LIKE CONCAT('%', ?, '%')
+      OR JSON_CONTAINS(project.project_recruitment_roles->'$.roleList', JSON_ARRAY(?))
+      OR JSON_CONTAINS(project.project_required_stacks->'$.stackList', JSON_ARRAY(?))
+    ) 
+    AND project.project_recruitment_status = ?
+    GROUP BY project.project_id
+    `;
+
+    const [projects]: any = await db.query(SQL, [
+      project_keyword,
+      project_keyword,
+      project_keyword,
+      project_keyword,
+      project_keyword,
+      project_status,
+    ]);
+
+    return projects;
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, '[ DB 에러 ] 키워드 및 모집 상태 별 모집 글 목록 조회 실패');
   }
 };
 
