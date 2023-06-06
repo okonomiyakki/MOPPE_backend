@@ -9,8 +9,8 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
   try {
     const { user_id } = req.user;
     const { project_id, comment_content } = req.body;
-    //  const { project_id, qna_id, comment_content } = req.body;
     // TODO] qna 기능 추가 시 할당
+    // const { project_id, qna_id, comment_content } = req.body;
     // (project 댓글일때는 validator 에서 qna_id = undefiend | null 체크 후 컨트롤러에서 0으로 바꾸기)
 
     if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
@@ -33,13 +33,8 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
       data: { comment_id: createdCommentId },
     });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 댓글 등록 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -66,13 +61,8 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
 
     res.status(200).json({ message: '댓글 수정 성공', data: { comment_id: updatedCommentId } });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 댓글 수정 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -88,13 +78,8 @@ export const removeCommentHandler = async (req: AuthRequest, res: Response, next
 
     if (isDeletedComment) res.status(200).json({ message: '댓글 삭제 성공', data: {} });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 댓글 삭제 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -119,13 +104,8 @@ export const getProjectCommentsByIdHandler = async (
 
     res.status(200).json({ message: '모집 글 별 댓글 목록 조회 성공', data: foundComments });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 모집 글 별 댓글 목록 조회 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -151,12 +131,7 @@ export const getMyCommentsByIdHandler = async (
       data: foundMyComments,
     });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 마이페이지 회원 별 작성 댓글 목록 조회 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };

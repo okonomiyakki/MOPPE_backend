@@ -12,13 +12,6 @@ export const createComment = async (inputData: Comment.CreateCommentInput): Prom
     `;
 
     const createValues = Object.values(inputData);
-    // const createValues = Object.values(inputData)
-    //   .map((value) => {
-    //     if (value === null || undefined) return 'DEFAULT';
-    //     else if (typeof value === 'object') return `'${JSON.stringify(value)}'`;
-    //     else return `'${value}'`;
-    //   })
-    //   .join(', ');
 
     const SQL = `
     INSERT INTO
@@ -33,12 +26,13 @@ export const createComment = async (inputData: Comment.CreateCommentInput): Prom
     return createdCommentId;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 댓글 등록 실패');
+    throw error;
   }
 };
 
 /* 댓글 수정 */
 export const updateComment = async (
+  user_id: number,
   comment_id: number,
   inputData: Comment.UpdateCommentInput
 ): Promise<number> => {
@@ -49,60 +43,71 @@ export const updateComment = async (
       .join(', ');
 
     const updateValues = Object.values(inputData).filter((value) => value !== undefined);
-    // const updateColums = Object.entries(inputData)
-    //   .filter(([_, value]) => value !== undefined)
-    //   .map(([key, value]) => `${key}='${value}'`)
-    //   .join(', ');
 
     const SQL = `
       UPDATE comment
       SET ${updateColums}
-      WHERE comment_id = ?
+      WHERE user_id = ? AND comment_id = ?
     `;
 
-    await db.execute(SQL, [...updateValues, comment_id]);
+    const [result, _] = await db.execute(SQL, [...updateValues, user_id, comment_id]);
 
-    // TODO] 에러 처리 추가해야함
+    const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+    const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;
+    const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
+
+    if (isAffected && isMatched && !isChanged)
+      throw new AppError(400, '[ DB 에러 ] 수정하실 내용이 기존과 동일합니다.');
+
+    if (!isAffected && !isMatched && !isChanged)
+      throw new AppError(403, '[ DB 에러 ] 해당 댓글 작성자만 수정할 수 있습니다.');
 
     return comment_id;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 댓글 수정 실패');
+    throw error;
   }
 };
 
 /* 댓글 삭제 */
-export const deleteCommentById = async (comment_id: number): Promise<boolean> => {
+export const deleteCommentById = async (user_id: number, comment_id: number): Promise<boolean> => {
   try {
     const SQL = `
     DELETE FROM comment
-    WHERE comment_id = ?
+    WHERE user_id = ? AND comment_id = ?
     `;
 
-    await db.execute(SQL, [comment_id]);
+    const [result, _] = await db.execute(SQL, [user_id, comment_id]);
+
+    const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+
+    if (!isAffected) throw new AppError(403, '[ DB 에러 ] 해당 댓글 작성자만 삭제할 수 있습니다.');
 
     return true;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 댓글 삭제 실패');
+    throw error;
   }
 };
 
-/* 댓글 조회 */
-export const findCommentById = async (comment_id: number): Promise<any> => {
+/* 댓글에 해당하는 모집 글 유효성 검사 */
+export const findProjectById = async (comment_id: number): Promise<void> => {
   try {
     const SQL = `
     SELECT *
     FROM comment
+    JOIN project ON project.project_id = comment.project_id
     WHERE comment_id = ?
     `;
 
-    const [comments]: any = await db.query(SQL, [comment_id]);
+    const [comment]: any = await db.query(SQL, [comment_id]);
 
-    return comments;
+    const isProjectValid = comment[0];
+
+    if (!isProjectValid) throw new AppError(404, '해당 모집 글은 이미 삭제 되었습니다.');
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 댓글 조회 실패');
+    throw error;
   }
 };
 
@@ -127,10 +132,12 @@ export const findProjectCommentsById = async (project_id: number): Promise<any> 
 
     const [comments]: any = await db.query(SQL, [project_id]);
 
+    if (!comments.length) throw new AppError(404, '존재하는 댓글이 없습니다.');
+
     return comments;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 모집 글 별 댓글 목록 조회 실패');
+    throw error;
   }
 };
 
@@ -156,9 +163,11 @@ export const findMyCommentsById = async (user_id: number): Promise<any> => {
 
     const [comments]: any = await db.query(SQL, [user_id]);
 
+    if (!comments.length) throw new AppError(404, '존재하는 댓글이 없습니다.');
+
     return comments;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 마이페이지 회원 별 작성 댓글 목록 조회 실패');
+    throw error;
   }
 };
