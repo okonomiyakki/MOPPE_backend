@@ -20,10 +20,10 @@ const generateNewAccessTokenHandler = async (
   next: NextFunction
 ) => {
   try {
-    const refreshToken = req.cookies.RT;
+    const refreshToken = req.headers['cookie'];
 
     if (refreshToken === undefined)
-      throw new AppError(401, 'RefreshToken이 존재하지 않습니다. 다시 로그인해 주세요.');
+      throw new AppError(401, 'AccessToken이 만료되었습니다. RefreshToken을 보내주세요.');
 
     const refreshTokenSecret = env.REFRESH_TOKEN_SECRET || 'MOGAKPPO_REFRESH_TOKEN_SECRET';
 
@@ -70,7 +70,7 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
       throw new AppError(
         401,
         'AccessToken이 존재하지 않습니다. 회원가입 및 로그인 후 이용해 주세요.'
-      );
+      ); // TODO] 에러코드 수정
 
     const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_ACCESS_TOKEN_SECRET';
 

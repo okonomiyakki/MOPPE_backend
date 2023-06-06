@@ -45,41 +45,42 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
       user_password,
     };
 
-    const foundInfoWithTokens: User.InfoWithTokens = await userService.logInUser(inputData);
+    const infoWithTokens: User.InfoWithTokens = await userService.logInUser(inputData);
 
-    const userInfoWithAT = {
-      accessToken: foundInfoWithTokens.accessToken,
-      user_id: foundInfoWithTokens.user_id,
-      user_name: foundInfoWithTokens.user_name,
-      user_img: foundInfoWithTokens.user_img,
+    const userInfoWithTokens = {
+      accessToken: infoWithTokens.accessToken,
+      refreshToken: infoWithTokens.refreshToken,
+      user_id: infoWithTokens.user_id,
+      user_name: infoWithTokens.user_name,
+      user_img: infoWithTokens.user_img,
     };
 
     // const foundTokens: User.Tokens = {
-    //   accessToken: foundInfoWithTokens.accessToken,
-    //   refreshToken: foundInfoWithTokens.refreshToken,
+    //   accessToken: infoWithTokens.accessToken,
+    //   refreshToken: infoWithTokens.refreshToken,
     // };
 
     // const foundLoginInfo: User.Info = {
-    //   user_id: foundInfoWithTokens.user_id,
-    //   user_name: foundInfoWithTokens.user_name,
-    //   user_img: foundInfoWithTokens.user_img,
+    //   user_id: infoWithTokens.user_id,
+    //   user_name: infoWithTokens.user_name,
+    //   user_img: infoWithTokens.user_img,
     // };
 
-    // res.setHeader('Authorization', `Bearer ${foundInfoWithTokens.accessToken}`);
+    // res.setHeader('Authorization', `Bearer ${infoWithTokens.accessToken}`);
 
-    // res.cookie('Authorization', `Bearer ${foundInfoWithTokens.accessToken}`, {
+    // res.cookie('Authorization', `Bearer ${infoWithTokens.accessToken}`, {
     //   httpOnly: false,
     //   // secure: true,
     // });
 
-    res.cookie('RT', foundInfoWithTokens.refreshToken, {
-      httpOnly: true,
-      path: '/' /* 해당 도메인 하의 모든 경로에서 쿠키 사용 가능 */,
-      // domain: 'example.com', /* 클라이언트 도메인 주소 */
-      // secure: true, /* https 에서만 쿠키 전송 가능 */
-    });
+    // res.cookie('RT', infoWithTokens.refreshToken, {
+    //   httpOnly: true,
+    //   path: '/' /* 해당 도메인 하의 모든 경로에서 쿠키 사용 가능 */,
+    //   // domain: 'example.com', /* 클라이언트 도메인 주소 */
+    //   // secure: true, /* https 에서만 쿠키 전송 가능 */
+    // });
 
-    res.status(200).json({ message: '로그인 성공', data: userInfoWithAT });
+    res.status(200).json({ message: '로그인 성공', data: userInfoWithTokens });
   } catch (error) {
     if (error instanceof AppError) {
       if (error.statusCode === 404 || error.statusCode === 400) console.log(error);
@@ -96,7 +97,9 @@ export const logOutUserHandler = async (req: AuthRequest, res: Response, next: N
   try {
     // res.clearCookie('Authorization');
 
-    res.clearCookie('RT');
+    // res.clearCookie('RT');
+
+    // 토큰 만료시간 초기화
 
     res.status(200).json({ message: '로그아웃 성공' });
   } catch (error) {
