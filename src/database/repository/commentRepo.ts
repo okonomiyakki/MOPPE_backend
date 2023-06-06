@@ -26,7 +26,7 @@ export const createComment = async (inputData: Comment.CreateCommentInput): Prom
     return createdCommentId;
   } catch (error) {
     console.log(error);
-    throw error;
+    throw new AppError(500, '댓글 등록 중 오류가 발생했습니다.');
   }
 };
 
@@ -57,10 +57,10 @@ export const updateComment = async (
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
     if (isAffected && isMatched && !isChanged)
-      throw new AppError(400, '[ DB 에러 ] 수정하실 내용이 기존과 동일합니다.');
+      throw new AppError(400, '수정하실 내용이 기존과 동일합니다.');
 
     if (!isAffected && !isMatched && !isChanged)
-      throw new AppError(403, '[ DB 에러 ] 해당 댓글 작성자만 수정할 수 있습니다.');
+      throw new AppError(403, '해당 댓글 작성자만 수정할 수 있습니다.');
 
     return comment_id;
   } catch (error) {
@@ -81,7 +81,7 @@ export const deleteCommentById = async (user_id: number, comment_id: number): Pr
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
 
-    if (!isAffected) throw new AppError(403, '[ DB 에러 ] 해당 댓글 작성자만 삭제할 수 있습니다.');
+    if (!isAffected) throw new AppError(403, '해당 댓글 작성자만 삭제할 수 있습니다.');
 
     return true;
   } catch (error) {

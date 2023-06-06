@@ -101,10 +101,10 @@ export const updateUserInfo = async (
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
     if (isAffected && isMatched && !isChanged)
-      throw new AppError(400, '[ DB 에러 ] 수정하실 내용이 기존과 동일합니다.');
+      throw new AppError(400, '수정하실 내용이 기존과 동일합니다.');
 
     if (!isAffected && !isMatched && !isChanged)
-      throw new AppError(403, '[ DB 에러 ] 회원 본인만 수정할 수 있습니다.');
+      throw new AppError(403, '회원 본인만 수정할 수 있습니다.');
 
     return user_id;
   } catch (error) {
