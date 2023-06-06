@@ -30,13 +30,8 @@ export const addBookmarkHandler = async (req: AuthRequest, res: Response, next: 
       data: { bookmark_id: createdBookmarkId },
     });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 북마크 등록 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -56,12 +51,7 @@ export const removeBookmarkHandler = async (
 
     if (isDeletedBookmark) res.status(200).json({ message: '북마크 삭제 성공', data: {} });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 북마크 삭제 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };

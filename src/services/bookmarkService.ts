@@ -1,10 +1,13 @@
 import { AppError } from '../middlewares/errorHandler';
 import * as bookmarkRepo from '../database/repository/bookmarkRepo';
 import * as Bookmark from '../types/BookmarkType';
+import { findProjectById } from '../database/repository/projectRepo';
 
 /* 북마크 등록 */
 export const addBookmark = async (inputData: Bookmark.CreateInput): Promise<any> => {
   try {
+    await bookmarkRepo.findProjectById(inputData.project_id);
+
     const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(
       inputData.user_id
     );
@@ -19,31 +22,21 @@ export const addBookmark = async (inputData: Bookmark.CreateInput): Promise<any>
 
     return createdBookmarkId;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 북마크 등록 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
 
 /* 북마크 삭제 */
 export const removeBookmark = async (user_id: number, project_id: number): Promise<boolean> => {
   try {
-    // TODO] 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
+    await bookmarkRepo.findProjectById(project_id);
 
     const isDeletedBookmark = await bookmarkRepo.deleteBookmarkById(user_id, project_id);
 
     return isDeletedBookmark;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 북마크 삭제 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };

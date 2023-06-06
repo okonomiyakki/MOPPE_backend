@@ -25,7 +25,7 @@ export const createBookmark = async (inputData: Bookmark.CreateInput): Promise<a
     return createdBookmarkId;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 북마크 등록 실패');
+    throw new AppError(500, '북마크 등록 중 오류가 발생했습니다.');
   }
 };
 
@@ -34,16 +34,36 @@ export const deleteBookmarkById = async (user_id: number, project_id: number): P
   try {
     const SQL = `
     DELETE FROM bookmark
-    WHERE project_id = ? AND user_id = ?
+    WHERE user_id = ? AND project_id = ?
     `;
 
-    const [result, _] = await db.execute(SQL, [project_id, user_id]);
+    const [result, _] = await db.execute(SQL, [user_id, project_id]);
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
 
-    if (!isAffected) throw new AppError(403, '[ DB 에러 ] 이미 삭제된 북마크 입니다.');
+    if (!isAffected) throw new AppError(403, '잘못된 접근입니다. 본인이 등록한 북마크가 아닙니다.');
 
     return true;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/* 북마크에 해당하는 모집 글 유효성 검사 */
+export const findProjectById = async (project_id: number): Promise<void> => {
+  try {
+    const SQL = `
+    SELECT *
+    FROM project
+    WHERE project_id = ?
+    `;
+
+    const [project]: any = await db.query(SQL, [project_id]);
+
+    const isProjectValid = project[0];
+
+    if (!isProjectValid) throw new AppError(404, '해당 모집 글은 이미 삭제 되었습니다.');
   } catch (error) {
     console.log(error);
     throw error;
@@ -68,7 +88,7 @@ export const findBookmarkedProjectsById = async (
     return bookmarks;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 회원 북마크 모집글 리스트 조회 실패');
+    throw new AppError(500, '북마크한 모집 글 조회 중 오류가 발생했습니다.');
   }
 };
 
@@ -89,6 +109,6 @@ export const findBookmarkedUsersById = async (project_id: number): Promise<any> 
     return bookmarks;
   } catch (error) {
     console.log(error);
-    throw new AppError(500, '[ DB 에러 ] 모집글 별 북마크한 회원 정보 조회 실패');
+    throw new AppError(500, '북마크한 회원 정보 조회 중 오류가 발생했습니다.');
   }
 };
