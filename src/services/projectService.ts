@@ -14,13 +14,8 @@ export const addProject = async (inputData: Project.CreateProjectInput): Promise
 
     return createdProjectId;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 모집 글 등록 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
 
@@ -35,13 +30,8 @@ export const editProjectInfo = async (
 
     return updatedProjectId;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 모집 글 상세 정보 수정 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
 
@@ -60,13 +50,8 @@ export const editProjectStatus = async (
 
     return updatedProjectId;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 모집 글 모집 상태 수정 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
 
@@ -77,13 +62,8 @@ export const removeProject = async (user_id: number, project_id: number): Promis
 
     return isDeletedProject;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 모집 글 삭제 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
 
@@ -177,8 +157,6 @@ export const getAllProjects = async (
   inputQuery: Project.QueryInput
 ): Promise<any> => {
   try {
-    // TODO] 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
-
     const foundProjects = await getProjectsByQuery(inputQuery); // TODO] 테스트 후 조건문 간소화 해야함
 
     const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
@@ -202,13 +180,8 @@ export const getAllProjects = async (
 
     return pagenatedProjectsInfo;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw error;
-    }
+    console.log(error);
+    throw error;
   }
 };
 
@@ -218,8 +191,6 @@ export const getProjectsByRole = async (user_id: number, project_role: string): 
     const foundProjects = await projectRepo.findProjectsByRole(project_role);
 
     const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
-
-    // TODO] 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
 
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
@@ -231,21 +202,14 @@ export const getProjectsByRole = async (user_id: number, project_role: string): 
 
     return projectsByRole;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 역할 별 모집 글 목록 조회 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
 
 /* 모집 글 상세 정보 조회 */
 export const getProjectById = async (user_id: number, project_id: number): Promise<any> => {
   try {
-    // TODO] 모집 글이 존재하는지 확인 후 없으면 에러 처리
-
     const foundProject = await projectRepo.findProjectById(project_id);
 
     const foundBookmarkedUsers = await bookmarkRepo.findBookmarkedUsersById(project_id);
@@ -276,20 +240,14 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
 
     return projectInfo;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 모집 글 상세 정보 조회 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
 
 /* 마이페이지 회원 별 작성 모집 글 목록 조회 */
 export const getMyProjectsById = async (user_id: number, page: number): Promise<any> => {
   try {
-    // TODO] 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
     const foundMyProjects = await projectRepo.findMyProjectsById(user_id);
 
     const pagenatedProjects = paginateList(foundMyProjects, page, 5);
@@ -304,21 +262,14 @@ export const getMyProjectsById = async (user_id: number, page: number): Promise<
 
     return pagenatedProjectsInfo;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 마이페이지 회원 별 작성 모집 글 목록 조회 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };
 
 /* 마이페이지 회원 별 북마크 모집 글 목록 조회 */
 export const getMyBookmarkedProjectsById = async (user_id: number, page: number): Promise<any> => {
   try {
-    // TODO] 모집 글 목록이 존재하는지 확인 후 없으면 에러 처리
-
     const foundMyBookmarkedProjects = await projectRepo.findMyBookmarkedProjectsById(user_id);
 
     const pagenatedProjects = paginateList(foundMyBookmarkedProjects, page, 5);
@@ -333,12 +284,7 @@ export const getMyBookmarkedProjectsById = async (user_id: number, page: number)
 
     return pagenatedProjectsInfo;
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 500) console.log(error);
-      throw error;
-    } else {
-      console.log(error);
-      throw new AppError(500, '[ 서버 에러 ] 마이페이지 회원 별 북마크 모집 글 목록 조회 실패');
-    }
+    console.log(error);
+    throw error;
   }
 };

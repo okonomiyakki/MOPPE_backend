@@ -48,13 +48,8 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
 
     res.status(201).json({ message: '모집 글 등록 성공', data: { project_id: createdProjectId } });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400 || error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 모집 글 등록 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -116,13 +111,8 @@ export const editProjectInfoHandler = async (
       .status(200)
       .json({ message: '모집 글 상세 정보 수정 성공', data: { project_id: updatedPeojectId } });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 모집 글 상세 정보 수정 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -152,13 +142,8 @@ export const editProjectStatusHandler = async (
       .status(200)
       .json({ message: '모집 글 모집 상태 수정 성공', data: { project_id: updatedPeojectId } });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 모집 글 모집 상태 수정 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -206,19 +191,12 @@ export const getAllProjectsHandler = async (
       page: Number(page),
     };
 
-    // const pagenatedProjectsInfo = await projectService.getAllProjects(user_id, Number(page));
-
     const pagenatedProjectsInfo = await projectService.getAllProjects(user_id, inputQuery);
 
     res.status(200).json({ message: '전체 모집 글 목록 조회 성공', data: pagenatedProjectsInfo });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 전체 모집 글 목록 조회 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -238,13 +216,8 @@ export const getProjectsByRoleHandler = async (
 
     res.status(200).json({ message: '역할별 모집 글 목록 조회 성공', data: projectsByRole });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 역할 별 모집 글 목록 조회 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -266,13 +239,8 @@ export const getProjectByIdHandler = async (
 
     res.status(200).json({ message: '모집 글 상세 정보 조회 성공', data: projectInfo });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 모집 글 상세 정보 조회 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -297,13 +265,8 @@ export const getMyProjectsByIdHandler = async (
       .status(200)
       .json({ message: '마이페이지 회원 별 작성 모집 글 목록 조회 성공', data: myProjects });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 마이페이지 회원 별 작성 모집 글 목록 조회 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
@@ -328,14 +291,7 @@ export const getMyBookmarkedProjectsByIdHandler = async (
       .status(200)
       .json({ message: '마이페이지 회원 별 북마크 모집 글 목록 조회 성공', data: myProjects });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(
-        new AppError(500, '[ HTTP 요청 에러 ] 마이페이지 회원 별 북마크 모집 글 목록 조회 실패')
-      );
-    }
+    console.log(error);
+    next(error);
   }
 };
