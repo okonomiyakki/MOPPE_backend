@@ -21,15 +21,12 @@ const generateNewAccessTokenHandler = async (
 ) => {
   try {
     const refreshHeader = req.header('X-Refresh-Token');
-    console.log('refreshHeader', refreshHeader);
 
     const refreshToken = refreshHeader !== undefined ? refreshHeader : undefined;
 
     // const refreshToken = typeof refreshHeader !== 'string' ? refreshHeader[0] : refreshHeader;
 
     // const refreshToken = authHeader && authHeader.split(' ')[1].split('refreshToken=')[1];
-
-    console.log('refreshToken', refreshToken);
 
     if (refreshToken === undefined)
       throw new AppError(401, 'AccessToken이 만료되었습니다. RefreshToken을 보내주세요.');
