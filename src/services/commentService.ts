@@ -69,7 +69,7 @@ export const getProjectCommentsById = async (project_id: number, page: number): 
   }
 };
 
-/* 마이페이지 회원 별 작성 댓글 목록 조회 */
+/* 마이페이지 작성 댓글 목록 조회 */
 export const getMyCommentsById = async (user_id: number, page: number): Promise<any> => {
   try {
     const foundComments = await commentRepo.findMyCommentsById(user_id);

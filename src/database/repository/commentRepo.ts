@@ -138,7 +138,7 @@ export const findProjectCommentsById = async (project_id: number): Promise<any> 
   }
 };
 
-/* 마이페이지 회원 별 작성 댓글 목록 조회 */
+/* 마이페이지 작성 댓글 목록 조회 */
 export const findMyCommentsById = async (user_id: number): Promise<any> => {
   try {
     const selectColumns = `

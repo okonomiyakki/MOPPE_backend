@@ -97,19 +97,19 @@ export const getProjectCommentsByIdHandler = async (
 
     if (!page) throw new AppError(400, 'page를 입력해주세요.');
 
-    const foundComments = await commentService.getProjectCommentsById(
+    const projectComments = await commentService.getProjectCommentsById(
       Number(project_id),
       Number(page)
     );
 
-    res.status(200).json({ message: '모집 글 별 댓글 목록 조회 성공', data: foundComments });
+    res.status(200).json({ message: '모집 글 별 댓글 목록 조회 성공', data: projectComments });
   } catch (error) {
     console.log(error);
     next(error);
   }
 };
 
-/* 마이페이지 회원 별 작성 댓글 목록 조회 */
+/* 마이페이지 작성 댓글 목록 조회 */
 export const getMyCommentsByIdHandler = async (
   req: AuthRequest,
   res: Response,
@@ -124,11 +124,11 @@ export const getMyCommentsByIdHandler = async (
 
     if (!page) throw new AppError(400, 'page를 입력해주세요.');
 
-    const foundMyComments = await commentService.getMyCommentsById(user_id, Number(page));
+    const myComments = await commentService.getMyCommentsById(user_id, Number(page));
 
     res.status(200).json({
-      message: '마이페이지 회원 별 작성 댓글 목록 조회 성공',
-      data: foundMyComments,
+      message: '마이페이지 작성 댓글 목록 조회 성공',
+      data: myComments,
     });
   } catch (error) {
     console.log(error);

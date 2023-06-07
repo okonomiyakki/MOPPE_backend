@@ -127,9 +127,9 @@ export const getMyInfoByIdHandler = async (req: AuthRequest, res: Response, next
 
     const { user_id } = req.user;
 
-    const userInfo = await userService.getUserInfoById(user_id);
+    const myInfo = await userService.getUserInfoById(user_id);
 
-    res.status(200).json({ message: '회원 마이페이지 정보 조회 성공', data: userInfo });
+    res.status(200).json({ message: '회원 마이페이지 정보 조회 성공', data: myInfo });
   } catch (error) {
     console.log(error);
     next(error);
