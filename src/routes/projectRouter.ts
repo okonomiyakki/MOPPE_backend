@@ -53,25 +53,18 @@ projectRouter.get(
   commentController.getProjectCommentsByIdHandler
 );
 
-/* 다른 회원 마이페이지 작성 모집 글 목록 조회 */
-projectRouter.get(
-  '/user/:user_id',
-  AuthenticateHandler,
-  projectController.getUserProjectsByIdHandler
-);
-
-/* 다른 회원 마이페이지 북마크 모집 글 목록 조회 */
-projectRouter.get(
-  '/user/bookmark/:user_id',
-  AuthenticateHandler,
-  projectController.getUserBookmarkedProjectsByIdHandler
-);
-
 /* 마이페이지 북마크 모집 글 목록 조회 */
 projectRouter.get(
   '/user/bookmark',
   AuthenticateHandler,
   projectController.getMyBookmarkedProjectsByIdHandler
+);
+
+/* 다른 회원 마이페이지 작성 모집 글 목록 조회 */
+projectRouter.get(
+  '/user/:user_id',
+  AuthenticateHandler,
+  projectController.getUserProjectsByIdHandler
 );
 
 /* 마이페이지 작성 모집 글 목록 조회 */
