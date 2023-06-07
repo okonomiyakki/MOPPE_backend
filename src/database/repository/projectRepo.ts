@@ -539,14 +539,14 @@ export const updateProjectViewsCount = async (
     WHERE project_id = ?
     `;
 
-    await db.query(SQL1, [project_id]);
+    await db.execute(SQL1, [project_id]);
 
     const SQL2 = `
     INSERT INTO project_view (user_id, project_id, project_view_date)
     VALUES (?, ?, ?)
     `;
 
-    await db.query(SQL2, [user_id, project_id, currentDate]);
+    await db.execute(SQL2, [user_id, project_id, currentDate]);
   } catch (error) {
     console.log(error);
     throw new AppError(500, '모집 글 조회 중 오류가 발생했습니다.');
