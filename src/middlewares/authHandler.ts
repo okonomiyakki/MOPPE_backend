@@ -4,7 +4,7 @@ import { AppError } from './errorHandler';
 import jwt from 'jsonwebtoken';
 import env from '../config/envconfig';
 import * as U from '../types/UserType';
-import { generateNewAccessToken } from '../utils/AccessTokenGenerator';
+import { generateNewAccessToken } from '../utils/accessTokenGenerator';
 
 const nextForGuest = (req: AuthRequest, next: NextFunction) => {
   req.user = {
