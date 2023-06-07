@@ -163,15 +163,15 @@ export const getAllProjects = async (
 
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
-    const allprojects: any = foundProjects.map((project: any) => {
+    const checkIsBookmarked: any = foundProjects.map((project: any) => {
       if (bookmarkedProjectIds.includes(project.project_id))
         return { ...project, is_bookmarked: true };
       else return { ...project, is_bookmarked: false };
     });
 
-    const pagenatedProjects = paginateList(allprojects, inputQuery.page, 10);
+    const pagenatedProjects = paginateList(checkIsBookmarked, inputQuery.page, 10);
 
-    const pageSize = Math.ceil(allprojects.length / 10); // TODO] 유틸로 옮기기
+    const pageSize = Math.ceil(checkIsBookmarked.length / 10); // TODO] 유틸로 옮기기
 
     const pagenatedProjectsInfo = {
       pageSize,
@@ -234,11 +234,11 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
 
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
-    const projectInfo = bookmarkedProjectIds.includes(project_id)
+    const checkIsBookmarked = bookmarkedProjectIds.includes(project_id)
       ? { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
       : { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
 
-    return projectInfo;
+    return checkIsBookmarked;
   } catch (error) {
     console.log(error);
     throw error;
@@ -250,12 +250,22 @@ export const getMyProjectsById = async (user_id: number, page: number): Promise<
   try {
     const foundMyProjects = await projectRepo.findMyProjectsById(user_id);
 
-    const pagenatedProjects = paginateList(foundMyProjects, page, 5);
+    const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
 
-    const pageSize = Math.ceil(foundMyProjects.length / 5); // TODO] 유틸로 옮기기
+    const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
+
+    const checkIsBookmarked: any = foundMyProjects.map((project: any) => {
+      if (bookmarkedProjectIds.includes(project.project_id))
+        return { ...project, is_bookmarked: true };
+      else return { ...project, is_bookmarked: false };
+    });
+
+    const pagenatedProjects = paginateList(checkIsBookmarked, page, 5);
+
+    const pageSize = Math.ceil(checkIsBookmarked.length / 5); // TODO] 유틸로 옮기기
 
     const pagenatedProjectsInfo = {
-      listLength: foundMyProjects.length,
+      listLength: checkIsBookmarked.length,
       pageSize,
       pagenatedProjects,
     };
@@ -272,12 +282,16 @@ export const getMyBookmarkedProjectsById = async (user_id: number, page: number)
   try {
     const foundMyBookmarkedProjects = await projectRepo.findMyBookmarkedProjectsById(user_id);
 
-    const pagenatedProjects = paginateList(foundMyBookmarkedProjects, page, 5);
+    const addIsBookmarked = foundMyBookmarkedProjects.map((project: any) => {
+      return { ...project, is_bookmarked: true };
+    });
 
-    const pageSize = Math.ceil(foundMyBookmarkedProjects.length / 5); // TODO] 유틸로 옮기기
+    const pagenatedProjects = paginateList(addIsBookmarked, page, 5);
+
+    const pageSize = Math.ceil(addIsBookmarked.length / 5); // TODO] 유틸로 옮기기
 
     const pagenatedProjectsInfo = {
-      listLength: foundMyBookmarkedProjects.length,
+      listLength: addIsBookmarked.length,
       pageSize,
       pagenatedProjects,
     };
