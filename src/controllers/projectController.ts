@@ -244,7 +244,62 @@ export const getProjectByIdHandler = async (
   }
 };
 
-/* 마이페이지 회원 별 작성 모집 글 목록 조회 */
+/* 다른 회원 마이페이지 작성 모집 글 목록 조회 */
+export const getUserProjectsByIdHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.user.user_id === 0)
+      throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+
+    const { page } = req.query;
+    const { user_id } = req.params;
+
+    if (!page) throw new AppError(400, 'page를 입력해주세요.');
+
+    const userProjects = await projectService.getMyProjectsById(Number(user_id), Number(page));
+
+    res
+      .status(200)
+      .json({ message: '다른 회원 마이페이지 작성 모집 글 목록 조회 성공', data: userProjects });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+/* 다른 회원 마이페이지 북마크 모집 글 목록 조회 */
+export const getUserBookmarkedProjectsByIdHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.user.user_id === 0)
+      throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+
+    const { page } = req.query;
+    const { user_id } = req.params;
+
+    if (!page) throw new AppError(400, 'page를 입력해주세요.');
+
+    const userProjects = await projectService.getMyBookmarkedProjectsById(
+      Number(user_id),
+      Number(page)
+    );
+
+    res
+      .status(200)
+      .json({ message: '다른 회원 마이페이지 북마크 모집 글 목록 조회 성공', data: userProjects });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+/* 마이페이지 작성 모집 글 목록 조회 */
 export const getMyProjectsByIdHandler = async (
   req: AuthRequest,
   res: Response,
@@ -261,16 +316,14 @@ export const getMyProjectsByIdHandler = async (
 
     const myProjects = await projectService.getMyProjectsById(user_id, Number(page));
 
-    res
-      .status(200)
-      .json({ message: '마이페이지 회원 별 작성 모집 글 목록 조회 성공', data: myProjects });
+    res.status(200).json({ message: '마이페이지 작성 모집 글 목록 조회 성공', data: myProjects });
   } catch (error) {
     console.log(error);
     next(error);
   }
 };
 
-/* 마이페이지 회원 별 북마크 모집 글 목록 조회 */
+/* 마이페이지 북마크 모집 글 목록 조회 */
 export const getMyBookmarkedProjectsByIdHandler = async (
   req: AuthRequest,
   res: Response,
@@ -287,9 +340,7 @@ export const getMyBookmarkedProjectsByIdHandler = async (
 
     const myProjects = await projectService.getMyBookmarkedProjectsById(user_id, Number(page));
 
-    res
-      .status(200)
-      .json({ message: '마이페이지 회원 별 북마크 모집 글 목록 조회 성공', data: myProjects });
+    res.status(200).json({ message: '마이페이지 북마크 모집 글 목록 조회 성공', data: myProjects });
   } catch (error) {
     console.log(error);
     next(error);

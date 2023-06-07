@@ -245,7 +245,7 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
   }
 };
 
-/* 마이페이지 회원 별 작성 모집 글 목록 조회 */
+/* 마이페이지 작성 모집 글 목록 조회 */
 export const getMyProjectsById = async (user_id: number, page: number): Promise<any> => {
   try {
     const foundMyProjects = await projectRepo.findMyProjectsById(user_id);
@@ -277,7 +277,7 @@ export const getMyProjectsById = async (user_id: number, page: number): Promise<
   }
 };
 
-/* 마이페이지 회원 별 북마크 모집 글 목록 조회 */
+/* 마이페이지 북마크 모집 글 목록 조회 */
 export const getMyBookmarkedProjectsById = async (user_id: number, page: number): Promise<any> => {
   try {
     const foundMyBookmarkedProjects = await projectRepo.findMyBookmarkedProjectsById(user_id);

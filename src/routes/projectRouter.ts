@@ -1,52 +1,80 @@
 import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
-import {
-  addProjectHandler,
-  editProjectInfoHandler,
-  editProjectStatusHandler,
-  removeProjectHandler,
-  getProjectsByRoleHandler,
-  getAllProjectsHandler,
-  getProjectByIdHandler,
-  getMyProjectsByIdHandler,
-  getMyBookmarkedProjectsByIdHandler,
-} from '../controllers/projectController';
-import { getProjectCommentsByIdHandler } from '../controllers/commentController';
+import * as projectController from '../controllers/projectController';
+import * as commentController from '../controllers/commentController';
 
 const projectRouter = Router();
 
 /* 모집 글 등록 */
-projectRouter.post('/recruitment', AuthenticateHandler, addProjectHandler);
+projectRouter.post('/recruitment', AuthenticateHandler, projectController.addProjectHandler);
 
 /* 모집 글 상세 정보 수정 */
-projectRouter.patch('/recruitment/:project_id', AuthenticateHandler, editProjectInfoHandler);
+projectRouter.patch(
+  '/recruitment/:project_id',
+  AuthenticateHandler,
+  projectController.editProjectInfoHandler
+);
 
 /* 모집 글 모집 상태 수정 */
 projectRouter.patch(
   '/recruitment/status/:project_id',
   AuthenticateHandler,
-  editProjectStatusHandler
+  projectController.editProjectStatusHandler
 );
 
 /* 모집 글 삭제 */
-projectRouter.delete('/recruitment/:project_id', AuthenticateHandler, removeProjectHandler);
+projectRouter.delete(
+  '/recruitment/:project_id',
+  AuthenticateHandler,
+  projectController.removeProjectHandler
+);
 
 /* 전체 모집 글 목록 조회 */
-projectRouter.get('/', AuthenticateHandler, getAllProjectsHandler);
+projectRouter.get('/', AuthenticateHandler, projectController.getAllProjectsHandler);
 
 /* 역할 별 모집 글 목록 조회 */
-projectRouter.get('/role/:project_role', AuthenticateHandler, getProjectsByRoleHandler);
+projectRouter.get(
+  '/role/:project_role',
+  AuthenticateHandler,
+  projectController.getProjectsByRoleHandler
+);
 
 /* 모집 글 상세 정보 조회 */
-projectRouter.get('/info/:project_id', AuthenticateHandler, getProjectByIdHandler);
+projectRouter.get(
+  '/info/:project_id',
+  AuthenticateHandler,
+  projectController.getProjectByIdHandler
+);
 
 /* 모집 글 별 댓글 목록 조회 */
-projectRouter.get('/:project_id/comments', AuthenticateHandler, getProjectCommentsByIdHandler);
+projectRouter.get(
+  '/:project_id/comments',
+  AuthenticateHandler,
+  commentController.getProjectCommentsByIdHandler
+);
 
-/* 마이페이지 회원 별 작성 모집 글 목록 조회 */
-projectRouter.get('/user', AuthenticateHandler, getMyProjectsByIdHandler);
+/* 다른 회원 마이페이지 작성 모집 글 목록 조회 */
+projectRouter.get(
+  '/user/:user_id',
+  AuthenticateHandler,
+  projectController.getUserProjectsByIdHandler
+);
 
-/* 마이페이지 회원 별 북마크 모집 글 목록 조회 */
-projectRouter.get('/user/bookmark', AuthenticateHandler, getMyBookmarkedProjectsByIdHandler);
+/* 다른 회원 마이페이지 북마크 모집 글 목록 조회 */
+projectRouter.get(
+  '/user/bookmark/:user_id',
+  AuthenticateHandler,
+  projectController.getUserBookmarkedProjectsByIdHandler
+);
+
+/* 마이페이지 북마크 모집 글 목록 조회 */
+projectRouter.get(
+  '/user/bookmark',
+  AuthenticateHandler,
+  projectController.getMyBookmarkedProjectsByIdHandler
+);
+
+/* 마이페이지 작성 모집 글 목록 조회 */
+projectRouter.get('/user', AuthenticateHandler, projectController.getMyProjectsByIdHandler);
 
 export default projectRouter;

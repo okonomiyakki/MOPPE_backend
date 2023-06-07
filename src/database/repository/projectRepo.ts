@@ -432,7 +432,7 @@ export const findProjectById = async (project_id: number): Promise<any> => {
   }
 };
 
-/* 마이페이지 회원 별 작성 모집 글 목록 조회 */
+/* 마이페이지 작성 모집 글 목록 조회 */
 export const findMyProjectsById = async (user_id: number): Promise<any> => {
   try {
     const selectColumns = `
@@ -468,7 +468,7 @@ export const findMyProjectsById = async (user_id: number): Promise<any> => {
   }
 };
 
-/* 마이페이지 회원 별 북마크 모집 글 목록 조회 */
+/* 마이페이지 북마크 모집 글 목록 조회 */
 export const findMyBookmarkedProjectsById = async (user_id: number): Promise<any> => {
   try {
     const selectColumns = `
