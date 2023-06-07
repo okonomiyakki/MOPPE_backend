@@ -10,9 +10,9 @@ const router = express.Router();
 
 const staticRouter = express.static('public');
 
-router.use('/static', staticRouter);
-
 router.use('/v1', rootRouter);
+
+router.use('/v1/static', staticRouter);
 
 router.use('/v1/users', userRouter);
 
