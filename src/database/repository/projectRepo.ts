@@ -63,9 +63,6 @@ export const updateProjectInfo = async (
     const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
-    if (isAffected && isMatched && !isChanged)
-      throw new AppError(400, '수정하실 내용이 기존과 동일합니다.');
-
     if (!isAffected && !isMatched && !isChanged)
       throw new AppError(403, '해당 모집 글 작성자만 수정할 수 있습니다.');
 
@@ -94,9 +91,6 @@ export const updateProjectStatus = async (
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
     const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
-
-    if (isAffected && isMatched && !isChanged)
-      throw new AppError(400, '수정하실 상태는 현재 상태와 동일합니다.');
 
     if (!isAffected && !isMatched && !isChanged)
       throw new AppError(403, '해당 모집 글 작성자만 상태를 변경할 수 있습니다.');
