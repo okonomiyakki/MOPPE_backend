@@ -489,7 +489,7 @@ export const findMyBookmarkedProjectsById = async (user_id: number): Promise<any
     FROM project
     LEFT JOIN bookmark ON bookmark.project_id = project.project_id
     LEFT JOIN comment ON comment.project_id = project.project_id
-    WHERE project.user_id = ? AND bookmark.user_id = ?
+    WHERE bookmark.user_id = ?
     GROUP BY project.project_id
     `;
 
