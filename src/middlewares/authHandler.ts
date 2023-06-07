@@ -20,7 +20,16 @@ const generateNewAccessTokenHandler = async (
   next: NextFunction
 ) => {
   try {
-    const refreshToken = req.headers['cookie'];
+    // const refreshToken2 = req.headers['X-Refresh-Token'];
+    const refreshToken2 = req.header('X-Refresh-Token');
+    console.log('refreshToken2', refreshToken2);
+
+    //@ts-ignore
+    const refreshToken = typeof refreshToken2 !== 'string' ? refreshToken2[0] : refreshToken2;
+
+    // const refreshToken = authHeader && authHeader.split(' ')[1].split('refreshToken=')[1];
+
+    console.log('refreshToken', refreshToken);
 
     if (refreshToken === undefined)
       throw new AppError(401, 'AccessToken이 만료되었습니다. RefreshToken을 보내주세요.');
@@ -28,7 +37,7 @@ const generateNewAccessTokenHandler = async (
     const refreshTokenSecret = env.REFRESH_TOKEN_SECRET || 'MOGAKPPO_REFRESH_TOKEN_SECRET';
 
     /* RefreshToken 검증 */
-    const decodedRefreshToken = jwt.verify(refreshToken, refreshTokenSecret) as U.decodedToken;
+    const decodedRefreshToken = jwt.verify(refreshToken, refreshTokenSecret) as any; //U.decodedToken;
 
     const currentTime = Math.floor(Date.now() / 1000);
 
