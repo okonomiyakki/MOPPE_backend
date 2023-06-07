@@ -254,12 +254,19 @@ export const getUserProjectsByIdHandler = async (
     if (req.user.user_id === 0)
       throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
+    const my_user_id = req.user.user_id;
+    console.log('my_user_id', my_user_id);
     const { page } = req.query;
     const { user_id } = req.params;
+    console.log('user_id', user_id);
 
     if (!page) throw new AppError(400, 'page를 입력해주세요.');
 
-    const userProjects = await projectService.getMyProjectsById(Number(user_id), Number(page));
+    const userProjects = await projectService.getMyProjectsById(
+      my_user_id,
+      Number(user_id),
+      Number(page)
+    );
 
     res
       .status(200)
@@ -285,7 +292,7 @@ export const getMyProjectsByIdHandler = async (
 
     if (!page) throw new AppError(400, 'page를 입력해주세요.');
 
-    const myProjects = await projectService.getMyProjectsById(user_id, Number(page));
+    const myProjects = await projectService.getMyProjectsById(user_id, user_id, Number(page));
 
     res.status(200).json({ message: '마이페이지 작성 모집 글 목록 조회 성공', data: myProjects });
   } catch (error) {
