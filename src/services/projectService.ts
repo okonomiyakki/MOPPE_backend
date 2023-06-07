@@ -169,7 +169,7 @@ export const getAllProjects = async (
       else return { ...project, is_bookmarked: false };
     });
 
-    const pagenatedProjects = paginateList(checkIsBookmarked, inputQuery.page, 10);
+    const pagenatedProjects = paginateList(checkIsBookmarked, inputQuery.page, 10, true);
 
     const pageSize = Math.ceil(checkIsBookmarked.length / 10); // TODO] 유틸로 옮기기
 
@@ -260,7 +260,7 @@ export const getMyProjectsById = async (user_id: number, page: number): Promise<
       else return { ...project, is_bookmarked: false };
     });
 
-    const pagenatedProjects = paginateList(checkIsBookmarked, page, 5);
+    const pagenatedProjects = paginateList(checkIsBookmarked, page, 5, true);
 
     const pageSize = Math.ceil(checkIsBookmarked.length / 5); // TODO] 유틸로 옮기기
 
@@ -286,7 +286,7 @@ export const getMyBookmarkedProjectsById = async (user_id: number, page: number)
       return { ...project, is_bookmarked: true };
     });
 
-    const pagenatedProjects = paginateList(addIsBookmarked, page, 5);
+    const pagenatedProjects = paginateList(addIsBookmarked, page, 5, true);
 
     const pageSize = Math.ceil(addIsBookmarked.length / 5); // TODO] 유틸로 옮기기
 
