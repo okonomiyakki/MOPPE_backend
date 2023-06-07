@@ -313,7 +313,6 @@ export const getMyBookmarkedProjectsByIdHandler = async (
 
     const { user_id } = req.user;
     const { page } = req.query;
-    console.log(2);
 
     if (!page) throw new AppError(400, 'page를 입력해주세요.');
 
