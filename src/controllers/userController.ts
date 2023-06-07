@@ -76,9 +76,20 @@ export const editUserInfoHandler = async (req: AuthRequest, res: Response, next:
       throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.user;
-    const { user_name, user_career_goal, user_stacks, user_introduction, user_img } = req.body;
+    const { user_name, user_career_goal, user_introduction } = req.body;
+    const stackList = req.body.user_stacks;
+    const { filename } = req.file || {};
 
-    if (!user_name && !user_career_goal && !user_stacks && !user_introduction && !user_img)
+    const stacks = JSON.parse(stackList);
+
+    const user_stacks: any = {
+      stackList: stacks,
+    };
+
+    const imgFileRoot =
+      filename === undefined ? undefined : `http://localhost:5500/api/v1/static/${filename}`;
+
+    if (!user_name && !user_career_goal && !user_stacks && !user_introduction && !filename)
       throw new AppError(400, '수정하실 정보를 하나 이상 입력해 주세요.');
 
     const inputData: User.UpdatUserInput = {
@@ -86,7 +97,7 @@ export const editUserInfoHandler = async (req: AuthRequest, res: Response, next:
       user_career_goal,
       user_stacks,
       user_introduction,
-      user_img,
+      user_img: imgFileRoot,
     };
 
     const updatedUserId: User.Id = await userService.editUserInfo(user_id, inputData);

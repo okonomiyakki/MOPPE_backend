@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express from 'express';
 import rootRouter from './rootRouter';
 import userRouter from './userRouter';
 import projectRouter from './projectRouter';
@@ -6,7 +6,11 @@ import commentRouter from './commentRouter';
 import bookmarkRouter from './bookmarkRouter';
 import stackRouter from './stackRouter';
 
-const router = Router();
+const router = express.Router();
+
+const staticRouter = express.static('public');
+
+router.use('/static', staticRouter);
 
 router.use('/v1', rootRouter);
 
