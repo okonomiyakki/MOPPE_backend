@@ -133,3 +133,28 @@ export const findUserInfoById = async (user_id: number): Promise<any> => {
     throw error;
   }
 };
+
+/* 회원 기술스택 조회  */
+export const findBestStacks = async (): Promise<any> => {
+  try {
+    const selectColumns = `
+    JSON_ARRAYAGG(
+      JSON_EXTRACT(mogakppo_db.user.user_stacks, '$.stackList')
+    ) AS stackLists
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM user
+    `;
+
+    const [user]: any = await db.query(SQL);
+
+    const userStackList = user[0];
+
+    return userStackList;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
