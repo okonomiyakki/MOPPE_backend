@@ -80,6 +80,8 @@ export const editUserInfoHandler = async (req: AuthRequest, res: Response, next:
     const stackList = req.body.user_stacks;
     const { filename } = req.file || {};
 
+    console.log(req.file);
+
     const stacks = JSON.parse(stackList);
 
     const user_stacks: any = {

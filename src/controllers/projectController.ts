@@ -159,13 +159,8 @@ export const removeProjectHandler = async (req: AuthRequest, res: Response, next
 
     if (isDeletedProject) res.status(200).json({ message: '모집 글 삭제 성공', data: {} });
   } catch (error) {
-    if (error instanceof AppError) {
-      if (error.statusCode === 400) console.log(error);
-      next(error);
-    } else {
-      console.log(error);
-      next(new AppError(500, '[ HTTP 요청 에러 ] 모집 글 삭제 실패'));
-    }
+    console.log(error);
+    next(error);
   }
 };
 
