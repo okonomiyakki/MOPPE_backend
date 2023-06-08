@@ -5,10 +5,9 @@ import projectRouter from './projectRouter';
 import commentRouter from './commentRouter';
 import bookmarkRouter from './bookmarkRouter';
 import stackRouter from './stackRouter';
+import staticRouter from './staticRouter';
 
 const router = express.Router();
-
-const staticRouter = express.static('public');
 
 router.use('/v1', rootRouter);
 
