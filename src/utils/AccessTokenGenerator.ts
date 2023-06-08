@@ -3,7 +3,7 @@ import env from '../config/envconfig';
 import * as U from '../types/UserType';
 
 export const generateNewAccessToken = (decodedRefreshToken: U.decodedToken) => {
-  const newPayload: U.PayloadInfo = {
+  const newPayload: U.Payload = {
     user_id: decodedRefreshToken.user_id,
     user_email: decodedRefreshToken.user_email,
   };
