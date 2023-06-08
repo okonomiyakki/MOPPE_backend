@@ -27,17 +27,27 @@ export type Email = Pick<UserProfile, 'user_email'>;
 
 export type InfoWithPayload = Pick<
   UserProfile,
-  'user_id' | 'user_email' | 'user_name' | 'user_img' | 'user_password'
+  | 'user_id'
+  | 'user_email'
+  | 'user_name'
+  | 'user_img'
+  | 'user_career_goal'
+  | 'user_stacks'
+  | 'user_introduction'
+  | 'user_password'
 >;
 
-export type PayloadInfo = Pick<UserProfile, 'user_id' | 'user_email'>;
+export type Payload = Pick<UserProfile, 'user_id' | 'user_email'>;
 
-export type decodedToken = PayloadInfo & {
+export type decodedToken = Payload & {
   iat: number;
   exp: number;
 };
 
-export type Info = Pick<UserProfile, 'user_id' | 'user_name' | 'user_img'>;
+export type Info = Pick<
+  UserProfile,
+  'user_id' | 'user_name' | 'user_img' | 'user_career_goal' | 'user_stacks' | 'user_introduction'
+>;
 
 export type Tokens = { accessToken: string; refreshToken: string };
 

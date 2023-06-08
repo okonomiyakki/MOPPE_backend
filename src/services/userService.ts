@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import env from '../config/envconfig';
-import { AppError } from '../middlewares/errorHandler';
 import hashPassword from '../utils/passwordHasher';
+import * as AppErrors from '../middlewares/errorHandler';
 import * as userRepo from '../database/repository/userRepo';
 import * as User from '../types/UserType';
 
@@ -17,7 +17,6 @@ export const signUpUser = async (inputData: User.SignUpUserInput): Promise<User.
 
     return createdUserId;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -34,9 +33,9 @@ export const logInUser = async (inputData: User.LogInUserInput): Promise<User.In
       foundUserInfoWithPayload.user_password
     );
 
-    if (!isPasswordMatch) throw new AppError(404, '비밀번호가 일치하지 않습니다.');
+    if (!isPasswordMatch) AppErrors.handleBadRequest('비밀번호가 일치하지 않습니다.');
 
-    const payload: User.PayloadInfo = {
+    const payload: User.Payload = {
       user_id: foundUserInfoWithPayload.user_id,
       user_email: foundUserInfoWithPayload.user_email,
     };
@@ -57,6 +56,9 @@ export const logInUser = async (inputData: User.LogInUserInput): Promise<User.In
       user_id: foundUserInfoWithPayload.user_id,
       user_name: foundUserInfoWithPayload.user_name,
       user_img: foundUserInfoWithPayload.user_img,
+      user_career_goal: foundUserInfoWithPayload.user_career_goal,
+      user_stacks: foundUserInfoWithPayload.user_stacks,
+      user_introduction: foundUserInfoWithPayload.user_introduction,
     };
 
     const userInfoWithTokens: User.InfoWithTokens = {
@@ -67,7 +69,6 @@ export const logInUser = async (inputData: User.LogInUserInput): Promise<User.In
 
     return userInfoWithTokens;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -78,13 +79,10 @@ export const editUserInfo = async (
   inputData: User.UpdatUserInput
 ): Promise<any> => {
   try {
-    await userRepo.isUserIdValid(user_id);
-
     const updatedUserId = await userRepo.updateUserInfo(user_id, inputData);
 
     return updatedUserId;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -98,7 +96,6 @@ export const getUserInfoById = async (user_id: number): Promise<any> => {
 
     return foundUserInfo;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
