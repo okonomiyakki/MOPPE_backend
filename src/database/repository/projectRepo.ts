@@ -1,5 +1,6 @@
 import db from '../../config/dbconfig';
-import { AppError } from '../../middlewares/errorHandler';
+// import { AppError } from '../../middlewares/errorHandler';
+import * as AppErrors from '../../middlewares/errorHandler';
 import * as Project from '../../types/ProjectType';
 
 /* 모집 글 등록 */
@@ -32,8 +33,7 @@ export const createProject = async (inputData: Project.CreateProjectInput): Prom
 
     return createdProjectId;
   } catch (error) {
-    console.log(error);
-    throw new AppError(500, '모집 글 등록 중 오류가 발생했습니다.');
+    throw error;
   }
 };
 
@@ -60,15 +60,16 @@ export const updateProjectInfo = async (
     const [result, _] = await db.execute(SQL, [...updateValues, user_id, project_id]);
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+
     const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;
+
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
     if (!isAffected && !isMatched && !isChanged)
-      throw new AppError(403, '해당 모집 글 작성자만 수정할 수 있습니다.');
+      AppErrors.handleForbidden('본인만 수정 가능 합니다.');
 
     return project_id;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -89,15 +90,16 @@ export const updateProjectStatus = async (
     const [result, _] = await db.execute(SQL, [project_recruitment_status, user_id, project_id]);
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+
     const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;
+
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
     if (!isAffected && !isMatched && !isChanged)
-      throw new AppError(403, '해당 모집 글 작성자만 상태를 변경할 수 있습니다.');
+      AppErrors.handleForbidden('본인만 수정 가능 합니다.');
 
     return project_id;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -114,11 +116,10 @@ export const deleteProjectById = async (user_id: number, project_id: number): Pr
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
 
-    if (!isAffected) throw new AppError(403, '해당 모집 글 작성자만 삭제할 수 있습니다.');
+    if (!isAffected) AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
 
     return true;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -152,11 +153,10 @@ export const findAllProjects = async (): Promise<any> => {
 
     const [projects]: any = await db.query(SQL);
 
-    if (!projects.length) throw new AppError(404, '존재하는 모집 글이 없습니다.');
+    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects; // TODO] as Project.ListByRole[]; 명시적으로 타입 선언
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -191,11 +191,10 @@ export const findProjectsByRole = async (project_role: string): Promise<any> => 
 
     const [projects]: any = await db.query(SQL, [project_role]);
 
-    if (!projects.length) throw new AppError(404, '존재하는 모집 글이 없습니다.');
+    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -230,11 +229,10 @@ export const findProjectsByStatus = async (project_status: string): Promise<any>
 
     const [projects]: any = await db.query(SQL, [project_status]);
 
-    if (!projects.length) throw new AppError(404, '존재하는 모집 글이 없습니다.');
+    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -272,11 +270,10 @@ export const findProjectsByRoleWithStatus = async (
 
     const [projects]: any = await db.query(SQL, [project_role, project_status]);
 
-    if (!projects.length) throw new AppError(404, '존재하는 모집 글이 없습니다.');
+    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -321,11 +318,10 @@ export const findProjectsByKeyword = async (project_keyword: string): Promise<an
       project_keyword,
     ]);
 
-    if (!projects.length) throw new AppError(404, '존재하는 모집 글이 없습니다.');
+    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -376,11 +372,10 @@ export const findProjectsByKeywordWithStatus = async (
       project_status,
     ]);
 
-    if (!projects.length) throw new AppError(404, '존재하는 모집 글이 없습니다.');
+    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -423,11 +418,10 @@ export const findProjectById = async (project_id: number): Promise<any> => {
 
     const isProjectValid = project[0];
 
-    if (!isProjectValid) throw new AppError(404, '해당 모집 글은 이미 삭제 되었습니다.');
+    if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
 
     return project[0];
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -459,11 +453,10 @@ export const findMyProjectsById = async (user_id: number): Promise<any> => {
 
     const [projects]: any = await db.query(SQL, [user_id]);
 
-    if (!projects.length) throw new AppError(404, '존재하는 모집 글이 없습니다.');
+    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -495,11 +488,10 @@ export const findMyBookmarkedProjectsById = async (user_id: number): Promise<any
 
     const [projects]: any = await db.query(SQL, [user_id, user_id]);
 
-    if (!projects.length) throw new AppError(404, '존재하는 모집 글이 없습니다.');
+    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -521,8 +513,7 @@ export const findUserViewDateById = async (
 
     return Number(date[0].project_view_count);
   } catch (error) {
-    console.log(error);
-    throw new AppError(500, '모집 글 조회 중 오류가 발생했습니다.');
+    throw error;
   }
 };
 
@@ -548,7 +539,6 @@ export const updateProjectViewsCount = async (
 
     await db.execute(SQL2, [user_id, project_id, currentDate]);
   } catch (error) {
-    console.log(error);
-    throw new AppError(500, '모집 글 조회 중 오류가 발생했습니다.');
+    throw error;
   }
 };

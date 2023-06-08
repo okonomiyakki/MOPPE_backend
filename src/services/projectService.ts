@@ -1,4 +1,4 @@
-import { AppError } from '../middlewares/errorHandler';
+import * as AppErrors from '../middlewares/errorHandler';
 import * as projectRepo from '../database/repository/projectRepo';
 import * as bookmarkRepo from '../database/repository/bookmarkRepo';
 import * as Project from '../types/ProjectType';
@@ -14,7 +14,6 @@ export const addProject = async (inputData: Project.CreateProjectInput): Promise
 
     return createdProjectId;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -30,7 +29,6 @@ export const editProjectInfo = async (
 
     return updatedProjectId;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -50,7 +48,6 @@ export const editProjectStatus = async (
 
     return updatedProjectId;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -62,7 +59,6 @@ export const removeProject = async (user_id: number, project_id: number): Promis
 
     return isDeletedProject;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -117,6 +113,7 @@ const getProjectsByQuery = async (inputQuery: Project.QueryInput) => {
         return foundProjects;
       }
     }
+
     // 키워드 별 조회
     else if (!inputQuery.project_role && inputQuery.project_keyword) {
       // 키워드 별 모집 중
@@ -144,9 +141,8 @@ const getProjectsByQuery = async (inputQuery: Project.QueryInput) => {
         console.log(9);
         return foundProjects;
       }
-    } else throw new AppError(500, '키워드와 모집 역할은 동시에 선택하실 수 없습니다.');
+    } else AppErrors.handleBadRequest('키워드와 모집 역할은 동시에 선택하실 수 없습니다.');
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -180,7 +176,6 @@ export const getAllProjects = async (
 
     return pagenatedProjectsInfo;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -240,7 +235,6 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
 
     return checkIsBookmarked;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -302,7 +296,6 @@ export const getMyBookmarkedProjectsById = async (user_id: number, page: number)
 
     return pagenatedProjectsInfo;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

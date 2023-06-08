@@ -1,6 +1,7 @@
 import { Response, NextFunction } from 'express';
-import { AppError } from '../middlewares/errorHandler';
 import { AuthRequest } from '../types/RequestType';
+import AppError from '../types/AppErrorType';
+import * as AppErrors from '../middlewares/errorHandler';
 import * as Project from '../types/ProjectType';
 import * as projectService from '../services/projectService';
 
@@ -29,7 +30,9 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
       !project_participation_time ||
       !project_introduction
     )
-      throw new AppError(400, '요청 body에 모든 정보를 입력해 주세요.');
+      AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
+
+    // TODO] validator 에서 요청 body 타입 유효성 검사 추가
 
     const inputData: Project.CreateProjectInput = {
       user_id,
@@ -49,7 +52,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
     res.status(201).json({ message: '모집 글 등록 성공', data: { project_id: createdProjectId } });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -74,7 +77,7 @@ export const editProjectInfoHandler = async (
       project_img,
     } = req.body;
 
-    if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
+    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
 
     if (
       !project_type &&
@@ -87,7 +90,11 @@ export const editProjectInfoHandler = async (
       !project_introduction &&
       !project_img
     )
-      throw new AppError(400, '수정하실 정보를 하나 이상 입력해 주세요.');
+      AppErrors.handleBadRequest('수정하실 정보를 하나 이상 입력해 주세요.');
+
+    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
+
+    // TODO] validator 에서 요청 body 타입 유효성 검사 추가
 
     const inputData: Project.UpdateInput = {
       project_type,
@@ -112,7 +119,7 @@ export const editProjectInfoHandler = async (
       .json({ message: '모집 글 상세 정보 수정 성공', data: { project_id: updatedPeojectId } });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -127,10 +134,15 @@ export const editProjectStatusHandler = async (
     const { project_id } = req.params;
     const { project_recruitment_status } = req.body;
 
-    if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
+    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
 
     if (!project_recruitment_status)
-      throw new AppError(400, 'project_recruitment_status를 입력해 주세요.');
+      AppErrors.handleBadRequest('project_recruitment_status를 입력해 주세요.');
+
+    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
+
+    if (typeof project_recruitment_status !== 'string')
+      AppErrors.handleBadRequest('유효한 project_recruitment_status를 입력해주세요.');
 
     const updatedPeojectId: Project.Id = await projectService.editProjectStatus(
       user_id,
@@ -143,7 +155,7 @@ export const editProjectStatusHandler = async (
       .json({ message: '모집 글 모집 상태 수정 성공', data: { project_id: updatedPeojectId } });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -153,14 +165,16 @@ export const removeProjectHandler = async (req: AuthRequest, res: Response, next
     const { user_id } = req.user;
     const { project_id } = req.params;
 
-    if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
+    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
+
+    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
 
     const isDeletedProject = await projectService.removeProject(user_id, Number(project_id));
 
     if (isDeletedProject) res.status(200).json({ message: '모집 글 삭제 성공', data: {} });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -173,6 +187,11 @@ export const getAllProjectsHandler = async (
   try {
     const { user_id } = req.user;
     const { cate, recruiting, keyword, page } = req.query;
+
+    if (!cate || !recruiting || !keyword || !page)
+      AppErrors.handleBadRequest('요청 query에 모든 정보를 입력해 주세요.');
+
+    // TODO] validator 에서 요청 query 타입 유효성 검사 추가
 
     const project_role = cate === 'all' ? undefined : (cate as string);
     const project_status =
@@ -191,7 +210,7 @@ export const getAllProjectsHandler = async (
     res.status(200).json({ message: '전체 모집 글 목록 조회 성공', data: pagenatedProjectsInfo });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -202,17 +221,20 @@ export const getProjectsByRoleHandler = async (
   next: NextFunction
 ) => {
   try {
-    const { project_role } = req.params;
     const { user_id } = req.user;
+    const { project_role } = req.params;
 
-    if (!project_role) throw new AppError(400, 'project_role를 입력해 주세요.');
+    if (!project_role) AppErrors.handleBadRequest('project_role를 입력해 주세요.');
+
+    if (typeof project_role !== 'string')
+      AppErrors.handleBadRequest('유효한 project_role를 입력해주세요.');
 
     const projectsByRole = await projectService.getProjectsByRole(user_id, project_role);
 
     res.status(200).json({ message: '역할별 모집 글 목록 조회 성공', data: projectsByRole });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -223,19 +245,19 @@ export const getProjectByIdHandler = async (
   next: NextFunction
 ) => {
   try {
-    const { project_id } = req.params;
     const { user_id } = req.user;
+    const { project_id } = req.params;
 
-    if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
+    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
 
-    if (isNaN(Number(project_id))) throw new AppError(400, '유효한 project_id를 입력해주세요.');
+    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
 
     const projectInfo = await projectService.getProjectById(user_id, Number(project_id));
 
     res.status(200).json({ message: '모집 글 상세 정보 조회 성공', data: projectInfo });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -247,13 +269,19 @@ export const getUserProjectsByIdHandler = async (
 ) => {
   try {
     if (req.user.user_id === 0)
-      throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const my_user_id = req.user.user_id;
     const { page } = req.query;
     const { user_id } = req.params;
 
-    if (!page) throw new AppError(400, 'page를 입력해주세요.');
+    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
+
+    if (!user_id) AppErrors.handleBadRequest('user_id를 입력해주세요.');
+
+    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
+
+    if (isNaN(Number(user_id))) AppErrors.handleBadRequest('유효한 user_id를 입력해주세요.');
 
     const userProjects = await projectService.getMyProjectsById(
       my_user_id,
@@ -266,7 +294,7 @@ export const getUserProjectsByIdHandler = async (
       .json({ message: '다른 회원 마이페이지 작성 모집 글 목록 조회 성공', data: userProjects });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -278,19 +306,21 @@ export const getMyProjectsByIdHandler = async (
 ) => {
   try {
     if (req.user.user_id === 0)
-      throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.user;
     const { page } = req.query;
 
-    if (!page) throw new AppError(400, 'page를 입력해주세요.');
+    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
+
+    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
 
     const myProjects = await projectService.getMyProjectsById(user_id, user_id, Number(page));
 
     res.status(200).json({ message: '마이페이지 작성 모집 글 목록 조회 성공', data: myProjects });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -302,18 +332,20 @@ export const getMyBookmarkedProjectsByIdHandler = async (
 ) => {
   try {
     if (req.user.user_id === 0)
-      throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.user;
     const { page } = req.query;
 
-    if (!page) throw new AppError(400, 'page를 입력해주세요.');
+    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
+
+    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
 
     const myProjects = await projectService.getMyBookmarkedProjectsById(user_id, Number(page));
 
     res.status(200).json({ message: '마이페이지 북마크 모집 글 목록 조회 성공', data: myProjects });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
