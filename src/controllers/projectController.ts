@@ -2,8 +2,8 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
 import AppError from '../types/AppErrorType';
 import * as AppErrors from '../middlewares/errorHandler';
-import * as Project from '../types/ProjectType';
 import * as projectService from '../services/projectService';
+import * as Project from '../types/ProjectType';
 
 /* 모집 글 등록 */
 export const addProjectHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -21,9 +21,9 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
     } = req.body;
     const fileList = req.files || {};
 
-    const imgFileRoots = (fileList as any[])
-      .map((file) => `http://localhost:5500/api/v1/static/project/${file.filename}`)
-      .join(', ');
+    const imgFileRoots = (fileList as any[]).map(
+      (file) => `http://localhost:5500/api/v1/static/project/${file.filename}`
+    );
 
     if (
       !project_type ||
@@ -43,12 +43,18 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
       project_type,
       project_title,
       project_summary,
-      project_recruitment_roles,
-      project_required_stacks,
+      project_recruitment_roles: {
+        roleList: JSON.parse(project_recruitment_roles),
+      },
+      project_required_stacks: {
+        stackList: JSON.parse(project_required_stacks),
+      },
       project_goal,
       project_participation_time,
       project_introduction,
-      project_img: imgFileRoots,
+      project_img: {
+        imgList: [...imgFileRoots],
+      },
     };
 
     const createdProjectId: Project.Id = await projectService.addProject(inputData);
@@ -103,8 +109,12 @@ export const editProjectInfoHandler = async (
       project_type,
       project_title,
       project_summary,
-      project_recruitment_roles,
-      project_required_stacks,
+      project_recruitment_roles: {
+        roleList: JSON.parse(project_recruitment_roles),
+      },
+      project_required_stacks: {
+        stackList: JSON.parse(project_required_stacks),
+      },
       project_goal,
       project_participation_time,
       project_introduction,

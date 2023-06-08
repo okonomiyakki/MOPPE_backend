@@ -10,7 +10,7 @@ interface ProjectProfile {
   project_goal: string;
   project_participation_time: string;
   project_introduction: string;
-  project_img: string | null;
+  project_img: { imgList: string[] } | null;
   project_views_count: number;
   project_created_at: string;
 }
