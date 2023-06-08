@@ -1,10 +1,9 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
-// import { AppError } from './errorHandler';
-import AppError from '../types/AppErrorType';
-import * as AppErrors from '../middlewares/errorHandler';
 import jwt from 'jsonwebtoken';
 import env from '../config/envconfig';
+import AppError from '../types/AppErrorType';
+import * as AppErrors from '../middlewares/errorHandler';
 import * as U from '../types/UserType';
 import { generateNewAccessToken } from '../utils/accessTokenGenerator';
 
