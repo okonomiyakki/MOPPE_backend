@@ -18,8 +18,12 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
       project_goal,
       project_participation_time,
       project_introduction,
-      project_img,
     } = req.body;
+    const fileList = req.files || {};
+
+    const imgFileRoots = (fileList as any[])
+      .map((file) => `http://localhost:5500/api/v1/static/project/${file.filename}`)
+      .join(', ');
 
     if (
       !project_type ||
@@ -44,7 +48,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
       project_goal,
       project_participation_time,
       project_introduction,
-      project_img,
+      project_img: imgFileRoots,
     };
 
     const createdProjectId: Project.Id = await projectService.addProject(inputData);
