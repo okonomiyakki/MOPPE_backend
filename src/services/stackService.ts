@@ -1,4 +1,3 @@
-import { AppError } from '../middlewares/errorHandler';
 import * as stackRepo from '../database/repository/stackRepo';
 import * as userRepo from '../database/repository/userRepo';
 import { countUserStacksFrequency } from '../utils/stackFrequencyCounter';
@@ -21,7 +20,6 @@ export const getAllStacks = async (): Promise<any> => {
 
     return stacksInfo;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
