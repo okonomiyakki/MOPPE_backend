@@ -12,21 +12,29 @@ export const addPortfolioHandler = async (req: AuthRequest, res: Response, next:
     const {
       portfolio_title,
       portfolio_summary,
-      portfolio_thumbnail,
       portfolio_github,
       portfolio_stacks,
       portfolio_description,
     } = req.body;
-    const fileList = req.files || {};
+    // const { filename } = req.file || {}; // 썸네일
+    const fileList = req.files || {}; // 이미지 배열
 
-    const imgFileRoots = (fileList as any[])
-      .map((file) => `http://localhost:5500/api/v1/static/portfolio/${file.filename}`)
-      .join(', ');
+    // console.log('filename : ', filename);
+    console.log('fileList : ', fileList);
+
+    // const imgFileRoot = `http://localhost:5500/api/v1/static/portfolio/${filename}`;
+
+    const imgFileRoots = (fileList as any[]).map(
+      (file) => `http://localhost:5500/api/v1/static/portfolio/${file.filename}`
+    );
+
+    const thumbnail = imgFileRoots[0];
+
+    console.log('body : ', req.body);
 
     if (
       !portfolio_title ||
       !portfolio_summary ||
-      !portfolio_thumbnail ||
       !portfolio_github ||
       !portfolio_stacks ||
       !portfolio_description
@@ -39,11 +47,13 @@ export const addPortfolioHandler = async (req: AuthRequest, res: Response, next:
       user_id,
       portfolio_title,
       portfolio_summary,
-      portfolio_thumbnail,
+      portfolio_thumbnail: thumbnail, //imgFileRoot,
       portfolio_github,
       portfolio_stacks,
       portfolio_description,
-      portfolio_img: imgFileRoots,
+      portfolio_img: {
+        imgList: [...imgFileRoots.slice(1)],
+      },
     };
 
     const createdPortfolioId: Portfolio.Id = await portfolioService.addPorfolio(inputData);

@@ -9,7 +9,7 @@ const portfolioRouter = Router();
 portfolioRouter.post(
   '/posts',
   AuthenticateHandler,
-  upload.projectImageHandler,
+  upload.portfolioImageHandler,
   portfolioController.addPortfolioHandler
 );
 

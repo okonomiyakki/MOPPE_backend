@@ -7,7 +7,7 @@ interface PortfolioProfile {
   portfolio_github: string;
   portfolio_stacks: { stackList: string[] };
   portfolio_description: string;
-  portfolio_img: string | null;
+  portfolio_img: { imgList: string[] } | null;
   portfolio_views_count: number;
   portfolio_created_at: string;
 }
