@@ -250,10 +250,8 @@ export const getUserProjectsByIdHandler = async (
       throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const my_user_id = req.user.user_id;
-    console.log('my_user_id', my_user_id);
     const { page } = req.query;
     const { user_id } = req.params;
-    console.log('user_id', user_id);
 
     if (!page) throw new AppError(400, 'page를 입력해주세요.');
 

@@ -22,8 +22,10 @@ export const signUpUserHandler = async (req: Request, res: Response, next: NextF
 
     res.status(201).json({ message: '회원 가입 성공', data: { user_id: createdUserId } });
   } catch (error) {
-    console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(new AppError(500, 'Server Error'));
+
+    // console.log(error);
+    // next(error);
   }
 };
 

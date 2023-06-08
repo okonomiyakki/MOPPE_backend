@@ -1,5 +1,5 @@
 import db from '../../config/dbconfig';
-import { AppError } from '../../middlewares/errorHandler';
+import * as AppError from '../../middlewares/errorHandler';
 import * as User from '../../types/UserType';
 
 /* 회원 가입 */
@@ -26,7 +26,7 @@ export const createUser = async (inputData: User.SignUpUserInput): Promise<User.
     return createdUserId;
   } catch (error) {
     console.log(error);
-    throw new AppError(400, '이미 가입된 이메일입니다. 다른 이메일을 사용해 주세요.');
+    throw error;
   }
 };
 
@@ -43,7 +43,7 @@ export const isUserIdValid = async (user_id: number): Promise<void> => {
 
     const isUserIdValid = user[0];
 
-    if (!isUserIdValid) throw new AppError(404, '존재하지 않는 회원입니다.');
+    if (!isUserIdValid) AppError.handleNotFound('존재하지 않는 회원입니다.');
   } catch (error) {
     console.log(error);
     throw error;
@@ -70,7 +70,7 @@ export const findUserPayloadByEmail = async (user_email: string): Promise<User.I
     const userInfoWithPayload = user[0];
 
     if (!userInfoWithPayload)
-      throw new AppError(404, '존재하지 않는 이메일입니다. 회원 가입 후 이용해 주세요.');
+      AppError.handleNotFound('존재하지 않는 이메일입니다. 회원 가입 후 이용해 주세요.');
 
     return userInfoWithPayload;
   } catch (error) {
@@ -105,7 +105,7 @@ export const updateUserInfo = async (
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
     if (!isAffected && !isMatched && !isChanged)
-      throw new AppError(403, '회원 본인만 수정할 수 있습니다.');
+      AppError.handleForbidden('회원 본인만 수정할 수 있습니다.');
 
     return user_id;
   } catch (error) {
@@ -135,7 +135,7 @@ export const findUserInfoById = async (user_id: number): Promise<any> => {
 
     const userInfoWithPayload = user[0];
 
-    if (!userInfoWithPayload) throw new AppError(404, '존재하지 않는 회원 입니다.');
+    if (!userInfoWithPayload) AppError.handleNotFound('존재하지 않는 회원입니다.');
 
     return userInfoWithPayload;
   } catch (error) {
