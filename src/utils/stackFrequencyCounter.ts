@@ -1,6 +1,7 @@
 export const countUserStacksFrequency = (userStackList: { stackLists: string[][] }) => {
   const stackFrequency: { [stackName: string]: number } = {};
   userStackList.stackLists.forEach((stackList: string[]) => {
+    if (stackList === null) stackList = [];
     stackList.forEach((stackName: string) => {
       if (stackFrequency[stackName]) stackFrequency[stackName]++;
       else stackFrequency[stackName] = 1;
