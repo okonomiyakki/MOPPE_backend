@@ -1,5 +1,5 @@
 import db from '../../config/dbconfig';
-import { AppError } from '../../middlewares/errorHandler';
+import * as AppErrors from '../../middlewares/errorHandler';
 import * as Comment from '../../types/commentType';
 
 /* 댓글 등록 */
@@ -25,8 +25,7 @@ export const createComment = async (inputData: Comment.CreateCommentInput): Prom
 
     return createdCommentId;
   } catch (error) {
-    console.log(error);
-    throw new AppError(500, '댓글 등록 중 오류가 발생했습니다.');
+    throw error;
   }
 };
 
@@ -53,15 +52,16 @@ export const updateComment = async (
     const [result, _] = await db.execute(SQL, [...updateValues, user_id, comment_id]);
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+
     const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;
+
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
     if (!isAffected && !isMatched && !isChanged)
-      throw new AppError(403, '해당 댓글 작성자만 수정할 수 있습니다.');
+      AppErrors.handleForbidden('본인만 수정 가능 합니다.');
 
     return comment_id;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -78,11 +78,10 @@ export const deleteCommentById = async (user_id: number, comment_id: number): Pr
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
 
-    if (!isAffected) throw new AppError(403, '해당 댓글 작성자만 삭제할 수 있습니다.');
+    if (!isAffected) AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
 
     return true;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -101,9 +100,8 @@ export const findProjectById = async (comment_id: number): Promise<void> => {
 
     const isProjectValid = comment[0];
 
-    if (!isProjectValid) throw new AppError(404, '해당 모집 글은 이미 삭제 되었습니다.');
+    if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -129,11 +127,10 @@ export const findProjectCommentsById = async (project_id: number): Promise<any> 
 
     const [comments]: any = await db.query(SQL, [project_id]);
 
-    if (!comments.length) throw new AppError(404, '존재하는 댓글이 없습니다.');
+    if (!comments.length) AppErrors.handleNotFound('존재하는 댓글이 없습니다.');
 
     return comments;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -160,7 +157,7 @@ export const findMyCommentsById = async (user_id: number): Promise<any> => {
 
     const [comments]: any = await db.query(SQL, [user_id]);
 
-    if (!comments.length) throw new AppError(404, '존재하는 댓글이 없습니다.');
+    if (!comments.length) AppErrors.handleNotFound('존재하는 댓글이 없습니다.');
 
     return comments;
   } catch (error) {

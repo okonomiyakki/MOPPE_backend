@@ -1,6 +1,7 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
-import { AppError } from '../middlewares/errorHandler';
+import AppError from '../types/AppErrorType';
+import * as AppErrors from '../middlewares/errorHandler';
 import * as commentService from '../services/commentService';
 import * as Comment from '../types/commentType';
 
@@ -16,6 +17,11 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
     if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
 
     if (!comment_content) throw new AppError(400, 'comment_content를 입력해 주세요.');
+
+    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
+
+    if (typeof comment_content !== 'string')
+      AppErrors.handleBadRequest('유효한 comment_content를 입력해주세요.');
 
     const commentLocation = project_id !== 0 ? '모집 글' : 'QnA';
 
@@ -34,7 +40,7 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
     });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -49,6 +55,11 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
 
     if (!comment_content) throw new AppError(400, 'comment_content를 입력해 주세요.');
 
+    if (isNaN(Number(comment_id))) AppErrors.handleBadRequest('유효한 comment_id를 입력해주세요.');
+
+    if (typeof comment_content !== 'string')
+      AppErrors.handleBadRequest('유효한 comment_content를 입력해주세요.');
+
     const inputData: Comment.UpdateCommentInput = {
       comment_content,
     };
@@ -62,7 +73,7 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
     res.status(200).json({ message: '댓글 수정 성공', data: { comment_id: updatedCommentId } });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -74,12 +85,14 @@ export const removeCommentHandler = async (req: AuthRequest, res: Response, next
 
     if (!comment_id) throw new AppError(400, 'comment_id를 입력해 주세요.');
 
+    if (isNaN(Number(comment_id))) AppErrors.handleBadRequest('유효한 comment_id를 입력해주세요.');
+
     const isDeletedComment = await commentService.removeComment(user_id, Number(comment_id));
 
     if (isDeletedComment) res.status(200).json({ message: '댓글 삭제 성공', data: {} });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -97,6 +110,10 @@ export const getProjectCommentsByIdHandler = async (
 
     if (!page) throw new AppError(400, 'page를 입력해주세요.');
 
+    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
+
+    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
+
     const projectComments = await commentService.getProjectCommentsById(
       Number(project_id),
       Number(page)
@@ -105,7 +122,7 @@ export const getProjectCommentsByIdHandler = async (
     res.status(200).json({ message: '모집 글 별 댓글 목록 조회 성공', data: projectComments });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -124,6 +141,8 @@ export const getMyCommentsByIdHandler = async (
 
     if (!page) throw new AppError(400, 'page를 입력해주세요.');
 
+    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
+
     const myComments = await commentService.getMyCommentsById(user_id, Number(page));
 
     res.status(200).json({
@@ -132,6 +151,6 @@ export const getMyCommentsByIdHandler = async (
     });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };

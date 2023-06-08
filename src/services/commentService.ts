@@ -1,4 +1,3 @@
-import { AppError } from '../middlewares/errorHandler';
 import * as commentRepo from '../database/repository/commentRepo';
 import * as Comment from '../types/commentType';
 import { paginateList } from '../utils/paginator';
@@ -10,7 +9,6 @@ export const addComment = async (inputData: Comment.CreateCommentInput): Promise
 
     return createdCommentId;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -28,7 +26,6 @@ export const editComment = async (
 
     return updatedCommentId;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -42,7 +39,6 @@ export const removeComment = async (user_id: number, comment_id: number): Promis
 
     return isDeletedComment;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -64,7 +60,6 @@ export const getProjectCommentsById = async (project_id: number, page: number): 
 
     return pagenatedCommentsInfo;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -86,7 +81,6 @@ export const getMyCommentsById = async (user_id: number, page: number): Promise<
 
     return pagenatedCommentsInfo;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

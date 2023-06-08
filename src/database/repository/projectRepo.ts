@@ -1,5 +1,4 @@
 import db from '../../config/dbconfig';
-// import { AppError } from '../../middlewares/errorHandler';
 import * as AppErrors from '../../middlewares/errorHandler';
 import * as Project from '../../types/ProjectType';
 
