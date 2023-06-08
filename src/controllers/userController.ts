@@ -13,6 +13,8 @@ export const signUpUserHandler = async (req: Request, res: Response, next: NextF
     if (!user_email || !user_name || !user_password)
       AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
 
+    // TODO] validator 에서 요청 body 타입 유효성 검사 추가
+
     const inputData: User.SignUpUserInput = {
       user_email,
       user_name,
@@ -35,6 +37,8 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
 
     if (!user_email || !user_password)
       AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
+
+    // TODO] validator 에서 요청 body 타입 유효성 검사 추가
 
     const inputData: User.LogInUserInput = {
       user_email,
@@ -93,7 +97,9 @@ export const editUserInfoHandler = async (req: AuthRequest, res: Response, next:
       filename === undefined ? undefined : `http://localhost:5500/api/v1/static/${filename}`;
 
     if (!user_name && !user_career_goal && !user_stacks && !user_introduction && !filename)
-      AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
+      AppErrors.handleBadRequest('수정하실 정보를 하나 이상 입력해 주세요.');
+
+    // TODO] validator 에서 요청 body 타입 유효성 검사 추가
 
     const inputData: User.UpdatUserInput = {
       user_name,
@@ -123,6 +129,10 @@ export const getUserInfoByIdHandler = async (
       AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.params;
+
+    if (!user_id) AppErrors.handleBadRequest('user_id를 입력해주세요.');
+
+    if (isNaN(Number(user_id))) AppErrors.handleBadRequest('유효한 user_id를 입력해주세요.');
 
     const userInfo = await userService.getUserInfoById(Number(user_id));
 

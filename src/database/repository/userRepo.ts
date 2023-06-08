@@ -73,7 +73,7 @@ export const findUserPayloadByEmail = async (user_email: string): Promise<User.I
     const userInfoWithPayload = user[0];
 
     if (!userInfoWithPayload)
-      AppErrors.handleNotFound('존재하지 않는 이메일입니다. 회원 가입 후 이용해 주세요.');
+      AppErrors.handleNotFound('존재하지 않는 회원입니다. 회원 가입 후 이용해 주세요.');
 
     return userInfoWithPayload;
   } catch (error) {
