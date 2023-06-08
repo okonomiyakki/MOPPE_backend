@@ -1,12 +1,18 @@
 import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
+import * as upload from '../middlewares/imageHandler';
 import * as projectController from '../controllers/projectController';
 import * as commentController from '../controllers/commentController';
 
 const projectRouter = Router();
 
 /* 모집 글 등록 */
-projectRouter.post('/recruitment', AuthenticateHandler, projectController.addProjectHandler);
+projectRouter.post(
+  '/recruitment',
+  AuthenticateHandler,
+  upload.projectImageHandler,
+  projectController.addProjectHandler
+);
 
 /* 모집 글 상세 정보 수정 */
 projectRouter.patch(
