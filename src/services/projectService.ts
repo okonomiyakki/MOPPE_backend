@@ -3,6 +3,7 @@ import * as bookmarkRepo from '../database/repository/bookmarkRepo';
 import * as Project from '../types/ProjectType';
 import * as Bookmark from '../types/BookmarkType';
 import { paginateList } from '../utils/paginator';
+import { generateNewDate } from '../utils/dateGenerator';
 import { searchProjectsByQuery } from '../utils/searchProjects';
 
 /* 모집 글 등록 */
@@ -127,11 +128,7 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
 
     const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
 
-    const currentDate = new Date().toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
-
-    const splitDate = currentDate.split('. ');
-
-    const currentKorDate = `${splitDate[0]}-${splitDate[1]}-${splitDate[2]}`;
+    const currentKorDate = generateNewDate();
 
     const isUserEnteredCurrentDate = await projectRepo.findUserViewDateById(
       user_id,
