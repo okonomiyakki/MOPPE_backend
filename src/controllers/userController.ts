@@ -52,6 +52,9 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
       user_id: infoWithTokens.user_id,
       user_name: infoWithTokens.user_name,
       user_img: infoWithTokens.user_img,
+      user_career_goal: infoWithTokens.user_career_goal,
+      user_stacks: infoWithTokens.user_stacks,
+      user_introduction: infoWithTokens.user_introduction,
     };
 
     res.status(200).json({ message: '로그인 성공', data: userInfoWithTokens });
