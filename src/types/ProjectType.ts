@@ -1,5 +1,3 @@
-import { Query } from 'typeorm/driver/Query';
-import * as B from './BookmarkType';
 interface ProjectProfile {
   project_id: number;
   user_id: number;
