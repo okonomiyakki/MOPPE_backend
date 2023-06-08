@@ -45,9 +45,9 @@ export const updateComment = async (
     const updateValues = Object.values(inputData).filter((value) => value !== undefined);
 
     const SQL = `
-      UPDATE comment
-      SET ${updateColums}
-      WHERE user_id = ? AND comment_id = ?
+    UPDATE comment
+    SET ${updateColums}
+    WHERE user_id = ? AND comment_id = ?
     `;
 
     const [result, _] = await db.execute(SQL, [...updateValues, user_id, comment_id]);

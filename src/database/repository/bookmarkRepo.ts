@@ -6,9 +6,9 @@ import * as Bookmark from '../../types/BookmarkType';
 export const createBookmark = async (inputData: Bookmark.CreateInput): Promise<any> => {
   try {
     const createColumns = `
-      user_id,
-      project_id
-      `;
+    user_id,
+    project_id
+    `;
 
     const createValues = Object.values(inputData);
 

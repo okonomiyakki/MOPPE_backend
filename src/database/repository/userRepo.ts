@@ -53,7 +53,11 @@ export const isUserIdValid = async (user_id: number): Promise<void> => {
 /* 회원 payload, 기본 필드 조회  */
 export const findUserPayloadByEmail = async (user_email: string): Promise<User.InfoWithPayload> => {
   try {
-    const selectColumns = 'user_id, user_email, user_name, user_img, user_password';
+    const selectColumns = `
+    user_id, user_email,
+    user_name, user_img,
+    user_password
+    `;
 
     const SQL = `
     SELECT ${selectColumns}
@@ -89,9 +93,9 @@ export const updateUserInfo = async (
     const updateValues = Object.values(inputData).filter((value) => value !== undefined);
 
     const SQL = `
-      UPDATE user
-      SET ${updateColums}
-      WHERE user_id = ?
+    UPDATE user
+    SET ${updateColums}
+    WHERE user_id = ?
     `;
 
     const [result, _] = await db.execute(SQL, [...updateValues, user_id]);
@@ -113,7 +117,13 @@ export const updateUserInfo = async (
 /* 회원 마이페이지 상세 정보 조회  */
 export const findUserInfoById = async (user_id: number): Promise<any> => {
   try {
-    const selectColumns = 'user_name, user_career_goal, user_stacks, user_introduction, user_img';
+    const selectColumns = `
+    user_name,
+    user_career_goal,
+    user_stacks,
+    user_introduction,
+    user_img
+    `;
 
     const SQL = `
     SELECT ${selectColumns}

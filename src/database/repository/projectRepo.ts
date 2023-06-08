@@ -6,17 +6,17 @@ import * as Project from '../../types/ProjectType';
 export const createProject = async (inputData: Project.CreateProjectInput): Promise<Project.Id> => {
   try {
     const createColumns = `
-      user_id,
-      project_type,
-      project_title, 
-      project_summary,
-      project_recruitment_roles,
-      project_required_stacks,
-      project_goal,
-      project_participation_time,
-      project_introduction,
-      project_img
-      `;
+    user_id,
+    project_type,
+    project_title, 
+    project_summary,
+    project_recruitment_roles,
+    project_required_stacks,
+    project_goal,
+    project_participation_time,
+    project_introduction,
+    project_img
+    `;
 
     const createValues = Object.values(inputData);
 
@@ -52,9 +52,9 @@ export const updateProjectInfo = async (
     const updateValues = Object.values(inputData).filter((value) => value !== undefined);
 
     const SQL = `
-      UPDATE project
-      SET ${updateColums}
-      WHERE user_id = ? AND project_id = ?
+    UPDATE project
+    SET ${updateColums}
+    WHERE user_id = ? AND project_id = ?
     `;
 
     const [result, _] = await db.execute(SQL, [...updateValues, user_id, project_id]);
@@ -81,9 +81,9 @@ export const updateProjectStatus = async (
 ): Promise<number> => {
   try {
     const SQL = `
-      UPDATE project
-      SET project_recruitment_status = ?
-      WHERE user_id = ? AND project_id = ?
+    UPDATE project
+    SET project_recruitment_status = ?
+    WHERE user_id = ? AND project_id = ?
     `;
 
     const [result, _] = await db.execute(SQL, [project_recruitment_status, user_id, project_id]);
