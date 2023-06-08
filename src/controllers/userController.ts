@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppError } from '../middlewares/errorHandler';
 import { AuthRequest } from '../types/RequestType';
-import * as User from '../types/UserType';
+import AppError from '../types/AppErrorType';
+import * as AppErrors from '../middlewares/errorHandler';
 import * as userService from '../services/userService';
+import * as User from '../types/UserType';
 
 /* 회원 가입 */
 export const signUpUserHandler = async (req: Request, res: Response, next: NextFunction) => {
@@ -10,7 +11,7 @@ export const signUpUserHandler = async (req: Request, res: Response, next: NextF
     const { user_email, user_name, user_password } = req.body;
 
     if (!user_email || !user_name || !user_password)
-      throw new AppError(400, '요청 body에 모든 정보를 입력해 주세요.');
+      AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
 
     const inputData: User.SignUpUserInput = {
       user_email,
@@ -22,10 +23,8 @@ export const signUpUserHandler = async (req: Request, res: Response, next: NextF
 
     res.status(201).json({ message: '회원 가입 성공', data: { user_id: createdUserId } });
   } catch (error) {
-    error instanceof AppError ? next(error) : next(new AppError(500, 'Server Error'));
-
-    // console.log(error);
-    // next(error);
+    console.log(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -35,7 +34,7 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
     const { user_email, user_password } = req.body;
 
     if (!user_email || !user_password)
-      throw new AppError(400, '요청 body에 모든 정보를 입력해 주세요.');
+      AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
 
     const inputData: User.LogInUserInput = {
       user_email,
@@ -55,7 +54,7 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
     res.status(200).json({ message: '로그인 성공', data: userInfoWithTokens });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -67,7 +66,7 @@ export const logOutUserHandler = async (req: AuthRequest, res: Response, next: N
     res.status(200).json({ message: '로그아웃 성공' });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -75,7 +74,7 @@ export const logOutUserHandler = async (req: AuthRequest, res: Response, next: N
 export const editUserInfoHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (req.user.user_id === 0)
-      throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.user;
     const { user_name, user_career_goal, user_introduction } = req.body;
@@ -94,7 +93,7 @@ export const editUserInfoHandler = async (req: AuthRequest, res: Response, next:
       filename === undefined ? undefined : `http://localhost:5500/api/v1/static/${filename}`;
 
     if (!user_name && !user_career_goal && !user_stacks && !user_introduction && !filename)
-      throw new AppError(400, '수정하실 정보를 하나 이상 입력해 주세요.');
+      AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
 
     const inputData: User.UpdatUserInput = {
       user_name,
@@ -109,7 +108,7 @@ export const editUserInfoHandler = async (req: AuthRequest, res: Response, next:
     res.status(200).json({ message: '회원 상세 정보 수정 성공', data: { user_id: updatedUserId } });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -121,7 +120,7 @@ export const getUserInfoByIdHandler = async (
 ) => {
   try {
     if (req.user.user_id === 0)
-      throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.params;
 
@@ -130,7 +129,7 @@ export const getUserInfoByIdHandler = async (
     res.status(200).json({ message: '다른 회원 마이페이지 정보 조회 성공', data: userInfo });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 
@@ -138,7 +137,7 @@ export const getUserInfoByIdHandler = async (
 export const getMyInfoByIdHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (req.user.user_id === 0)
-      throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.user;
 
@@ -147,6 +146,6 @@ export const getMyInfoByIdHandler = async (req: AuthRequest, res: Response, next
     res.status(200).json({ message: '회원 마이페이지 정보 조회 성공', data: myInfo });
   } catch (error) {
     console.log(error);
-    next(error);
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };

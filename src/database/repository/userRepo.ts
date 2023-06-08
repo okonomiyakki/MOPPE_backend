@@ -1,5 +1,5 @@
 import db from '../../config/dbconfig';
-import * as AppError from '../../middlewares/errorHandler';
+import * as AppErrors from '../../middlewares/errorHandler';
 import * as User from '../../types/UserType';
 
 /* 회원 가입 */
@@ -25,12 +25,11 @@ export const createUser = async (inputData: User.SignUpUserInput): Promise<User.
 
     return createdUserId;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
 
-/*  user_id 유효성 검사 */
+/*  회원 존재 여부 검사 */
 export const isUserIdValid = async (user_id: number): Promise<void> => {
   try {
     const SQL = `
@@ -43,9 +42,8 @@ export const isUserIdValid = async (user_id: number): Promise<void> => {
 
     const isUserIdValid = user[0];
 
-    if (!isUserIdValid) AppError.handleNotFound('존재하지 않는 회원입니다.');
+    if (!isUserIdValid) AppErrors.handleNotFound('존재하지 않는 회원입니다.');
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -54,8 +52,13 @@ export const isUserIdValid = async (user_id: number): Promise<void> => {
 export const findUserPayloadByEmail = async (user_email: string): Promise<User.InfoWithPayload> => {
   try {
     const selectColumns = `
-    user_id, user_email,
-    user_name, user_img,
+    user_id, 
+    user_email,
+    user_name, 
+    user_img,
+    user_career_goal,
+    user_stacks,
+    user_introduction,
     user_password
     `;
 
@@ -70,11 +73,10 @@ export const findUserPayloadByEmail = async (user_email: string): Promise<User.I
     const userInfoWithPayload = user[0];
 
     if (!userInfoWithPayload)
-      AppError.handleNotFound('존재하지 않는 이메일입니다. 회원 가입 후 이용해 주세요.');
+      AppErrors.handleNotFound('존재하지 않는 이메일입니다. 회원 가입 후 이용해 주세요.');
 
     return userInfoWithPayload;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -101,15 +103,16 @@ export const updateUserInfo = async (
     const [result, _] = await db.execute(SQL, [...updateValues, user_id]);
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+
     const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;
+
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
     if (!isAffected && !isMatched && !isChanged)
-      AppError.handleForbidden('회원 본인만 수정할 수 있습니다.');
+      AppErrors.handleForbidden('본인만 수정 가능 합니다.');
 
     return user_id;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -135,11 +138,10 @@ export const findUserInfoById = async (user_id: number): Promise<any> => {
 
     const userInfoWithPayload = user[0];
 
-    if (!userInfoWithPayload) AppError.handleNotFound('존재하지 않는 회원입니다.');
+    if (!userInfoWithPayload) AppErrors.handleNotFound('존재하지 않는 회원입니다.');
 
     return userInfoWithPayload;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -164,7 +166,6 @@ export const findBestStacks = async (): Promise<any> => {
 
     return userStackList;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
