@@ -1,6 +1,6 @@
 import db from '../../config/dbconfig';
 import * as AppErrors from '../../middlewares/errorHandler';
-import * as Comment from '../../types/commentType';
+import * as Comment from '../../types/CommentType';
 
 /* 댓글 등록 */
 export const createComment = async (inputData: Comment.CreateCommentInput): Promise<Comment.Id> => {

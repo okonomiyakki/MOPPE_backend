@@ -1,6 +1,6 @@
 import * as commentRepo from '../database/repository/commentRepo';
 import * as projectRepo from '../database/repository/projectRepo';
-import * as Comment from '../types/commentType';
+import * as Comment from '../types/CommentType';
 import { paginateList } from '../utils/paginator';
 
 /* 댓글 등록 */

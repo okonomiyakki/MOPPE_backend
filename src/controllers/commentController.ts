@@ -3,7 +3,7 @@ import { AuthRequest } from '../types/RequestType';
 import AppError from '../types/AppErrorType';
 import * as AppErrors from '../middlewares/errorHandler';
 import * as commentService from '../services/commentService';
-import * as Comment from '../types/commentType';
+import * as Comment from '../types/CommentType';
 
 /* 댓글 등록 - 기능 추가 시 수정 필요 */
 export const addCommentHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
