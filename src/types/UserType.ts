@@ -4,7 +4,9 @@ interface UserProfile {
   user_name: string;
   user_password: string;
   user_career_goal: string | null;
-  user_stacks: string | null;
+  user_stacks: {
+    stackList: string[] | [];
+  } | null;
   user_introduction: string | null;
   user_img: string | null;
   user_created_at: string;

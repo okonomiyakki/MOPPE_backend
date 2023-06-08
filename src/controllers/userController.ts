@@ -81,20 +81,11 @@ export const editUserInfoHandler = async (req: AuthRequest, res: Response, next:
       AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
 
     const { user_id } = req.user;
-    const { user_name, user_career_goal, user_introduction } = req.body;
-    const stackList = req.body.user_stacks;
+    const { user_name, user_career_goal, user_stacks, user_introduction } = req.body;
     const { filename } = req.file || {};
 
-    console.log(req.file);
-
-    const stacks = JSON.parse(stackList);
-
-    const user_stacks: any = {
-      stackList: stacks,
-    };
-
     const imgFileRoot =
-      filename === undefined ? undefined : `http://localhost:5500/api/v1/static/${filename}`;
+      filename === undefined ? undefined : `http://localhost:5500/api/v1/static/user/${filename}`;
 
     if (!user_name && !user_career_goal && !user_stacks && !user_introduction && !filename)
       AppErrors.handleBadRequest('수정하실 정보를 하나 이상 입력해 주세요.');
@@ -104,7 +95,9 @@ export const editUserInfoHandler = async (req: AuthRequest, res: Response, next:
     const inputData: User.UpdatUserInput = {
       user_name,
       user_career_goal,
-      user_stacks,
+      user_stacks: {
+        stackList: JSON.parse(user_stacks),
+      },
       user_introduction,
       user_img: imgFileRoot,
     };

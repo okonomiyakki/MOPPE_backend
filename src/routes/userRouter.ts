@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
-import processImageHandler from '../middlewares/multer';
+import * as upload from '../middlewares/imageHandler';
 import * as userController from '../controllers/userController';
 
 const userRouter = Router();
@@ -18,7 +18,7 @@ userRouter.post('/logout', userController.logOutUserHandler);
 userRouter.patch(
   '/profile',
   AuthenticateHandler,
-  processImageHandler,
+  upload.userProfileImageHandler,
   userController.editUserInfoHandler
 );
 
