@@ -379,6 +379,25 @@ export const findProjectsByKeywordWithStatus = async (
   }
 };
 
+/* 북마크에 해당하는 모집 글 유효성 검사 */
+export const isProjectValid = async (project_id: number): Promise<void> => {
+  try {
+    const SQL = `
+    SELECT *
+    FROM project
+    WHERE project_id = ?
+    `;
+
+    const [project]: any = await db.query(SQL, [project_id]);
+
+    const isProjectValid = project[0];
+
+    if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
+  } catch (error) {
+    throw error;
+  }
+};
+
 /* 모집 글 상세 정보 조회 */
 export const findProjectById = async (project_id: number): Promise<any> => {
   try {

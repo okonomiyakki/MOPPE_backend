@@ -87,7 +87,7 @@ export const deleteCommentById = async (user_id: number, comment_id: number): Pr
 };
 
 /* 댓글에 해당하는 모집 글 유효성 검사 */
-export const findProjectById = async (comment_id: number): Promise<void> => {
+export const isProjectValid = async (comment_id: number): Promise<void> => {
   try {
     const SQL = `
     SELECT *

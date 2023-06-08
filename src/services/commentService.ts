@@ -1,10 +1,13 @@
 import * as commentRepo from '../database/repository/commentRepo';
+import * as projectRepo from '../database/repository/projectRepo';
 import * as Comment from '../types/commentType';
 import { paginateList } from '../utils/paginator';
 
 /* 댓글 등록 */
 export const addComment = async (inputData: Comment.CreateCommentInput): Promise<Comment.Id> => {
   try {
+    await projectRepo.isProjectValid(inputData.project_id);
+
     const createdCommentId: Comment.Id = await commentRepo.createComment(inputData);
 
     return createdCommentId;
@@ -20,7 +23,7 @@ export const editComment = async (
   inputData: Comment.UpdateCommentInput
 ): Promise<any> => {
   try {
-    await commentRepo.findProjectById(comment_id);
+    await commentRepo.isProjectValid(comment_id);
 
     const updatedCommentId = await commentRepo.updateComment(user_id, comment_id, inputData);
 
@@ -33,7 +36,7 @@ export const editComment = async (
 /* 댓글 삭제 */
 export const removeComment = async (user_id: number, comment_id: number): Promise<boolean> => {
   try {
-    await commentRepo.findProjectById(comment_id);
+    await commentRepo.isProjectValid(comment_id);
 
     const isDeletedComment = await commentRepo.deleteCommentById(user_id, comment_id);
 

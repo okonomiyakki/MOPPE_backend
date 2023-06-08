@@ -30,7 +30,7 @@ export const createUser = async (inputData: User.SignUpUserInput): Promise<User.
 };
 
 /*  회원 존재 여부 검사 */
-export const isUserIdValid = async (user_id: number): Promise<void> => {
+export const isUserValid = async (user_id: number): Promise<void> => {
   try {
     const SQL = `
     SELECT *

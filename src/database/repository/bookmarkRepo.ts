@@ -48,25 +48,6 @@ export const deleteBookmarkById = async (user_id: number, project_id: number): P
   }
 };
 
-/* 북마크에 해당하는 모집 글 유효성 검사 */
-export const findProjectById = async (project_id: number): Promise<void> => {
-  try {
-    const SQL = `
-    SELECT *
-    FROM project
-    WHERE project_id = ?
-    `;
-
-    const [project]: any = await db.query(SQL, [project_id]);
-
-    const isProjectValid = project[0];
-
-    if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
-  } catch (error) {
-    throw error;
-  }
-};
-
 /* 회원이 북마크한 project_id 리스트 조회 */
 export const findBookmarkedProjectsById = async (
   user_id: number

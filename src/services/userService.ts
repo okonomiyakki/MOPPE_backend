@@ -90,7 +90,7 @@ export const editUserInfo = async (
 /* 회원 마이페이지 상세 정보 조회 */
 export const getUserInfoById = async (user_id: number): Promise<any> => {
   try {
-    await userRepo.isUserIdValid(user_id);
+    await userRepo.isUserValid(user_id);
 
     const foundUserInfo = await userRepo.findUserInfoById(user_id);
 

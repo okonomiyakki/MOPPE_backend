@@ -1,11 +1,12 @@
 import * as AppErrors from '../middlewares/errorHandler';
 import * as bookmarkRepo from '../database/repository/bookmarkRepo';
+import * as projectRepo from '../database/repository/projectRepo';
 import * as Bookmark from '../types/BookmarkType';
 
 /* 북마크 등록 */
 export const addBookmark = async (inputData: Bookmark.CreateInput): Promise<any> => {
   try {
-    await bookmarkRepo.findProjectById(inputData.project_id);
+    await projectRepo.isProjectValid(inputData.project_id);
 
     const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(
       inputData.user_id
@@ -28,7 +29,7 @@ export const addBookmark = async (inputData: Bookmark.CreateInput): Promise<any>
 /* 북마크 삭제 */
 export const removeBookmark = async (user_id: number, project_id: number): Promise<boolean> => {
   try {
-    await bookmarkRepo.findProjectById(project_id);
+    await projectRepo.isProjectValid(project_id);
 
     const isDeletedBookmark = await bookmarkRepo.deleteBookmarkById(user_id, project_id);
 
