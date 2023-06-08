@@ -1,5 +1,5 @@
 import db from '../../config/dbconfig';
-import { AppError } from '../../middlewares/errorHandler';
+import * as AppErrors from '../../middlewares/errorHandler';
 import * as Bookmark from '../../types/BookmarkType';
 
 /* 북마크 등록 */
@@ -24,8 +24,7 @@ export const createBookmark = async (inputData: Bookmark.CreateInput): Promise<a
 
     return createdBookmarkId;
   } catch (error) {
-    console.log(error);
-    throw new AppError(500, '북마크 등록 중 오류가 발생했습니다.');
+    throw error;
   }
 };
 
@@ -41,11 +40,10 @@ export const deleteBookmarkById = async (user_id: number, project_id: number): P
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
 
-    if (!isAffected) throw new AppError(403, '잘못된 접근입니다. 본인이 등록한 북마크가 아닙니다.');
+    if (!isAffected) AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
 
     return true;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -63,9 +61,8 @@ export const findProjectById = async (project_id: number): Promise<void> => {
 
     const isProjectValid = project[0];
 
-    if (!isProjectValid) throw new AppError(404, '해당 모집 글은 이미 삭제 되었습니다.');
+    if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -87,8 +84,7 @@ export const findBookmarkedProjectsById = async (
 
     return bookmarks;
   } catch (error) {
-    console.log(error);
-    throw new AppError(500, '북마크한 모집 글 조회 중 오류가 발생했습니다.');
+    throw error;
   }
 };
 
@@ -108,7 +104,6 @@ export const findBookmarkedUsersById = async (project_id: number): Promise<any> 
 
     return bookmarks;
   } catch (error) {
-    console.log(error);
-    throw new AppError(500, '북마크한 회원 정보 조회 중 오류가 발생했습니다.');
+    throw error;
   }
 };

@@ -1,7 +1,6 @@
-import { AppError } from '../middlewares/errorHandler';
+import * as AppErrors from '../middlewares/errorHandler';
 import * as bookmarkRepo from '../database/repository/bookmarkRepo';
 import * as Bookmark from '../types/BookmarkType';
-import { findProjectById } from '../database/repository/projectRepo';
 
 /* 북마크 등록 */
 export const addBookmark = async (inputData: Bookmark.CreateInput): Promise<any> => {
@@ -16,13 +15,12 @@ export const addBookmark = async (inputData: Bookmark.CreateInput): Promise<any>
 
     const isBookmarked = bookmarkedProjectIds.includes(inputData.project_id) ? true : false;
 
-    if (isBookmarked) throw new AppError(500, '이미 북마크된 모집 글 입니다.');
+    if (isBookmarked) AppErrors.handleBadRequest('이미 북마크된 모집 글 입니다.');
 
     const createdBookmarkId: Bookmark.Id = await bookmarkRepo.createBookmark(inputData);
 
     return createdBookmarkId;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -36,7 +34,6 @@ export const removeBookmark = async (user_id: number, project_id: number): Promi
 
     return isDeletedBookmark;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
