@@ -14,9 +14,9 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
     // const { project_id, qna_id, comment_content } = req.body;
     // (project 댓글일때는 validator 에서 qna_id = undefiend | null 체크 후 컨트롤러에서 0으로 바꾸기)
 
-    if (!project_id) throw new AppError(400, 'project_id를 입력해 주세요.');
+    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
 
-    if (!comment_content) throw new AppError(400, 'comment_content를 입력해 주세요.');
+    if (!comment_content) AppErrors.handleBadRequest('comment_content를 입력해 주세요.');
 
     if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
 
@@ -51,9 +51,9 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
     const { comment_id } = req.params;
     const { comment_content } = req.body;
 
-    if (!comment_id) throw new AppError(400, 'comment_id를 입력해 주세요.');
+    if (!comment_id) AppErrors.handleBadRequest('comment_id를 입력해 주세요.');
 
-    if (!comment_content) throw new AppError(400, 'comment_content를 입력해 주세요.');
+    if (!comment_content) AppErrors.handleBadRequest('comment_content를 입력해 주세요.');
 
     if (isNaN(Number(comment_id))) AppErrors.handleBadRequest('유효한 comment_id를 입력해주세요.');
 
@@ -83,7 +83,7 @@ export const removeCommentHandler = async (req: AuthRequest, res: Response, next
     const { user_id } = req.user;
     const { comment_id } = req.params;
 
-    if (!comment_id) throw new AppError(400, 'comment_id를 입력해 주세요.');
+    if (!comment_id) AppErrors.handleBadRequest('comment_id를 입력해 주세요.');
 
     if (isNaN(Number(comment_id))) AppErrors.handleBadRequest('유효한 comment_id를 입력해주세요.');
 
@@ -106,9 +106,9 @@ export const getProjectCommentsByIdHandler = async (
     const { project_id } = req.params;
     const { page } = req.query;
 
-    if (!project_id) throw new AppError(400, 'project_id를 입력해주세요.');
+    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해주세요.');
 
-    if (!page) throw new AppError(400, 'page를 입력해주세요.');
+    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
 
     if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
 
@@ -139,7 +139,7 @@ export const getMyCommentsByIdHandler = async (
     const { user_id } = req.user;
     const { page } = req.query;
 
-    if (!page) throw new AppError(400, 'page를 입력해주세요.');
+    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
 
     if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
 
