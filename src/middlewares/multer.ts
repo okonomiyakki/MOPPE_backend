@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
-import { AppError } from './errorHandler';
+import * as AppErrors from '../middlewares/errorHandler';
 import multer from 'multer';
 import fs from 'fs';
 
@@ -25,7 +25,7 @@ const processImageHandler = (req: AuthRequest, res: Response, next: NextFunction
       next();
     } catch (error) {
       console.log(error);
-      next(new AppError(400, '이미지 업로드 중 오류가 발생했습니다.'));
+      next(AppErrors.handleBadRequest('이미지 업로드 중 오류가 발생했습니다.'));
     }
   });
 };
