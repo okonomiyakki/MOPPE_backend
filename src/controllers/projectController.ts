@@ -51,7 +51,6 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
 
     res.status(201).json({ message: '모집 글 등록 성공', data: { project_id: createdProjectId } });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -118,7 +117,6 @@ export const editProjectInfoHandler = async (
       .status(200)
       .json({ message: '모집 글 상세 정보 수정 성공', data: { project_id: updatedPeojectId } });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -154,7 +152,6 @@ export const editProjectStatusHandler = async (
       .status(200)
       .json({ message: '모집 글 모집 상태 수정 성공', data: { project_id: updatedPeojectId } });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -173,7 +170,6 @@ export const removeProjectHandler = async (req: AuthRequest, res: Response, next
 
     if (isDeletedProject) res.status(200).json({ message: '모집 글 삭제 성공', data: {} });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -209,7 +205,6 @@ export const getAllProjectsHandler = async (
 
     res.status(200).json({ message: '전체 모집 글 목록 조회 성공', data: pagenatedProjectsInfo });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -233,7 +228,6 @@ export const getProjectsByRoleHandler = async (
 
     res.status(200).json({ message: '역할별 모집 글 목록 조회 성공', data: projectsByRole });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -256,7 +250,6 @@ export const getProjectByIdHandler = async (
 
     res.status(200).json({ message: '모집 글 상세 정보 조회 성공', data: projectInfo });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -293,7 +286,6 @@ export const getUserProjectsByIdHandler = async (
       .status(200)
       .json({ message: '다른 회원 마이페이지 작성 모집 글 목록 조회 성공', data: userProjects });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -319,7 +311,6 @@ export const getMyProjectsByIdHandler = async (
 
     res.status(200).json({ message: '마이페이지 작성 모집 글 목록 조회 성공', data: myProjects });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -345,7 +336,6 @@ export const getMyBookmarkedProjectsByIdHandler = async (
 
     res.status(200).json({ message: '마이페이지 북마크 모집 글 목록 조회 성공', data: myProjects });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };

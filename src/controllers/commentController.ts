@@ -39,7 +39,6 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
       data: { comment_id: createdCommentId },
     });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -72,7 +71,6 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
 
     res.status(200).json({ message: '댓글 수정 성공', data: { comment_id: updatedCommentId } });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -91,7 +89,6 @@ export const removeCommentHandler = async (req: AuthRequest, res: Response, next
 
     if (isDeletedComment) res.status(200).json({ message: '댓글 삭제 성공', data: {} });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -121,7 +118,6 @@ export const getProjectCommentsByIdHandler = async (
 
     res.status(200).json({ message: '모집 글 별 댓글 목록 조회 성공', data: projectComments });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -150,7 +146,6 @@ export const getMyCommentsByIdHandler = async (
       data: myComments,
     });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };

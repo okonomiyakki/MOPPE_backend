@@ -33,7 +33,6 @@ export const addBookmarkHandler = async (req: AuthRequest, res: Response, next: 
       data: { bookmark_id: createdBookmarkId },
     });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -56,7 +55,6 @@ export const removeBookmarkHandler = async (
 
     if (isDeletedBookmark) res.status(200).json({ message: '북마크 삭제 성공', data: {} });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };

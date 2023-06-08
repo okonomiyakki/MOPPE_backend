@@ -25,7 +25,6 @@ export const signUpUserHandler = async (req: Request, res: Response, next: NextF
 
     res.status(201).json({ message: '회원 가입 성공', data: { user_id: createdUserId } });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -57,7 +56,6 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
 
     res.status(200).json({ message: '로그인 성공', data: userInfoWithTokens });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -69,7 +67,6 @@ export const logOutUserHandler = async (req: AuthRequest, res: Response, next: N
 
     res.status(200).json({ message: '로그아웃 성공' });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -113,7 +110,6 @@ export const editUserInfoHandler = async (req: AuthRequest, res: Response, next:
 
     res.status(200).json({ message: '회원 상세 정보 수정 성공', data: { user_id: updatedUserId } });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -138,7 +134,6 @@ export const getUserInfoByIdHandler = async (
 
     res.status(200).json({ message: '다른 회원 마이페이지 정보 조회 성공', data: userInfo });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
@@ -155,7 +150,6 @@ export const getMyInfoByIdHandler = async (req: AuthRequest, res: Response, next
 
     res.status(200).json({ message: '회원 마이페이지 정보 조회 성공', data: myInfo });
   } catch (error) {
-    console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
