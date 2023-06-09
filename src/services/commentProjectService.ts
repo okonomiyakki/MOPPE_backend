@@ -53,14 +53,12 @@ export const getProjectCommentsById = async (project_id: number, page: number): 
   try {
     const foundComments = await commentProjectRepo.findProjectCommentsById(project_id);
 
-    const pagenatedComments = paginateList(foundComments, page, 10, false);
-
-    const pageSize = Math.ceil(foundComments.length / 10); // TODO] 유틸로 옮기기
+    const pagenatedRowsInfo = paginateList(foundComments, page, 10, false);
 
     const pagenatedCommentsInfo = {
       listLength: foundComments.length,
-      pageSize,
-      pagenatedComments,
+      pageSize: pagenatedRowsInfo.pageSize,
+      pagenatedPortfolio: pagenatedRowsInfo.pageRows,
     };
 
     return pagenatedCommentsInfo;
@@ -74,14 +72,12 @@ export const getMyCommentsById = async (user_id: number, page: number): Promise<
   try {
     const foundComments = await commentProjectRepo.findMyCommentsById(user_id);
 
-    const pagenatedComments = paginateList(foundComments, page, 5, true);
-
-    const pageSize = Math.ceil(foundComments.length / 5); // TODO] 유틸로 옮기기
+    const pagenatedRowsInfo = paginateList(foundComments, page, 5, true);
 
     const pagenatedCommentsInfo = {
       listLength: foundComments.length,
-      pageSize,
-      pagenatedComments,
+      pageSize: pagenatedRowsInfo.pageSize,
+      pagenatedPortfolio: pagenatedRowsInfo.pageRows,
     };
 
     return pagenatedCommentsInfo;

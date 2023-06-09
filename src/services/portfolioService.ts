@@ -38,16 +38,14 @@ export const getAllPortfolios = async (
       else return { ...portfolio, is_bookmarked: false };
     });
 
-    const pagenatedPortfolio = paginateList(checkIsBookmarked, inputQuery.page, 9, true);
+    const pagenatedRowsInfo = paginateList(checkIsBookmarked, inputQuery.page, 9, true);
 
-    const pageSize = Math.ceil(checkIsBookmarked.length / 9); // TODO] 유틸로 옮기기
-
-    const pagenatedPortfolioInfo = {
-      pageSize,
-      pagenatedPortfolio,
+    const pagenatedPortfoliosInfo = {
+      pageSize: pagenatedRowsInfo.pageSize,
+      pagenatedPortfolio: pagenatedRowsInfo.pageRows,
     };
 
-    return pagenatedPortfolioInfo;
+    return pagenatedPortfoliosInfo;
   } catch (error) {
     throw error;
   }
@@ -61,7 +59,7 @@ export const getAllPortfolios = async (
 
 //     const foundBookmarkedUsers = await bookmarkPortfolioRepo.findBookmarkedUsersById(portfolio_id);
 
-//     const foundBookmarkedProjects = await bookmarkPortfolioRepo.findBookmarkedPortfolioById(
+//     const foundBookmarkedPortfolios = await bookmarkPortfolioRepo.findBookmarkedPortfolioById(
 //       user_id
 //     );
 
@@ -77,9 +75,11 @@ export const getAllPortfolios = async (
 //     //   await portfolioRepo.updateProjectViewsCount(user_id, portfolio_id, currentKorDate);
 //     // }
 
-//     const bookmarkedProjectIds = foundBookmarkedProjects.map((portfolio:any) => portfolio.portfolio_id);
+//     const bookmarkedPortfolioIds = foundBookmarkedPortfolios.map(
+//       (portfolio: any) => portfolio.portfolio_id
+//     );
 
-//     const checkIsBookmarked = bookmarkedProjectIds.includes(portfolio_id)
+//     const checkIsBookmarked = bookmarkedPortfolioIds.includes(portfolio_id)
 //       ? { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
 //       : { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
 

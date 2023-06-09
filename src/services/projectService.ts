@@ -11,8 +11,6 @@ export const addProject = async (inputData: Project.CreateProjectInput): Promise
   try {
     const createdProjectId: Project.Id = await projectRepo.createProject(inputData);
 
-    // 같은 아이디로 연속적인 모집 글 등록 요청 에러 반환 추가하기
-
     return createdProjectId;
   } catch (error) {
     throw error;
@@ -82,13 +80,11 @@ export const getAllProjects = async (
       else return { ...project, is_bookmarked: false };
     });
 
-    const pagenatedProjects = paginateList(checkIsBookmarked, inputQuery.page, 10, true);
-
-    const pageSize = Math.ceil(checkIsBookmarked.length / 10); // TODO] 유틸로 옮기기
+    const pagenatedRowsInfo = paginateList(checkIsBookmarked, inputQuery.page, 10, true);
 
     const pagenatedProjectsInfo = {
-      pageSize,
-      pagenatedProjects,
+      pageSize: pagenatedRowsInfo.pageSize,
+      pagenatedProjects: pagenatedRowsInfo.pageRows,
     };
 
     return pagenatedProjectsInfo;
@@ -173,14 +169,12 @@ export const getMyProjectsById = async (
       else return { ...project, is_bookmarked: false };
     });
 
-    const pagenatedProjects = paginateList(checkIsBookmarked, page, 5, true);
-
-    const pageSize = Math.ceil(checkIsBookmarked.length / 5); // TODO] 유틸로 옮기기
+    const pagenatedRowsInfo = paginateList(checkIsBookmarked, page, 5, true);
 
     const pagenatedProjectsInfo = {
       listLength: checkIsBookmarked.length,
-      pageSize,
-      pagenatedProjects,
+      pageSize: pagenatedRowsInfo.pageSize,
+      pagenatedProjects: pagenatedRowsInfo.pageRows,
     };
 
     return pagenatedProjectsInfo;
@@ -199,14 +193,12 @@ export const getMyBookmarkedProjectsById = async (user_id: number, page: number)
       return { ...project, is_bookmarked: true };
     });
 
-    const pagenatedProjects = paginateList(addIsBookmarked, page, 5, true);
-
-    const pageSize = Math.ceil(addIsBookmarked.length / 5); // TODO] 유틸로 옮기기
+    const pagenatedRowsInfo = paginateList(addIsBookmarked, page, 5, true);
 
     const pagenatedProjectsInfo = {
       listLength: addIsBookmarked.length,
-      pageSize,
-      pagenatedProjects,
+      pageSize: pagenatedRowsInfo.pageSize,
+      pagenatedProjects: pagenatedRowsInfo.pageRows,
     };
 
     return pagenatedProjectsInfo;

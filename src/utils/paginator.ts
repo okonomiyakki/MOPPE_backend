@@ -7,5 +7,12 @@ export const paginateList = (list: any, page: number, offset: number, sorting: b
 
   const pageRows = sortedList.slice(startIndex, endIndex);
 
-  return pageRows;
+  const pageSize = Math.ceil(list.length / offset);
+
+  const pagenatedPortfolioInfo = {
+    pageSize,
+    pageRows,
+  };
+
+  return pagenatedPortfolioInfo;
 };
