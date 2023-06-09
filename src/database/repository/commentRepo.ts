@@ -127,8 +127,6 @@ export const findProjectCommentsById = async (project_id: number): Promise<any> 
 
     const [comments]: any = await db.query(SQL, [project_id]);
 
-    if (!comments.length) AppErrors.handleNotFound('존재하는 댓글이 없습니다.');
-
     return comments;
   } catch (error) {
     throw error;
@@ -156,8 +154,6 @@ export const findMyCommentsById = async (user_id: number): Promise<any> => {
     `;
 
     const [comments]: any = await db.query(SQL, [user_id]);
-
-    if (!comments.length) AppErrors.handleNotFound('존재하는 댓글이 없습니다.');
 
     return comments;
   } catch (error) {
