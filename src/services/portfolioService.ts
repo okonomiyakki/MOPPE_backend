@@ -25,11 +25,11 @@ export const addPorfolio = async (inputData: Portfolio.CreateInput): Promise<Por
 
 //     const currentKorDate = generateNewDate();
 
-//     const isUserEnteredCurrentDate = await portfolioRepo.findUserViewDateById(
-//       user_id,
-//       portfolio_id,
-//       currentKorDate
-//     );
+//     // const isUserEnteredCurrentDate = await portfolioRepo.findUserViewDateById(
+//     //   user_id,
+//     //   portfolio_id,
+//     //   currentKorDate
+//     // );
 
 //     // if (!isUserEnteredCurrentDate) {
 //     //   await portfolioRepo.updateProjectViewsCount(user_id, portfolio_id, currentKorDate);
@@ -37,9 +37,9 @@ export const addPorfolio = async (inputData: Portfolio.CreateInput): Promise<Por
 
 //     // const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.portfolio_id);
 
-//     const checkIsBookmarked = bookmarkedProjectIds.includes(portfolio_id)
-//       ? { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
-//       : { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
+//     // const checkIsBookmarked = bookmarkedProjectIds.includes(portfolio_id)
+//     //   ? { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
+//     //   : { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
 
 //     return checkIsBookmarked;
 //   } catch (error) {
