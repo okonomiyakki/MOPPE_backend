@@ -72,26 +72,6 @@ export const findBookmarkedProjectsById = async (
   }
 };
 
-/* 회원이 북마크한 portfolio_id 리스트 조회 */
-export const findBookmarkedPortfolioById = async (user_id: number): Promise<any> => {
-  try {
-    const selectColumn = 'portfolio_id';
-
-    const SQL = `
-    SELECT ${selectColumn}
-    FROM portfolio_bookmark
-    WHERE portfolio_bookmark.user_id = ?
-    `;
-
-    const [portfolios]: any = await db.query(SQL, [user_id]);
-
-    return portfolios;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-
 /* 모집글 별 북마크한 회원 정보 조회 */
 export const findBookmarkedUsersById = async (project_id: number): Promise<any> => {
   try {
