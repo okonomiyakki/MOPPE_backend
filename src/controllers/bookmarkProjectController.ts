@@ -17,7 +17,7 @@ export const addBookmarkHandler = async (req: AuthRequest, res: Response, next: 
 
     const inputData: BookmarkProject.CreateInput = {
       user_id,
-      project_id: project_id || 0,
+      project_id,
     };
 
     const createdBookmarkId: BookmarkProject.Id = await bookmarkProjectService.addBookmark(
