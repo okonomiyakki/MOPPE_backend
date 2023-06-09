@@ -38,9 +38,9 @@ export const getAllPortfolios = async (
       else return { ...portfolio, is_bookmarked: false };
     });
 
-    const pagenatedPortfolio = paginateList(checkIsBookmarked, inputQuery.page, 10, true);
+    const pagenatedPortfolio = paginateList(checkIsBookmarked, inputQuery.page, 9, true);
 
-    const pageSize = Math.ceil(checkIsBookmarked.length / 10); // TODO] 유틸로 옮기기
+    const pageSize = Math.ceil(checkIsBookmarked.length / 9); // TODO] 유틸로 옮기기
 
     const pagenatedPortfolioInfo = {
       pageSize,
