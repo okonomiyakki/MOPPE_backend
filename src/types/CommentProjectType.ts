@@ -1,7 +1,6 @@
 interface CommentProfile {
   comment_id: number;
   project_id: number;
-  // qna_id: number; /* qna 기능 추가 시 할당*/
   user_id: number;
   comment_content: string;
   comment_created_at: string;
