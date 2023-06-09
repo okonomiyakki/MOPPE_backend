@@ -4,7 +4,6 @@ import * as Project from '../types/ProjectType';
 
 export const searchProjectsByQuery = async (inputQuery: Project.QueryInput) => {
   try {
-    console.log(inputQuery);
     // 전체 조회
     if (!inputQuery.project_role && !inputQuery.project_keyword) {
       // 전체 모집 중
