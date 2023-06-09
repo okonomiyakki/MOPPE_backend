@@ -1,5 +1,5 @@
 import * as portfolioRepo from '../database/repository/portfolioRepo';
-import * as bookmarkRepo from '../database/repository/bookmarkProjectRepo';
+import * as bookmarkPortfolioRepo from '../database/repository/bookmarkPortfolioRepo';
 import * as Portfolio from '../types/PortfolioType';
 import { paginateList } from '../utils/paginator';
 import { generateNewDate } from '../utils/dateGenerator';
@@ -24,7 +24,9 @@ export const getAllPortfolios = async (
   try {
     const foundPortfolio = await searchPortfoliosByQuery(inputQuery); // TODO] 테스트 후 조건문 간소화 해야함
 
-    const foundBookmarkedPortfolio = await bookmarkRepo.findBookmarkedPortfolioById(user_id);
+    const foundBookmarkedPortfolio = await bookmarkPortfolioRepo.findBookmarkedPortfolioById(
+      user_id
+    );
 
     const bookmarkedPortfolioIds = foundBookmarkedPortfolio.map(
       (portfolio: any) => portfolio.portfolio_id
@@ -57,9 +59,11 @@ export const getAllPortfolios = async (
 //   try {
 //     const foundPortfolio = await portfolioRepo.findPortfolioById(portfolio_id);
 
-//     // const foundBookmarkedUsers = await bookmarkRepo.findBookmarkedUsersById(portfolio_id);
+//     const foundBookmarkedUsers = await bookmarkPortfolioRepo.findBookmarkedUsersById(portfolio_id);
 
-//     // const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
+//     const foundBookmarkedProjects = await bookmarkPortfolioRepo.findBookmarkedPortfolioById(
+//       user_id
+//     );
 
 //     const currentKorDate = generateNewDate();
 
@@ -73,11 +77,11 @@ export const getAllPortfolios = async (
 //     //   await portfolioRepo.updateProjectViewsCount(user_id, portfolio_id, currentKorDate);
 //     // }
 
-//     // const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.portfolio_id);
+//     const bookmarkedProjectIds = foundBookmarkedProjects.map((portfolio:any) => portfolio.portfolio_id);
 
-//     // const checkIsBookmarked = bookmarkedProjectIds.includes(portfolio_id)
-//     //   ? { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
-//     //   : { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
+//     const checkIsBookmarked = bookmarkedProjectIds.includes(portfolio_id)
+//       ? { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
+//       : { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
 
 //     return checkIsBookmarked;
 //   } catch (error) {
