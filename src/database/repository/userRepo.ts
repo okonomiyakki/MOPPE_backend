@@ -41,7 +41,7 @@ export const isUserValid = async (user_id: number): Promise<void> => {
 
     const [user]: any = await db.query(SQL, [user_id]);
 
-    const isUserIdValid = user[0];
+    const isUserIdValid = user[0].user_id;
 
     if (!isUserIdValid) AppErrors.handleNotFound('존재하지 않는 회원입니다.');
   } catch (error) {
@@ -72,7 +72,7 @@ export const findUserPayloadByEmail = async (user_email: string): Promise<User.I
 
     const [user]: any = await db.query(SQL, [user_email]);
 
-    const userInfoWithPayload = user[0];
+    const userInfoWithPayload = user[0].user_id;
 
     if (!userInfoWithPayload)
       AppErrors.handleNotFound('존재하지 않는 회원입니다. 회원 가입 후 이용해 주세요.');
@@ -140,7 +140,7 @@ export const findUserInfoById = async (user_id: number): Promise<any> => {
 
     const [user]: any = await db.query(SQL, [user_id]);
 
-    const userInfoWithPayload = user[0];
+    const userInfoWithPayload = user[0].user_id;
 
     if (!userInfoWithPayload) AppErrors.handleNotFound('존재하지 않는 회원입니다.');
 

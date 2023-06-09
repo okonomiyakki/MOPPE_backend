@@ -388,7 +388,7 @@ export const isProjectValid = async (project_id: number): Promise<void> => {
 
     const [project]: any = await db.query(SQL, [project_id]);
 
-    const isProjectValid = project[0];
+    const isProjectValid = project[0].portfolio_id;
 
     if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
   } catch (error) {
@@ -433,7 +433,7 @@ export const findProjectById = async (project_id: number): Promise<any> => {
 
     const [project]: any = await db.query(SQL, [project_id]);
 
-    const isProjectValid = project[0];
+    const isProjectValid = project[0].project_id;
 
     if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
 

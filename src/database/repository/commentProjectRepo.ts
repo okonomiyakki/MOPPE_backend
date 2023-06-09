@@ -103,7 +103,7 @@ export const isProjectValid = async (comment_id: number): Promise<void> => {
 
     const [comment]: any = await db.query(SQL, [comment_id]);
 
-    const isProjectValid = comment[0];
+    const isProjectValid = comment[0].comment_id;
 
     if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
   } catch (error) {
