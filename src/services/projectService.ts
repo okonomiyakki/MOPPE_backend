@@ -1,7 +1,7 @@
 import * as projectRepo from '../database/repository/projectRepo';
-import * as bookmarkRepo from '../database/repository/bookmarkProjectRepo';
+import * as bookmarkProjectRepo from '../database/repository/bookmarkProjectRepo';
 import * as Project from '../types/ProjectType';
-import * as Bookmark from '../types/BookmarkProjectType';
+import * as BookmarkProject from '../types/BookmarkProjectType';
 import { paginateList } from '../utils/paginator';
 import { generateNewDate } from '../utils/dateGenerator';
 import { searchProjectsByQuery } from '../utils/searchProjects';
@@ -72,7 +72,7 @@ export const getAllProjects = async (
   try {
     const foundProjects = await searchProjectsByQuery(inputQuery); // TODO] 테스트 후 조건문 간소화 해야함
 
-    const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
+    const foundBookmarkedProjects = await bookmarkProjectRepo.findBookmarkedProjectsById(user_id);
 
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
@@ -102,7 +102,7 @@ export const getProjectsByRole = async (user_id: number, project_role: string): 
   try {
     const foundProjects = await projectRepo.findProjectsByRole(project_role);
 
-    const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
+    const foundBookmarkedProjects = await bookmarkProjectRepo.findBookmarkedProjectsById(user_id);
 
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
@@ -124,9 +124,9 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
   try {
     const foundProject = await projectRepo.findProjectById(project_id);
 
-    const foundBookmarkedUsers = await bookmarkRepo.findBookmarkedUsersById(project_id);
+    const foundBookmarkedUsers = await bookmarkProjectRepo.findBookmarkedUsersById(project_id);
 
-    const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(user_id);
+    const foundBookmarkedProjects = await bookmarkProjectRepo.findBookmarkedProjectsById(user_id);
 
     const currentKorDate = generateNewDate();
 
@@ -161,7 +161,9 @@ export const getMyProjectsById = async (
   try {
     const foundMyProjects = await projectRepo.findMyProjectsById(user_id);
 
-    const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(my_user_id);
+    const foundBookmarkedProjects = await bookmarkProjectRepo.findBookmarkedProjectsById(
+      my_user_id
+    );
 
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
