@@ -42,7 +42,7 @@ export const addPortfolioHandler = async (req: AuthRequest, res: Response, next:
       user_id,
       portfolio_title,
       portfolio_summary,
-      portfolio_thumbnail: thumbnail, //imgFileRoot,
+      portfolio_thumbnail: thumbnail,
       portfolio_github,
       portfolio_stacks,
       portfolio_description,
