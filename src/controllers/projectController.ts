@@ -21,8 +21,8 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
     } = req.body;
     const fileList = req.files || {};
 
-    const imgFileRoots = (fileList as any[]).map(
-      (file) => `http://localhost:5500/api/v1/static/project/${file.filename}`
+    const imgFileRoots = (fileList as any[]).map((file) =>
+      file === undefined ? '' : `http://localhost:5500/api/v1/static/project/${file.filename}`
     );
 
     if (
@@ -43,18 +43,12 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
       project_type,
       project_title,
       project_summary,
-      project_recruitment_roles: {
-        roleList: JSON.parse(project_recruitment_roles),
-      },
-      project_required_stacks: {
-        stackList: JSON.parse(project_required_stacks),
-      },
+      project_recruitment_roles: { roleList: JSON.parse(project_recruitment_roles) },
+      project_required_stacks: { stackList: JSON.parse(project_required_stacks) },
       project_goal,
       project_participation_time,
       project_introduction,
-      project_img: {
-        imgList: [...imgFileRoots],
-      },
+      project_img: { imgList: [...imgFileRoots] },
     };
 
     const createdProjectId: Project.Id = await projectService.addProject(inputData);
@@ -86,8 +80,8 @@ export const editProjectInfoHandler = async (
     } = req.body;
     const fileList = req.files || {};
 
-    const imgFileRoots = (fileList as any[]).map(
-      (file) => `http://localhost:5500/api/v1/static/project/${file.filename}`
+    const imgFileRoots = (fileList as any[]).map((file) =>
+      file === undefined ? '' : `http://localhost:5500/api/v1/static/project/${file.filename}`
     );
 
     if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
@@ -112,18 +106,12 @@ export const editProjectInfoHandler = async (
       project_type,
       project_title,
       project_summary,
-      project_recruitment_roles: {
-        roleList: JSON.parse(project_recruitment_roles),
-      },
-      project_required_stacks: {
-        stackList: JSON.parse(project_required_stacks),
-      },
+      project_recruitment_roles: { roleList: JSON.parse(project_recruitment_roles) },
+      project_required_stacks: { stackList: JSON.parse(project_required_stacks) },
       project_goal,
       project_participation_time,
       project_introduction,
-      project_img: {
-        imgList: [...imgFileRoots],
-      },
+      project_img: { imgList: [...imgFileRoots] },
     };
 
     const updatedPeojectId: Project.Id = await projectService.editProjectInfo(
