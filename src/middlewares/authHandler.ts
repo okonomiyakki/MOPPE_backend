@@ -5,7 +5,7 @@ import env from '../config/envconfig';
 import AppError from '../types/AppErrorType';
 import * as AppErrors from '../middlewares/errorHandler';
 import * as U from '../types/UserType';
-import { generateNewAccessToken } from '../utils/accessTokenGenerator';
+import { generateNewAccessToken } from '../utils/AccessTokenGenerator';
 
 const nextForGuest = (req: AuthRequest, next: NextFunction) => {
   req.user = {
