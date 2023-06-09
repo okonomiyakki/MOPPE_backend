@@ -16,21 +16,16 @@ export const addPortfolioHandler = async (req: AuthRequest, res: Response, next:
       portfolio_stacks,
       portfolio_description,
     } = req.body;
-    // const { filename } = req.file || {}; // 썸네일
     const fileList = req.files || []; // 이미지 배열
 
-    // console.log('filename : ', filename);
     console.log('fileList : ', fileList);
-
-    // const imgFileRoot = `http://localhost:5500/api/v1/static/portfolio/${filename}`;
 
     const imgFileRoots = (fileList as any[]).map(
       (file) => `http://localhost:5500/api/v1/static/portfolio/${file.filename}`
     );
 
     const thumbnail = imgFileRoots[0];
-
-    console.log('body : ', req.body);
+    const editortImg = imgFileRoots.slice(1);
 
     if (
       !portfolio_title ||
@@ -52,7 +47,7 @@ export const addPortfolioHandler = async (req: AuthRequest, res: Response, next:
       portfolio_stacks,
       portfolio_description,
       portfolio_img: {
-        imgList: [...imgFileRoots.slice(1)],
+        imgList: [...editortImg],
       },
     };
 
