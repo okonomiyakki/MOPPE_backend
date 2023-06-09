@@ -1,4 +1,4 @@
-interface CommentProfile {
+interface CommentProjectProfile {
   comment_id: number;
   project_id: number;
   user_id: number;
@@ -6,8 +6,11 @@ interface CommentProfile {
   comment_created_at: string;
 }
 
-export type CreateCommentInput = Pick<CommentProfile, 'user_id' | 'project_id' | 'comment_content'>;
+export type CreateCommentInput = Pick<
+  CommentProjectProfile,
+  'user_id' | 'project_id' | 'comment_content'
+>;
 
-export type UpdateCommentInput = Partial<Pick<CommentProfile, 'comment_content'>>;
+export type UpdateCommentInput = Partial<Pick<CommentProjectProfile, 'comment_content'>>;
 
 export type Id = number;
