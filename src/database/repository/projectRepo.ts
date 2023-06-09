@@ -152,8 +152,6 @@ export const findAllProjects = async (): Promise<any> => {
 
     const [projects]: any = await db.query(SQL);
 
-    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
-
     return projects; // TODO] as Project.ListByRole[]; 명시적으로 타입 선언
   } catch (error) {
     throw error;
@@ -190,8 +188,6 @@ export const findProjectsByRole = async (project_role: string): Promise<any> => 
 
     const [projects]: any = await db.query(SQL, [project_role]);
 
-    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
-
     return projects;
   } catch (error) {
     throw error;
@@ -227,8 +223,6 @@ export const findProjectsByStatus = async (project_status: string): Promise<any>
     `;
 
     const [projects]: any = await db.query(SQL, [project_status]);
-
-    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
@@ -268,8 +262,6 @@ export const findProjectsByRoleWithStatus = async (
     `;
 
     const [projects]: any = await db.query(SQL, [project_role, project_status]);
-
-    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
@@ -316,8 +308,6 @@ export const findProjectsByKeyword = async (project_keyword: string): Promise<an
       project_keyword,
       project_keyword,
     ]);
-
-    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
@@ -370,8 +360,6 @@ export const findProjectsByKeywordWithStatus = async (
       project_keyword,
       project_status,
     ]);
-
-    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
@@ -471,8 +459,6 @@ export const findMyProjectsById = async (user_id: number): Promise<any> => {
 
     const [projects]: any = await db.query(SQL, [user_id]);
 
-    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
-
     return projects;
   } catch (error) {
     throw error;
@@ -505,8 +491,6 @@ export const findMyBookmarkedProjectsById = async (user_id: number): Promise<any
     `;
 
     const [projects]: any = await db.query(SQL, [user_id, user_id]);
-
-    if (!projects.length) AppErrors.handleNotFound('존재하는 모집 글이 없습니다.');
 
     return projects;
   } catch (error) {
