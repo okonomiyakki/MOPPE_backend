@@ -17,7 +17,7 @@ export const addPortfolioHandler = async (req: AuthRequest, res: Response, next:
       portfolio_description,
     } = req.body;
     // const { filename } = req.file || {}; // 썸네일
-    const fileList = req.files || {}; // 이미지 배열
+    const fileList = req.files || []; // 이미지 배열
 
     // console.log('filename : ', filename);
     console.log('fileList : ', fileList);

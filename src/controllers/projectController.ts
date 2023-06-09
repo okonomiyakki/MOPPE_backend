@@ -19,7 +19,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
       project_participation_time,
       project_introduction,
     } = req.body;
-    const fileList = req.files || {};
+    const fileList = req.files || [];
 
     const imgFileRoots = (fileList as any[]).map((file) =>
       file === undefined ? '' : `http://localhost:5500/api/v1/static/project/${file.filename}`
@@ -78,7 +78,7 @@ export const editProjectInfoHandler = async (
       project_participation_time,
       project_introduction,
     } = req.body;
-    const fileList = req.files || {};
+    const fileList = req.files || [];
 
     const imgFileRoots = (fileList as any[]).map((file) =>
       file === undefined ? '' : `http://localhost:5500/api/v1/static/project/${file.filename}`
