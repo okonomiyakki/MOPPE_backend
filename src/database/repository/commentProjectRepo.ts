@@ -91,7 +91,7 @@ export const deleteCommentById = async (user_id: number, comment_id: number): Pr
   }
 };
 
-/* 댓글에 해당하는 모집 글 유효성 검사 */
+/* 댓글 수정, 삭제 시 모집 글 유효성 검사 */
 export const isProjectValid = async (comment_id: number): Promise<void> => {
   try {
     const SQL = `
@@ -103,7 +103,7 @@ export const isProjectValid = async (comment_id: number): Promise<void> => {
 
     const [comment]: any = await db.query(SQL, [comment_id]);
 
-    const isProjectValid = comment[0].comment_id;
+    const isProjectValid = comment[0].project_id;
 
     if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
   } catch (error) {
