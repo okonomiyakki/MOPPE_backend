@@ -10,9 +10,6 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
   try {
     const { user_id } = req.user;
     const { project_id, comment_content } = req.body;
-    // TODO] qna 기능 추가 시 할당
-    // const { project_id, qna_id, comment_content } = req.body;
-    // (project 댓글일때는 validator 에서 qna_id = undefiend | null 체크 후 컨트롤러에서 0으로 바꾸기)
 
     if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
 
@@ -23,19 +20,16 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
     if (typeof comment_content !== 'string')
       AppErrors.handleBadRequest('유효한 comment_content를 입력해주세요.');
 
-    const commentLocation = project_id !== 0 ? '모집 글' : 'QnA';
-
     const inputData: Comment.CreateCommentInput = {
       user_id,
       project_id: project_id || 0,
-      /* qna_id: qna_id || 0, // qna 기능 추가 시 할당 */
       comment_content,
     };
 
     const createdCommentId: Comment.Id = await commentService.addComment(inputData);
 
     res.status(201).json({
-      message: `${commentLocation} 댓글 등록 성공`,
+      message: '모집 글 댓글 등록 성공',
       data: { comment_id: createdCommentId },
     });
   } catch (error) {
