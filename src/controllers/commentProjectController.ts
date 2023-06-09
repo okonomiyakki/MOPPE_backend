@@ -2,8 +2,8 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
 import AppError from '../types/AppErrorType';
 import * as AppErrors from '../middlewares/errorHandler';
-import * as commentService from '../services/commentService';
-import * as Comment from '../types/CommentType';
+import * as commentProjectService from '../services/commentProjectService';
+import * as Comment from '../types/CommentProjectType';
 
 /* 댓글 등록 - 기능 추가 시 수정 필요 */
 export const addCommentHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -26,7 +26,7 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
       comment_content,
     };
 
-    const createdCommentId: Comment.Id = await commentService.addComment(inputData);
+    const createdCommentId: Comment.Id = await commentProjectService.addComment(inputData);
 
     res.status(201).json({
       message: '모집 글 댓글 등록 성공',
@@ -57,7 +57,7 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
       comment_content,
     };
 
-    const updatedCommentId: Comment.Id = await commentService.editComment(
+    const updatedCommentId: Comment.Id = await commentProjectService.editComment(
       user_id,
       Number(comment_id),
       inputData
@@ -79,7 +79,7 @@ export const removeCommentHandler = async (req: AuthRequest, res: Response, next
 
     if (isNaN(Number(comment_id))) AppErrors.handleBadRequest('유효한 comment_id를 입력해주세요.');
 
-    const isDeletedComment = await commentService.removeComment(user_id, Number(comment_id));
+    const isDeletedComment = await commentProjectService.removeComment(user_id, Number(comment_id));
 
     if (isDeletedComment) res.status(200).json({ message: '댓글 삭제 성공', data: {} });
   } catch (error) {
@@ -105,7 +105,7 @@ export const getProjectCommentsByIdHandler = async (
 
     if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
 
-    const projectComments = await commentService.getProjectCommentsById(
+    const projectComments = await commentProjectService.getProjectCommentsById(
       Number(project_id),
       Number(page)
     );
@@ -133,7 +133,7 @@ export const getMyCommentsByIdHandler = async (
 
     if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
 
-    const myComments = await commentService.getMyCommentsById(user_id, Number(page));
+    const myComments = await commentProjectService.getMyCommentsById(user_id, Number(page));
 
     res.status(200).json({
       message: '마이페이지 작성 댓글 목록 조회 성공',

@@ -1,6 +1,6 @@
-import * as commentRepo from '../database/repository/commentRepo';
+import * as commentProjectRepo from '../database/repository/commentProjectRepo';
 import * as projectRepo from '../database/repository/projectRepo';
-import * as Comment from '../types/CommentType';
+import * as Comment from '../types/CommentProjectType';
 import { paginateList } from '../utils/paginator';
 
 /* 댓글 등록 */
@@ -8,7 +8,7 @@ export const addComment = async (inputData: Comment.CreateCommentInput): Promise
   try {
     await projectRepo.isProjectValid(inputData.project_id);
 
-    const createdCommentId: Comment.Id = await commentRepo.createComment(inputData);
+    const createdCommentId: Comment.Id = await commentProjectRepo.createComment(inputData);
 
     return createdCommentId;
   } catch (error) {
@@ -23,9 +23,9 @@ export const editComment = async (
   inputData: Comment.UpdateCommentInput
 ): Promise<any> => {
   try {
-    await commentRepo.isProjectValid(comment_id);
+    await commentProjectRepo.isProjectValid(comment_id);
 
-    const updatedCommentId = await commentRepo.updateComment(user_id, comment_id, inputData);
+    const updatedCommentId = await commentProjectRepo.updateComment(user_id, comment_id, inputData);
 
     return updatedCommentId;
   } catch (error) {
@@ -36,9 +36,9 @@ export const editComment = async (
 /* 댓글 삭제 */
 export const removeComment = async (user_id: number, comment_id: number): Promise<boolean> => {
   try {
-    await commentRepo.isProjectValid(comment_id);
+    await commentProjectRepo.isProjectValid(comment_id);
 
-    const isDeletedComment = await commentRepo.deleteCommentById(user_id, comment_id);
+    const isDeletedComment = await commentProjectRepo.deleteCommentById(user_id, comment_id);
 
     return isDeletedComment;
   } catch (error) {
@@ -49,7 +49,7 @@ export const removeComment = async (user_id: number, comment_id: number): Promis
 /* 모집 글 별 댓글 목록 조회 */
 export const getProjectCommentsById = async (project_id: number, page: number): Promise<any> => {
   try {
-    const foundComments = await commentRepo.findProjectCommentsById(project_id);
+    const foundComments = await commentProjectRepo.findProjectCommentsById(project_id);
 
     const pagenatedComments = paginateList(foundComments, page, 10, false);
 
@@ -70,7 +70,7 @@ export const getProjectCommentsById = async (project_id: number, page: number): 
 /* 마이페이지 작성 댓글 목록 조회 */
 export const getMyCommentsById = async (user_id: number, page: number): Promise<any> => {
   try {
-    const foundComments = await commentRepo.findMyCommentsById(user_id);
+    const foundComments = await commentProjectRepo.findMyCommentsById(user_id);
 
     const pagenatedComments = paginateList(foundComments, page, 5, true);
 

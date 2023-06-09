@@ -1,9 +1,11 @@
 import db from '../../config/dbconfig';
 import * as AppErrors from '../../middlewares/errorHandler';
-import * as Comment from '../../types/CommentType';
+import * as CommentProject from '../../types/CommentProjectType';
 
 /* 댓글 등록 */
-export const createComment = async (inputData: Comment.CreateCommentInput): Promise<Comment.Id> => {
+export const createComment = async (
+  inputData: CommentProject.CreateCommentInput
+): Promise<CommentProject.Id> => {
   try {
     const createColumn = `
     user_id,
@@ -21,7 +23,7 @@ export const createComment = async (inputData: Comment.CreateCommentInput): Prom
 
     const [createdInfo, _] = await db.execute(SQL, createValues);
 
-    const createdCommentId: Comment.Id = (createdInfo as { insertId: number }).insertId;
+    const createdCommentId: CommentProject.Id = (createdInfo as { insertId: number }).insertId;
 
     return createdCommentId;
   } catch (error) {
@@ -34,7 +36,7 @@ export const createComment = async (inputData: Comment.CreateCommentInput): Prom
 export const updateComment = async (
   user_id: number,
   comment_id: number,
-  inputData: Comment.UpdateCommentInput
+  inputData: CommentProject.UpdateCommentInput
 ): Promise<number> => {
   try {
     const updateColums = Object.entries(inputData)

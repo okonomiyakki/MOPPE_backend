@@ -2,7 +2,7 @@ import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
 import * as upload from '../middlewares/imageHandler';
 import * as projectController from '../controllers/projectController';
-import * as commentController from '../controllers/commentController';
+import * as commentController from '../controllers/commentProjectController';
 
 const projectRouter = Router();
 
