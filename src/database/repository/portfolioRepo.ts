@@ -45,7 +45,7 @@ export const findAllPortfolios = async (): Promise<any> => {
     portfolio.portfolio_thumbnail,
     portfolio.portfolio_stacks,
     COUNT(DISTINCT portfolio_bookmark.user_id) AS portfolio_bookmark_count,
-    COUNT(DISTINCT portfolio_comment.portfolio_comment_id) AS portfolio_comments_count,
+    COUNT(DISTINCT portfolio_comment.comment_id) AS portfolio_comments_count,
     portfolio.portfolio_views_count,
     portfolio.portfolio_created_at
     `;
@@ -77,7 +77,7 @@ export const findPortfoliosByKeyword = async (portfolio_keyword: string): Promis
     portfolio.portfolio_thumbnail,
     portfolio.portfolio_stacks,
     COUNT(DISTINCT portfolio_bookmark.user_id) AS portfolio_bookmark_count,
-    COUNT(DISTINCT portfolio_comment.portfolio_comment_id) AS portfolio_comments_count,
+    COUNT(DISTINCT portfolio_comment.comment_id) AS portfolio_comments_count,
     portfolio.portfolio_views_count,
     portfolio.portfolio_created_at
     `;
@@ -121,8 +121,8 @@ export const findPortfolioById = async (portfolio_id: number): Promise<any> => {
     portfolio.portfolio_stacks,
     portfolio.portfolio_description,
     portfolio.portfolio_img,
-    COUNT(DISTINCT bookmark.user_id) AS portfolio_bookmark_count,
-    COUNT(DISTINCT comment.comment_id) AS portfolio_comments_count,
+    COUNT(DISTINCT portfolio_bookmark.user_id) AS portfolio_bookmark_count,
+    COUNT(DISTINCT portfolio_comment.comment_id) AS portfolio_comments_count,
     portfolio.portfolio_views_count,
     portfolio.portfolio_created_at,
     user.user_id,
