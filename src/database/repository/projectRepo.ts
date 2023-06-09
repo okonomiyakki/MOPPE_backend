@@ -32,6 +32,7 @@ export const createProject = async (inputData: Project.CreateProjectInput): Prom
 
     return createdProjectId;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -69,6 +70,7 @@ export const updateProjectInfo = async (
 
     return project_id;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -99,6 +101,7 @@ export const updateProjectStatus = async (
 
     return project_id;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -119,6 +122,7 @@ export const deleteProjectById = async (user_id: number, project_id: number): Pr
 
     return true;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -154,6 +158,7 @@ export const findAllProjects = async (): Promise<any> => {
 
     return projects; // TODO] as Project.ListByRole[]; 명시적으로 타입 선언
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -190,6 +195,7 @@ export const findProjectsByRole = async (project_role: string): Promise<any> => 
 
     return projects;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -226,6 +232,7 @@ export const findProjectsByStatus = async (project_status: string): Promise<any>
 
     return projects;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -265,6 +272,7 @@ export const findProjectsByRoleWithStatus = async (
 
     return projects;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -311,6 +319,7 @@ export const findProjectsByKeyword = async (project_keyword: string): Promise<an
 
     return projects;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -363,6 +372,7 @@ export const findProjectsByKeywordWithStatus = async (
 
     return projects;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -382,6 +392,7 @@ export const isProjectValid = async (project_id: number): Promise<void> => {
 
     if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -428,6 +439,7 @@ export const findProjectById = async (project_id: number): Promise<any> => {
 
     return project[0];
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -461,6 +473,7 @@ export const findMyProjectsById = async (user_id: number): Promise<any> => {
 
     return projects;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -494,6 +507,7 @@ export const findMyBookmarkedProjectsById = async (user_id: number): Promise<any
 
     return projects;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -515,6 +529,7 @@ export const findUserViewDateById = async (
 
     return Number(date[0].project_view_count);
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -541,6 +556,7 @@ export const updateProjectViewsCount = async (
 
     await db.execute(SQL2, [user_id, project_id, currentDate]);
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };

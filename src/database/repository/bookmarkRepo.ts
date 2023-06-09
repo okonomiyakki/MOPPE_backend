@@ -24,6 +24,7 @@ export const createBookmark = async (inputData: Bookmark.CreateInput): Promise<a
 
     return createdBookmarkId;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -44,6 +45,7 @@ export const deleteBookmarkById = async (user_id: number, project_id: number): P
 
     return true;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -65,6 +67,7 @@ export const findBookmarkedProjectsById = async (
 
     return bookmarks;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -84,6 +87,7 @@ export const findBookmarkedPortfolioById = async (user_id: number): Promise<any>
 
     return portfolios;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -104,6 +108,7 @@ export const findBookmarkedUsersById = async (project_id: number): Promise<any> 
 
     return bookmarks;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };

@@ -16,6 +16,7 @@ export const findAllStacks = async (): Promise<any[]> => {
 
     return stacks;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };

@@ -25,6 +25,7 @@ export const createUser = async (inputData: User.SignUpUserInput): Promise<User.
 
     return createdUserId;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -44,6 +45,7 @@ export const isUserValid = async (user_id: number): Promise<void> => {
 
     if (!isUserIdValid) AppErrors.handleNotFound('존재하지 않는 회원입니다.');
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -77,6 +79,7 @@ export const findUserPayloadByEmail = async (user_email: string): Promise<User.I
 
     return userInfoWithPayload;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -113,6 +116,7 @@ export const updateUserInfo = async (
 
     return user_id;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -142,6 +146,7 @@ export const findUserInfoById = async (user_id: number): Promise<any> => {
 
     return userInfoWithPayload;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -166,6 +171,7 @@ export const findBestStacks = async (): Promise<any> => {
 
     return userStackList;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };

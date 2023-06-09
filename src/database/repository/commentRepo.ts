@@ -25,6 +25,7 @@ export const createComment = async (inputData: Comment.CreateCommentInput): Prom
 
     return createdCommentId;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -62,6 +63,7 @@ export const updateComment = async (
 
     return comment_id;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -82,6 +84,7 @@ export const deleteCommentById = async (user_id: number, comment_id: number): Pr
 
     return true;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -102,6 +105,7 @@ export const isProjectValid = async (comment_id: number): Promise<void> => {
 
     if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -129,6 +133,7 @@ export const findProjectCommentsById = async (project_id: number): Promise<any> 
 
     return comments;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
