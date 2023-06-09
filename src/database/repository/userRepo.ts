@@ -77,7 +77,7 @@ export const findUserPayloadByEmail = async (user_email: string): Promise<User.I
     if (!userInfoWithPayload)
       AppErrors.handleNotFound('존재하지 않는 회원입니다. 회원 가입 후 이용해 주세요.');
 
-    return userInfoWithPayload;
+    return user[0];
   } catch (error) {
     console.log(error);
     throw error;
@@ -125,6 +125,7 @@ export const updateUserInfo = async (
 export const findUserInfoById = async (user_id: number): Promise<any> => {
   try {
     const selectColumns = `
+    user_id,
     user_name,
     user_career_goal,
     user_stacks,
@@ -140,11 +141,11 @@ export const findUserInfoById = async (user_id: number): Promise<any> => {
 
     const [user]: any = await db.query(SQL, [user_id]);
 
-    const userInfoWithPayload = user[0].user_id;
+    const userInfo = user[0].user_id;
 
-    if (!userInfoWithPayload) AppErrors.handleNotFound('존재하지 않는 회원입니다.');
+    if (!userInfo) AppErrors.handleNotFound('존재하지 않는 회원입니다.');
 
-    return userInfoWithPayload;
+    return user[0];
   } catch (error) {
     console.log(error);
     throw error;
