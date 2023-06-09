@@ -503,7 +503,7 @@ export const findMyBookmarkedProjectsById = async (user_id: number): Promise<any
     GROUP BY project.project_id
     `;
 
-    const [projects]: any = await db.query(SQL, [user_id, user_id]);
+    const [projects]: any = await db.query(SQL, [user_id]);
 
     return projects;
   } catch (error) {
