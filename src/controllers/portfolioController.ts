@@ -133,15 +133,16 @@ export const getUserPortfoliosByIdHandler = async (
 
     if (isNaN(Number(user_id))) AppErrors.handleBadRequest('유효한 user_id를 입력해주세요.');
 
-    const userProjects = await portfolioService.getMyPortfoliosById(
+    const userPortfolios = await portfolioService.getMyPortfoliosById(
       my_user_id,
       Number(user_id),
       Number(page)
     );
 
-    res
-      .status(200)
-      .json({ message: '다른 회원 마이페이지 작성 포트폴리오 목록 조회 성공', data: userProjects });
+    res.status(200).json({
+      message: '다른 회원 마이페이지 작성 포트폴리오 목록 조회 성공',
+      data: userPortfolios,
+    });
   } catch (error) {
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
@@ -164,11 +165,41 @@ export const getMyPortfoliosByIdHandler = async (
 
     if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
 
-    const myProjects = await portfolioService.getMyPortfoliosById(user_id, user_id, Number(page));
+    const myPortfolios = await portfolioService.getMyPortfoliosById(user_id, user_id, Number(page));
 
     res
       .status(200)
-      .json({ message: '마이페이지 작성 포트폴리오 목록 조회 성공', data: myProjects });
+      .json({ message: '마이페이지 작성 포트폴리오 목록 조회 성공', data: myPortfolios });
+  } catch (error) {
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+  }
+};
+
+/* 마이페이지 북마크 포트폴리오 목록 조회 */
+export const getMyBookmarkedPortfoliosByIdHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.user.user_id === 0)
+      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+
+    const { user_id } = req.user;
+    const { page } = req.query;
+
+    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
+
+    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
+
+    const myPortfolios = await portfolioService.getMyBookmarkedPortfoliosById(
+      user_id,
+      Number(page)
+    );
+
+    res
+      .status(200)
+      .json({ message: '마이페이지 북마크 포트폴리오 목록 조회 성공', data: myPortfolios });
   } catch (error) {
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }

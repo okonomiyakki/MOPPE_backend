@@ -188,6 +188,39 @@ export const findMyPortfoliosById = async (user_id: number): Promise<any> => {
   }
 };
 
+/* 마이페이지 북마크 포트폴리오 목록 조회 */
+export const findMyBookmarkedPortfoliosById = async (user_id: number): Promise<any> => {
+  try {
+    const selectColumns = `
+    portfolio.portfolio_id,
+    portfolio.portfolio_title,
+    portfolio.portfolio_summary,
+    portfolio.portfolio_thumbnail,
+    portfolio.portfolio_github,
+    COUNT(DISTINCT portfolio_bookmark.user_id) AS portfolio_bookmark_count,
+    COUNT(DISTINCT portfolio_comment.comment_id) AS portfolio_comments_count,
+    portfolio.portfolio_views_count,
+    portfolio.portfolio_created_at
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM portfolio
+    LEFT JOIN portfolio_bookmark ON portfolio_bookmark.portfolio_id = portfolio.portfolio_id
+    LEFT JOIN portfolio_comment ON portfolio_comment.portfolio_id = portfolio.portfolio_id
+    WHERE portfolio_bookmark.user_id = ?
+    GROUP BY portfolio.portfolio_id
+    `;
+
+    const [portfolios]: any = await db.query(SQL, [user_id]);
+
+    return portfolios;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 /* 포트폴리오에 조회한 유저의 조회 날짜가 현재인지 조회 */
 export const findUserViewDateById = async (
   user_id: number,

@@ -42,7 +42,7 @@ export const getAllPortfolios = async (
 
     const pagenatedPortfoliosInfo = {
       pageSize: pagenatedRowsInfo.pageSize,
-      pagenatedPortfolio: pagenatedRowsInfo.pageRows,
+      pagenatedPortfolios: pagenatedRowsInfo.pageRows,
     };
 
     return pagenatedPortfoliosInfo;
@@ -82,7 +82,7 @@ export const getPortfolioById = async (user_id: number, portfolio_id: number): P
       ? { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
       : { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
 
-    // TODO] 참여한 멤버 정보 추가해야함
+    // TODO] 참여한 멤버 정보 추가해야함 ***************************************************
 
     return checkIsBookmarked;
   } catch (error) {
@@ -119,12 +119,38 @@ export const getMyPortfoliosById = async (
     const pagenatedPortfoliosInfo = {
       listLength: checkIsBookmarked.length,
       pageSize: pagenatedRowsInfo.pageSize,
-      pagenatedProjects: pagenatedRowsInfo.pageRows,
+      pagenatedPortfolios: pagenatedRowsInfo.pageRows,
     };
 
     return pagenatedPortfoliosInfo;
   } catch (error) {
     console.log(error);
+    throw error;
+  }
+};
+
+/* 마이페이지 북마크 포트폴리오 목록 조회 */
+export const getMyBookmarkedPortfoliosById = async (
+  user_id: number,
+  page: number
+): Promise<any> => {
+  try {
+    const foundMyBookmarkedPortfolios = await portfolioRepo.findMyBookmarkedPortfoliosById(user_id);
+
+    const addIsBookmarked = foundMyBookmarkedPortfolios.map((portfolio: any) => {
+      return { ...portfolio, is_bookmarked: true };
+    });
+
+    const pagenatedRowsInfo = paginateList(addIsBookmarked, page, 5, true);
+
+    const pagenatedPortfoliosInfo = {
+      listLength: addIsBookmarked.length,
+      pageSize: pagenatedRowsInfo.pageSize,
+      pagenatedPortfolios: pagenatedRowsInfo.pageRows,
+    };
+
+    return pagenatedPortfoliosInfo;
+  } catch (error) {
     throw error;
   }
 };

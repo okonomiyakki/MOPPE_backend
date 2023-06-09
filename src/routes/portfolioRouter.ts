@@ -23,14 +23,21 @@ portfolioRouter.get(
   portfolioController.getPortfolioByIdHandler
 );
 
-/* 다른 회원 마이페이지 작성 모집 글 목록 조회 */
+/* 마이페이지 북마크 포트폴리오 목록 조회 */
+portfolioRouter.get(
+  '/user/bookmark',
+  AuthenticateHandler,
+  portfolioController.getMyBookmarkedPortfoliosByIdHandler
+);
+
+/* 다른 회원 마이페이지 작성 포트폴리오 목록 조회 */
 portfolioRouter.get(
   '/user/:user_id',
   AuthenticateHandler,
   portfolioController.getUserPortfoliosByIdHandler
 );
 
-/* 마이페이지 작성 모집 글 목록 조회 */
+/* 마이페이지 작성 포트폴리오 목록 조회 */
 portfolioRouter.get('/user', AuthenticateHandler, portfolioController.getMyPortfoliosByIdHandler);
 
 export default portfolioRouter;
