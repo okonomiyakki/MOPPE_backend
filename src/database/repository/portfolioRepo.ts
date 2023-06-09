@@ -134,19 +134,68 @@ export const findPortfolioById = async (portfolio_id: number): Promise<any> => {
     const SQL = `
     SELECT ${selectColumns}
     FROM portfolio
-    LEFT JOIN bookmark ON bookmark.portfolio_id = portfolio.portfolio_id
-    LEFT JOIN comment ON comment.portfolio_id = portfolio.portfolio_id
+    LEFT JOIN portfolio_bookmark ON portfolio_bookmark.portfolio_id = portfolio.portfolio_id
+    LEFT JOIN portfolio_comment ON portfolio_comment.portfolio_id = portfolio.portfolio_id
     JOIN user ON user.user_id = portfolio.user_id
     WHERE portfolio.portfolio_id = ?
     `;
 
     const [portfolio]: any = await db.query(SQL, [portfolio_id]);
 
-    const isPortfolioValid = portfolio[0];
+    const isPortfolioValid = portfolio[0].portfolio_id;
 
     if (!isPortfolioValid) AppErrors.handleNotFound('이미 삭제된 포트폴리오 입니다.');
 
     return portfolio[0];
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/* 포트폴리오에 조회한 유저의 조회 날짜가 현재인지 조회 */
+export const findUserViewDateById = async (
+  user_id: number,
+  portfolio_id: number,
+  currentDate: string
+): Promise<any> => {
+  try {
+    const SQL = `
+    SELECT COUNT(*) AS portfolio_view_count
+    FROM portfolio_view
+    WHERE user_id = ? AND portfolio_id = ? AND portfolio_view_date = ?
+    `;
+
+    const [date]: any = await db.query(SQL, [user_id, portfolio_id, currentDate]);
+
+    return Number(date[0].portfolio_view_count);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/* 포트폴리오 클릭 시 조회 수 증가 */
+export const updatePortfolioViewsCount = async (
+  user_id: number,
+  portfolio_id: number,
+  currentDate: string
+): Promise<any> => {
+  try {
+    const SQL1 = `
+    UPDATE portfolio
+    SET portfolio_views_count = portfolio_views_count + 1
+    WHERE portfolio_id = ?
+    `;
+
+    await db.execute(SQL1, [portfolio_id]);
+
+    const SQL2 = `
+    INSERT INTO portfolio_view (user_id, portfolio_id, portfolio_view_date)
+    VALUES (?, ?, ?)
+    `;
+
+    await db.execute(SQL2, [user_id, portfolio_id, currentDate]);
   } catch (error) {
     console.log(error);
     throw error;

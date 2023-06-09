@@ -88,25 +88,25 @@ export const getAllPortfoliosHandler = async (
   }
 };
 
-// /* 포트폴리오 상세 정보 조회 */
-// export const getPortfolioByIdHandler = async (
-//   req: AuthRequest,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const { user_id } = req.user;
-//     const { portfolio_id } = req.params;
+/* 포트폴리오 상세 정보 조회 */
+export const getPortfolioByIdHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { portfolio_id } = req.params;
 
-//     if (!portfolio_id) AppErrors.handleBadRequest('portfolio_id를 입력해 주세요.');
+    if (!portfolio_id) AppErrors.handleBadRequest('portfolio_id를 입력해 주세요.');
 
-//     if (isNaN(Number(portfolio_id)))
-//       AppErrors.handleBadRequest('유효한 portfolio_id를 입력해주세요.');
+    if (isNaN(Number(portfolio_id)))
+      AppErrors.handleBadRequest('유효한 portfolio_id를 입력해주세요.');
 
-//     const portfolioInfo = await portfolioService.getPortfolioById(user_id, Number(portfolio_id));
+    const portfolioInfo = await portfolioService.getPortfolioById(user_id, Number(portfolio_id));
 
-//     res.status(200).json({ message: '포트폴리오 상세 정보 조회 성공', data: portfolioInfo });
-//   } catch (error) {
-//     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
-//   }
-// };
+    res.status(200).json({ message: '포트폴리오 상세 정보 조회 성공', data: portfolioInfo });
+  } catch (error) {
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+  }
+};

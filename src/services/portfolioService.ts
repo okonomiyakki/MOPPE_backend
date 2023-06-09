@@ -51,40 +51,41 @@ export const getAllPortfolios = async (
   }
 };
 
-// /* 포트폴리오 상세 정보 조회 */
-// // TODO] 라우터 변경 한 다음 추가하기
-// export const getPortfolioById = async (user_id: number, portfolio_id: number): Promise<any> => {
-//   try {
-//     const foundPortfolio = await portfolioRepo.findPortfolioById(portfolio_id);
+/* 포트폴리오 상세 정보 조회 */
+export const getPortfolioById = async (user_id: number, portfolio_id: number): Promise<any> => {
+  try {
+    const foundPortfolio = await portfolioRepo.findPortfolioById(portfolio_id);
 
-//     const foundBookmarkedUsers = await bookmarkPortfolioRepo.findBookmarkedUsersById(portfolio_id);
+    const foundBookmarkedUsers = await bookmarkPortfolioRepo.findBookmarkedUsersById(portfolio_id);
 
-//     const foundBookmarkedPortfolios = await bookmarkPortfolioRepo.findBookmarkedPortfolioById(
-//       user_id
-//     );
+    const foundBookmarkedPortfolios = await bookmarkPortfolioRepo.findBookmarkedPortfolioById(
+      user_id
+    );
 
-//     const currentKorDate = generateNewDate();
+    const currentKorDate = generateNewDate();
 
-//     // const isUserEnteredCurrentDate = await portfolioRepo.findUserViewDateById(
-//     //   user_id,
-//     //   portfolio_id,
-//     //   currentKorDate
-//     // );
+    const isUserEnteredCurrentDate = await portfolioRepo.findUserViewDateById(
+      user_id,
+      portfolio_id,
+      currentKorDate
+    );
 
-//     // if (!isUserEnteredCurrentDate) {
-//     //   await portfolioRepo.updateProjectViewsCount(user_id, portfolio_id, currentKorDate);
-//     // }
+    if (!isUserEnteredCurrentDate) {
+      await portfolioRepo.updatePortfolioViewsCount(user_id, portfolio_id, currentKorDate);
+    }
 
-//     const bookmarkedPortfolioIds = foundBookmarkedPortfolios.map(
-//       (portfolio: any) => portfolio.portfolio_id
-//     );
+    const bookmarkedPortfolioIds = foundBookmarkedPortfolios.map(
+      (portfolio: any) => portfolio.portfolio_id
+    );
 
-//     const checkIsBookmarked = bookmarkedPortfolioIds.includes(portfolio_id)
-//       ? { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
-//       : { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
+    const checkIsBookmarked = bookmarkedPortfolioIds.includes(portfolio_id)
+      ? { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
+      : { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
 
-//     return checkIsBookmarked;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+    // TODO] 참여한 멤버 정보 추가해야함
+
+    return checkIsBookmarked;
+  } catch (error) {
+    throw error;
+  }
+};
