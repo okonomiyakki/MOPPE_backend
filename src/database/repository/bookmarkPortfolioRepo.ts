@@ -72,3 +72,24 @@ export const findBookmarkedPortfolioById = async (user_id: number): Promise<any>
     throw error;
   }
 };
+
+/* 포트폴리오 별 북마크한 회원 정보 조회 */
+export const findBookmarkedUsersById = async (portfolio_id: number): Promise<any> => {
+  try {
+    const selectColumns = `user.user_id, user.user_name, user.user_img`;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM portfolio_bookmark
+    INNER JOIN user ON portfolio_bookmark.user_id = user.user_id
+    WHERE portfolio_bookmark.portfolio_id = ?
+    `;
+
+    const [portfolios]: any = await db.query(SQL, [portfolio_id]);
+
+    return portfolios;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
