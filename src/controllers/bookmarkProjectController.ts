@@ -2,8 +2,8 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
 import AppError from '../types/AppErrorType';
 import * as AppErrors from '../middlewares/errorHandler';
-import * as bookmarkService from '../services/bookmarkService';
-import * as Bookmark from '../types/BookmarkType';
+import * as bookmarkProjectService from '../services/bookmarkProjectService';
+import * as BookmarkProject from '../types/BookmarkProjectType';
 
 /* 북마크 등록 - 기능 추가 시 수정 필요 */
 export const addBookmarkHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -15,12 +15,14 @@ export const addBookmarkHandler = async (req: AuthRequest, res: Response, next: 
 
     if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
 
-    const inputData: Bookmark.CreateInput = {
+    const inputData: BookmarkProject.CreateInput = {
       user_id,
       project_id: project_id || 0,
     };
 
-    const createdBookmarkId: Bookmark.Id = await bookmarkService.addBookmark(inputData);
+    const createdBookmarkId: BookmarkProject.Id = await bookmarkProjectService.addBookmark(
+      inputData
+    );
 
     res.status(201).json({
       message: '모집 글 북마크 등록 성공',
@@ -45,7 +47,10 @@ export const removeBookmarkHandler = async (
 
     if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
 
-    const isDeletedBookmark = await bookmarkService.removeBookmark(user_id, Number(project_id));
+    const isDeletedBookmark = await bookmarkProjectService.removeBookmark(
+      user_id,
+      Number(project_id)
+    );
 
     if (isDeletedBookmark) res.status(200).json({ message: '북마크 삭제 성공', data: {} });
   } catch (error) {

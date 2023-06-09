@@ -1,9 +1,9 @@
 import db from '../../config/dbconfig';
 import * as AppErrors from '../../middlewares/errorHandler';
-import * as Bookmark from '../../types/BookmarkType';
+import * as BookmarkProject from '../../types/BookmarkProjectType';
 
 /* 북마크 등록 */
-export const createBookmark = async (inputData: Bookmark.CreateInput): Promise<any> => {
+export const createBookmark = async (inputData: BookmarkProject.CreateInput): Promise<any> => {
   try {
     const createColumns = `
     user_id,
@@ -20,7 +20,7 @@ export const createBookmark = async (inputData: Bookmark.CreateInput): Promise<a
 
     const [result, _] = await db.execute(SQL, createValues);
 
-    const createdBookmarkId: Bookmark.Id = (result as { insertId: number }).insertId;
+    const createdBookmarkId: BookmarkProject.Id = (result as { insertId: number }).insertId;
 
     return createdBookmarkId;
   } catch (error) {
@@ -53,7 +53,7 @@ export const deleteBookmarkById = async (user_id: number, project_id: number): P
 /* 회원이 북마크한 project_id 리스트 조회 */
 export const findBookmarkedProjectsById = async (
   user_id: number
-): Promise<Bookmark.BookmarkedProjects[]> => {
+): Promise<BookmarkProject.BookmarkedProjects[]> => {
   try {
     const selectColumn = 'project_id';
 

@@ -1,14 +1,14 @@
 import * as AppErrors from '../middlewares/errorHandler';
-import * as bookmarkRepo from '../database/repository/bookmarkRepo';
+import * as bookmarkProjectRepo from '../database/repository/bookmarkProjectRepo';
 import * as projectRepo from '../database/repository/projectRepo';
-import * as Bookmark from '../types/BookmarkType';
+import * as BookmarkProject from '../types/BookmarkProjectType';
 
 /* 북마크 등록 */
-export const addBookmark = async (inputData: Bookmark.CreateInput): Promise<any> => {
+export const addBookmark = async (inputData: BookmarkProject.CreateInput): Promise<any> => {
   try {
     await projectRepo.isProjectValid(inputData.project_id);
 
-    const foundBookmarkedProjects = await bookmarkRepo.findBookmarkedProjectsById(
+    const foundBookmarkedProjects = await bookmarkProjectRepo.findBookmarkedProjectsById(
       inputData.user_id
     );
 
@@ -18,7 +18,9 @@ export const addBookmark = async (inputData: Bookmark.CreateInput): Promise<any>
 
     if (isBookmarked) AppErrors.handleBadRequest('이미 북마크된 모집 글 입니다.');
 
-    const createdBookmarkId: Bookmark.Id = await bookmarkRepo.createBookmark(inputData);
+    const createdBookmarkId: BookmarkProject.Id = await bookmarkProjectRepo.createBookmark(
+      inputData
+    );
 
     return createdBookmarkId;
   } catch (error) {
@@ -31,7 +33,7 @@ export const removeBookmark = async (user_id: number, project_id: number): Promi
   try {
     await projectRepo.isProjectValid(project_id);
 
-    const isDeletedBookmark = await bookmarkRepo.deleteBookmarkById(user_id, project_id);
+    const isDeletedBookmark = await bookmarkProjectRepo.deleteBookmarkById(user_id, project_id);
 
     return isDeletedBookmark;
   } catch (error) {

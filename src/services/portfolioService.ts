@@ -1,5 +1,5 @@
 import * as portfolioRepo from '../database/repository/portfolioRepo';
-import * as bookmarkRepo from '../database/repository/bookmarkRepo';
+import * as bookmarkRepo from '../database/repository/bookmarkProjectRepo';
 import * as Portfolio from '../types/PortfolioType';
 import { paginateList } from '../utils/paginator';
 import { generateNewDate } from '../utils/dateGenerator';

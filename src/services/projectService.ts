@@ -1,7 +1,7 @@
 import * as projectRepo from '../database/repository/projectRepo';
-import * as bookmarkRepo from '../database/repository/bookmarkRepo';
+import * as bookmarkRepo from '../database/repository/bookmarkProjectRepo';
 import * as Project from '../types/ProjectType';
-import * as Bookmark from '../types/BookmarkType';
+import * as Bookmark from '../types/BookmarkProjectType';
 import { paginateList } from '../utils/paginator';
 import { generateNewDate } from '../utils/dateGenerator';
 import { searchProjectsByQuery } from '../utils/searchProjects';
