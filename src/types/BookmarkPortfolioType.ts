@@ -6,8 +6,8 @@ interface BookmarkPortfolioProfile {
 
 export type CreateInput = Pick<BookmarkPortfolioProfile, 'portfolio_id' | 'user_id'>;
 
-export type BookmarkedProjects = Pick<BookmarkPortfolioProfile, 'portfolio_id'>;
+export type BookmarkedPortfolios = Pick<BookmarkPortfolioProfile, 'portfolio_id'>;
 
-export type BookmarkedProjectIds = number;
+export type BookmarkedPortfolioIds = number;
 
 export type Id = number;
