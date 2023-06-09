@@ -15,11 +15,18 @@ bookmarkRouter.post(
   bookmarkPortfolioController.addBookmarkHandler
 );
 
-/* 북마크 삭제 */
+/* 모집 글 북마크 삭제 */
 bookmarkRouter.delete(
-  '/:project_id',
+  '/project/:project_id',
   AuthenticateHandler,
   bookmarkProjectController.removeBookmarkHandler
+);
+
+/* 포트폴리오 북마크 삭제 */
+bookmarkRouter.delete(
+  '/portfolio/:portfolio_id',
+  AuthenticateHandler,
+  bookmarkPortfolioController.removeBookmarkHandler
 );
 
 export default bookmarkRouter;

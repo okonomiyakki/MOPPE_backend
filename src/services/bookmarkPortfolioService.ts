@@ -1,12 +1,12 @@
 import * as AppErrors from '../middlewares/errorHandler';
 import * as bookmarkPortfolioRepo from '../database/repository/bookmarkPortfolioRepo';
-import * as projectRepo from '../database/repository/projectRepo';
+import * as portfolioRepo from '../database/repository/portfolioRepo';
 import * as BookmarkPortfolio from '../types/BookmarkPortfolioType';
 
 /* 포트폴리오 북마크 등록 */
 export const addBookmark = async (inputData: BookmarkPortfolio.CreateInput): Promise<any> => {
   try {
-    // await projectRepo.isPortfolioValid(inputData.portfolio_id);
+    // await portfolioRepo.isPortfolioValid(inputData.portfolio_id);
 
     const foundBookmarkedPortfolios = await bookmarkPortfolioRepo.findBookmarkedPortfolioById(
       inputData.user_id
@@ -25,6 +25,19 @@ export const addBookmark = async (inputData: BookmarkPortfolio.CreateInput): Pro
     );
 
     return createdBookmarkId;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/* 포트폴리오 북마크 삭제 */
+export const removeBookmark = async (user_id: number, portfolio_id: number): Promise<boolean> => {
+  try {
+    // await portfolioRepo.isPortfolioValid(portfolio_id); TODO] 포트폴리오 유효성 검사
+
+    const isDeletedBookmark = await bookmarkPortfolioRepo.deleteBookmarkById(user_id, portfolio_id);
+
+    return isDeletedBookmark;
   } catch (error) {
     throw error;
   }

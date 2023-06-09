@@ -29,6 +29,30 @@ export const createBookmark = async (inputData: BookmarkPortfolio.CreateInput): 
   }
 };
 
+/* 포트폴리오 북마크 삭제 */
+export const deleteBookmarkById = async (
+  user_id: number,
+  portfolio_id: number
+): Promise<boolean> => {
+  try {
+    const SQL = `
+    DELETE FROM portfolio_bookmark
+    WHERE user_id = ? AND portfolio_id = ?
+    `;
+
+    const [result, _] = await db.execute(SQL, [user_id, portfolio_id]);
+
+    const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+
+    if (!isAffected) AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 /* 회원이 북마크한 portfolio_id 리스트 조회 */
 export const findBookmarkedPortfolioById = async (user_id: number): Promise<any> => {
   try {
