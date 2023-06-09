@@ -18,6 +18,7 @@ projectRouter.post(
 projectRouter.patch(
   '/recruitment/:project_id',
   AuthenticateHandler,
+  upload.projectImageHandler,
   projectController.editProjectInfoHandler
 );
 

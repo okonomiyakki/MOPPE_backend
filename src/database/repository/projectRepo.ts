@@ -57,7 +57,7 @@ export const updateProjectInfo = async (
     `;
 
     const [result, _] = await db.execute(SQL, [...updateValues, user_id, project_id]);
-
+    console.log(result);
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
 
     const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;

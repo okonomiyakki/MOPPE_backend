@@ -83,8 +83,12 @@ export const editProjectInfoHandler = async (
       project_goal,
       project_participation_time,
       project_introduction,
-      project_img,
     } = req.body;
+    const fileList = req.files || {};
+
+    const imgFileRoots = (fileList as any[]).map(
+      (file) => `http://localhost:5500/api/v1/static/project/${file.filename}`
+    );
 
     if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
 
@@ -96,8 +100,7 @@ export const editProjectInfoHandler = async (
       !project_required_stacks &&
       !project_goal &&
       !project_participation_time &&
-      !project_introduction &&
-      !project_img
+      !project_introduction
     )
       AppErrors.handleBadRequest('수정하실 정보를 하나 이상 입력해 주세요.');
 
@@ -118,7 +121,9 @@ export const editProjectInfoHandler = async (
       project_goal,
       project_participation_time,
       project_introduction,
-      project_img,
+      project_img: {
+        imgList: [...imgFileRoots],
+      },
     };
 
     const updatedPeojectId: Project.Id = await projectService.editProjectInfo(
