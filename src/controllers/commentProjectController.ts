@@ -3,7 +3,7 @@ import { AuthRequest } from '../types/RequestType';
 import AppError from '../types/AppErrorType';
 import * as AppErrors from '../middlewares/errorHandler';
 import * as commentProjectService from '../services/commentProjectService';
-import * as Comment from '../types/CommentProjectType';
+import * as CommentProject from '../types/CommentProjectType';
 
 /* 댓글 등록 - 기능 추가 시 수정 필요 */
 export const addCommentHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -20,13 +20,13 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
     if (typeof comment_content !== 'string')
       AppErrors.handleBadRequest('유효한 comment_content를 입력해주세요.');
 
-    const inputData: Comment.CreateCommentInput = {
+    const inputData: CommentProject.CreateCommentInput = {
       user_id,
       project_id: project_id || 0,
       comment_content,
     };
 
-    const createdCommentId: Comment.Id = await commentProjectService.addComment(inputData);
+    const createdCommentId: CommentProject.Id = await commentProjectService.addComment(inputData);
 
     res.status(201).json({
       message: '모집 글 댓글 등록 성공',
@@ -53,11 +53,11 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
     if (typeof comment_content !== 'string')
       AppErrors.handleBadRequest('유효한 comment_content를 입력해주세요.');
 
-    const inputData: Comment.UpdateCommentInput = {
+    const inputData: CommentProject.UpdateCommentInput = {
       comment_content,
     };
 
-    const updatedCommentId: Comment.Id = await commentProjectService.editComment(
+    const updatedCommentId: CommentProject.Id = await commentProjectService.editComment(
       user_id,
       Number(comment_id),
       inputData

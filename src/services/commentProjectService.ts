@@ -1,14 +1,16 @@
 import * as commentProjectRepo from '../database/repository/commentProjectRepo';
 import * as projectRepo from '../database/repository/projectRepo';
-import * as Comment from '../types/CommentProjectType';
+import * as CommentProject from '../types/CommentProjectType';
 import { paginateList } from '../utils/paginator';
 
 /* 댓글 등록 */
-export const addComment = async (inputData: Comment.CreateCommentInput): Promise<Comment.Id> => {
+export const addComment = async (
+  inputData: CommentProject.CreateCommentInput
+): Promise<CommentProject.Id> => {
   try {
     await projectRepo.isProjectValid(inputData.project_id);
 
-    const createdCommentId: Comment.Id = await commentProjectRepo.createComment(inputData);
+    const createdCommentId: CommentProject.Id = await commentProjectRepo.createComment(inputData);
 
     return createdCommentId;
   } catch (error) {
@@ -20,7 +22,7 @@ export const addComment = async (inputData: Comment.CreateCommentInput): Promise
 export const editComment = async (
   user_id: number,
   comment_id: number,
-  inputData: Comment.UpdateCommentInput
+  inputData: CommentProject.UpdateCommentInput
 ): Promise<any> => {
   try {
     await commentProjectRepo.isProjectValid(comment_id);
