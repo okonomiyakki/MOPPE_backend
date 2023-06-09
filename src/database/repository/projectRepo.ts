@@ -377,7 +377,7 @@ export const findProjectsByKeywordWithStatus = async (
   }
 };
 
-/* 북마크에 해당하는 모집 글 유효성 검사 */
+/* 댓글 등록 및 북마크 등록, 삭제 시 모집 글 유효성 검사 */
 export const isProjectValid = async (project_id: number): Promise<void> => {
   try {
     const SQL = `
@@ -388,7 +388,7 @@ export const isProjectValid = async (project_id: number): Promise<void> => {
 
     const [project]: any = await db.query(SQL, [project_id]);
 
-    const isProjectValid = project[0].portfolio_id;
+    const isProjectValid = project[0].project_id;
 
     if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
   } catch (error) {
