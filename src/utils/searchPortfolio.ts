@@ -4,7 +4,6 @@ import * as Portfolio from '../types/PortfolioType';
 
 export const searchPortfoliosByQuery = async (inputQuery: Portfolio.QueryInput) => {
   try {
-    console.log(inputQuery);
     // 전체 조회
     if (!inputQuery.portfolio_keyword) {
       const foundPortfolios = await portfolioRepo.findAllPortfolios();
