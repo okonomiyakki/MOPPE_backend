@@ -13,4 +13,7 @@ portfolioRouter.post(
   portfolioController.addPortfolioHandler
 );
 
+/* 전체 포트폴리오 목록 조회 */
+portfolioRouter.get('/', AuthenticateHandler, portfolioController.getAllPortfoliosHandler);
+
 export default portfolioRouter;

@@ -30,6 +30,81 @@ export const createPorfolio = async (inputData: Portfolio.CreateInput): Promise<
 
     return createdPorfolioId;
   } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/* 전체 포트폴리오 목록 조회 */
+export const findAllPortfolios = async (): Promise<any> => {
+  try {
+    const selectColumns = `
+    portfolio.portfolio_id,
+    portfolio.portfolio_title,
+    portfolio.portfolio_summary,
+    portfolio.portfolio_thumbnail,
+    portfolio.portfolio_stacks,
+    COUNT(DISTINCT portfolio_bookmark.user_id) AS portfolio_bookmark_count,
+    COUNT(DISTINCT portfolio_comment.portfolio_comment_id) AS portfolio_comments_count,
+    portfolio.portfolio_views_count,
+    portfolio.portfolio_created_at
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM portfolio
+    LEFT JOIN portfolio_bookmark ON portfolio_bookmark.portfolio_id = portfolio.portfolio_id
+    LEFT JOIN portfolio_comment ON portfolio_comment.portfolio_id = portfolio.portfolio_id
+    GROUP BY portfolio.portfolio_id
+    `;
+
+    const [portfolios]: any = await db.query(SQL);
+
+    return portfolios; // TODO] as portfolios.ListByRole[]; 명시적으로 타입 선언
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/* 키워드 별 포트폴리오 목록 조회 */
+export const findPortfoliosByKeyword = async (portfolio_keyword: string): Promise<any> => {
+  try {
+    const selectColumns = `
+    portfolio.portfolio_id,
+    portfolio.portfolio_title,
+    portfolio.portfolio_summary,
+    portfolio.portfolio_thumbnail,
+    portfolio.portfolio_stacks,
+    COUNT(DISTINCT portfolio_bookmark.user_id) AS portfolio_bookmark_count,
+    COUNT(DISTINCT portfolio_comment.portfolio_comment_id) AS portfolio_comments_count,
+    portfolio.portfolio_views_count,
+    portfolio.portfolio_created_at
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM portfolio
+    LEFT JOIN portfolio_bookmark ON portfolio_bookmark.portfolio_id = portfolio.portfolio_id
+    LEFT JOIN portfolio_comment ON portfolio_comment.portfolio_id = portfolio.portfolio_id
+    WHERE portfolio.portfolio_title LIKE CONCAT('%', ?, '%') 
+    OR portfolio.portfolio_summary LIKE CONCAT('%', ?, '%') 
+    OR portfolio.portfolio_description LIKE CONCAT('%', ?, '%')
+    OR JSON_CONTAINS(portfolio.portfolio_stacks->'$.stackList', JSON_ARRAY(?))
+    GROUP BY portfolio.portfolio_id
+    `;
+
+    const [portfolio]: any = await db.query(SQL, [
+      portfolio_keyword,
+      portfolio_keyword,
+      portfolio_keyword,
+      portfolio_keyword,
+      portfolio_keyword,
+    ]);
+
+    return portfolio;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -73,6 +148,7 @@ export const findPortfolioById = async (portfolio_id: number): Promise<any> => {
 
     return portfolio[0];
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };

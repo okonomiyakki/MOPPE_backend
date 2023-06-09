@@ -24,4 +24,9 @@ export type CreateInput = Pick<
   | 'portfolio_img'
 >;
 
+export type QueryInput = {
+  portfolio_keyword?: string;
+  page: number;
+};
+
 export type Id = number;

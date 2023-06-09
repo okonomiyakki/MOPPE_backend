@@ -1,6 +1,9 @@
 import * as portfolioRepo from '../database/repository/portfolioRepo';
+import * as bookmarkRepo from '../database/repository/bookmarkRepo';
 import * as Portfolio from '../types/PortfolioType';
+import { paginateList } from '../utils/paginator';
 import { generateNewDate } from '../utils/dateGenerator';
+import { searchPortfoliosByQuery } from '../utils/searchPortfolio';
 
 /* 포트폴리오 등록 */
 export const addPorfolio = async (inputData: Portfolio.CreateInput): Promise<Portfolio.Id> => {
@@ -8,6 +11,41 @@ export const addPorfolio = async (inputData: Portfolio.CreateInput): Promise<Por
     const createdPorfolioId: Portfolio.Id = await portfolioRepo.createPorfolio(inputData);
 
     return createdPorfolioId;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/* 전체 포트폴리오 목록 조회 */
+export const getAllPortfolios = async (
+  user_id: number,
+  inputQuery: Portfolio.QueryInput
+): Promise<any> => {
+  try {
+    const foundPortfolio = await searchPortfoliosByQuery(inputQuery); // TODO] 테스트 후 조건문 간소화 해야함
+
+    const foundBookmarkedPortfolio = await bookmarkRepo.findBookmarkedPortfolioById(user_id);
+
+    const bookmarkedPortfolioIds = foundBookmarkedPortfolio.map(
+      (portfolio: any) => portfolio.portfolio_id
+    );
+
+    const checkIsBookmarked: any = foundPortfolio.map((portfolio: any) => {
+      if (bookmarkedPortfolioIds.includes(portfolio.portfolio_id))
+        return { ...portfolio, is_bookmarked: true };
+      else return { ...portfolio, is_bookmarked: false };
+    });
+
+    const pagenatedPortfolio = paginateList(checkIsBookmarked, inputQuery.page, 10, true);
+
+    const pageSize = Math.ceil(checkIsBookmarked.length / 10); // TODO] 유틸로 옮기기
+
+    const pagenatedPortfolioInfo = {
+      pageSize,
+      pagenatedPortfolio,
+    };
+
+    return pagenatedPortfolioInfo;
   } catch (error) {
     throw error;
   }
