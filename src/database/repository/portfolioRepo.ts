@@ -43,6 +43,7 @@ export const findAllPortfolios = async (): Promise<any> => {
     portfolio.portfolio_title,
     portfolio.portfolio_summary,
     portfolio.portfolio_thumbnail,
+    portfolio.portfolio_github,
     portfolio.portfolio_stacks,
     COUNT(DISTINCT portfolio_bookmark.user_id) AS portfolio_bookmark_count,
     COUNT(DISTINCT portfolio_comment.comment_id) AS portfolio_comments_count,
@@ -75,6 +76,7 @@ export const findPortfoliosByKeyword = async (portfolio_keyword: string): Promis
     portfolio.portfolio_title,
     portfolio.portfolio_summary,
     portfolio.portfolio_thumbnail,
+    portfolio.portfolio_github,
     portfolio.portfolio_stacks,
     COUNT(DISTINCT portfolio_bookmark.user_id) AS portfolio_bookmark_count,
     COUNT(DISTINCT portfolio_comment.comment_id) AS portfolio_comments_count,
@@ -147,6 +149,39 @@ export const findPortfolioById = async (portfolio_id: number): Promise<any> => {
     if (!isPortfolioValid) AppErrors.handleNotFound('이미 삭제된 포트폴리오 입니다.');
 
     return portfolio[0];
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/* 마이페이지 작성 포트폴리오 목록 조회 */
+export const findMyPortfoliosById = async (user_id: number): Promise<any> => {
+  try {
+    const selectColumns = `
+    portfolio.portfolio_id,
+    portfolio.portfolio_title,
+    portfolio.portfolio_summary,
+    portfolio.portfolio_thumbnail,
+    portfolio.portfolio_github,
+    COUNT(DISTINCT portfolio_bookmark.user_id) AS portfolio_bookmark_count,
+    COUNT(DISTINCT portfolio_comment.comment_id) AS portfolio_comments_count,
+    portfolio.portfolio_views_count,
+    portfolio.portfolio_created_at
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM portfolio
+    LEFT JOIN portfolio_bookmark ON portfolio_bookmark.portfolio_id = portfolio.portfolio_id
+    LEFT JOIN portfolio_comment ON portfolio_comment.portfolio_id = portfolio.portfolio_id
+    WHERE portfolio.user_id = ?
+    GROUP BY portfolio.portfolio_id
+    `;
+
+    const [portfolios]: any = await db.query(SQL, [user_id]);
+
+    return portfolios;
   } catch (error) {
     console.log(error);
     throw error;

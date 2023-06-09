@@ -8,7 +8,7 @@ export const addBookmark = async (inputData: BookmarkPortfolio.CreateInput): Pro
   try {
     // await portfolioRepo.isPortfolioValid(inputData.portfolio_id);
 
-    const foundBookmarkedPortfolios = await bookmarkPortfolioRepo.findBookmarkedPortfolioById(
+    const foundBookmarkedPortfolios = await bookmarkPortfolioRepo.findBookmarkedPortfoliosById(
       inputData.user_id
     );
 

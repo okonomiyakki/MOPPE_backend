@@ -110,3 +110,66 @@ export const getPortfolioByIdHandler = async (
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
+
+/* 다른 회원 마이페이지 작성 포트폴리오 목록 조회 */
+export const getUserPortfoliosByIdHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.user.user_id === 0)
+      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+
+    const my_user_id = req.user.user_id;
+    const { page } = req.query;
+    const { user_id } = req.params;
+
+    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
+
+    if (!user_id) AppErrors.handleBadRequest('user_id를 입력해주세요.');
+
+    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
+
+    if (isNaN(Number(user_id))) AppErrors.handleBadRequest('유효한 user_id를 입력해주세요.');
+
+    const userProjects = await portfolioService.getMyPortfoliosById(
+      my_user_id,
+      Number(user_id),
+      Number(page)
+    );
+
+    res
+      .status(200)
+      .json({ message: '다른 회원 마이페이지 작성 포트폴리오 목록 조회 성공', data: userProjects });
+  } catch (error) {
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+  }
+};
+
+/* 마이페이지 작성 포트폴리오 목록 조회 */
+export const getMyPortfoliosByIdHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.user.user_id === 0)
+      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+
+    const { user_id } = req.user;
+    const { page } = req.query;
+
+    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
+
+    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
+
+    const myProjects = await portfolioService.getMyPortfoliosById(user_id, user_id, Number(page));
+
+    res
+      .status(200)
+      .json({ message: '마이페이지 작성 포트폴리오 목록 조회 성공', data: myProjects });
+  } catch (error) {
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+  }
+};
