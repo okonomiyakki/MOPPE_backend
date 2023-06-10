@@ -14,6 +14,14 @@ portfolioRouter.post(
   portfolioController.addPortfolioHandler
 );
 
+/* 포트폴리오 상세 정보 수정 */
+portfolioRouter.patch(
+  '/posts/:portfolio_id',
+  AuthenticateHandler,
+  upload.portfolioImageHandler,
+  portfolioController.editPortfolioInfoHandler
+);
+
 /* 전체 포트폴리오 목록 조회 */
 portfolioRouter.get('/', AuthenticateHandler, portfolioController.getAllPortfoliosHandler);
 

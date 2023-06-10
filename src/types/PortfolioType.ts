@@ -24,6 +24,19 @@ export type CreateInput = Pick<
   | 'portfolio_img'
 >;
 
+export type UpdateInput = Partial<
+  Pick<
+    PortfolioProfile,
+    | 'portfolio_title'
+    | 'portfolio_summary'
+    | 'portfolio_thumbnail'
+    | 'portfolio_github'
+    | 'portfolio_stacks'
+    | 'portfolio_description'
+    | 'portfolio_img'
+  >
+>;
+
 export type QueryInput = {
   portfolio_keyword?: string;
   page: number;

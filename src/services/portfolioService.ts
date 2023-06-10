@@ -16,6 +16,25 @@ export const addPorfolio = async (inputData: Portfolio.CreateInput): Promise<Por
   }
 };
 
+/* 포트폴리오 상세 정보 수정 */
+export const editPortfolioInfo = async (
+  user_id: number,
+  portfolio_id: number,
+  inputData: Portfolio.UpdateInput
+): Promise<any> => {
+  try {
+    const updatedPortfolioId = await portfolioRepo.updatePortfolioInfo(
+      user_id,
+      portfolio_id,
+      inputData
+    );
+
+    return updatedPortfolioId;
+  } catch (error) {
+    throw error;
+  }
+};
+
 /* 전체 포트폴리오 목록 조회 */
 export const getAllPortfolios = async (
   user_id: number,

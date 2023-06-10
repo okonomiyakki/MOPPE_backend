@@ -35,6 +35,44 @@ export const createPorfolio = async (inputData: Portfolio.CreateInput): Promise<
   }
 };
 
+/* 포트폴리오 상세 정보 수정 */
+export const updatePortfolioInfo = async (
+  user_id: number,
+  portfolio_id: number,
+  inputData: Portfolio.UpdateInput
+): Promise<number> => {
+  try {
+    const updateColums = Object.entries(inputData)
+      .filter(([_, value]) => value !== undefined)
+      .map(([key, _]) => `${key} = ?`)
+      .join(', ');
+
+    const updateValues = Object.values(inputData).filter((value) => value !== undefined);
+
+    const SQL = `
+    UPDATE portfolio
+    SET ${updateColums}
+    WHERE user_id = ? AND portfolio_id = ?
+    `;
+
+    const [result, _] = await db.execute(SQL, [...updateValues, user_id, portfolio_id]);
+
+    const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+
+    const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;
+
+    const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
+
+    if (!isAffected && !isMatched && !isChanged)
+      AppErrors.handleForbidden('본인만 수정 가능 합니다.');
+
+    return portfolio_id;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 /* 전체 포트폴리오 목록 조회 */
 export const findAllPortfolios = async (): Promise<any> => {
   try {
