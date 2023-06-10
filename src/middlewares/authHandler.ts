@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import env from '../config/envconfig';
 import AppError from '../types/AppErrorType';
 import * as AppErrors from '../middlewares/errorHandler';
-import * as U from '../types/UserType';
+import * as User from '../types/UserType';
 import { generateNewAccessToken } from '../utils/AccessTokenGenerator';
 
 const nextForGuest = (req: AuthRequest, next: NextFunction) => {
@@ -25,10 +25,6 @@ const generateNewAccessTokenHandler = async (
 
     const refreshToken = refreshHeader !== undefined ? refreshHeader : undefined;
 
-    // const refreshToken = typeof refreshHeader !== 'string' ? refreshHeader[0] : refreshHeader;
-
-    // const refreshToken = authHeader && authHeader.split(' ')[1].split('refreshToken=')[1];
-
     if (refreshToken === undefined)
       AppErrors.handleUnauthorized('AccessToken이 만료되었습니다. RefreshToken을 보내주세요.');
 
@@ -36,7 +32,7 @@ const generateNewAccessTokenHandler = async (
 
     /* RefreshToken 검증 */
     if (refreshToken) {
-      const decodedRefreshToken = jwt.verify(refreshToken, refreshTokenSecret) as U.decodedToken;
+      const decodedRefreshToken = jwt.verify(refreshToken, refreshTokenSecret) as User.decodedToken;
 
       const currentTime = Math.floor(Date.now() / 1000);
 
@@ -76,7 +72,7 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
 
     /* AccessToken 검증 */
     if (accessToken) {
-      const decodedAccessToken = jwt.verify(accessToken, accessTokenSecret) as U.decodedToken;
+      const decodedAccessToken = jwt.verify(accessToken, accessTokenSecret) as User.decodedToken;
 
       const currentTime = Math.floor(Date.now() / 1000);
 
