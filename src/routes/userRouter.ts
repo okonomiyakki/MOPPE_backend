@@ -1,12 +1,17 @@
 import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
+import * as userValidator from '../middlewares/validationHandler/userValidator';
 import * as upload from '../middlewares/imageHandler';
 import * as userController from '../controllers/userController';
 
 const userRouter = Router();
 
 /* 회원 가입 */
-userRouter.post('/signup', userController.signUpUserHandler);
+userRouter.post(
+  '/signup',
+  userValidator.signUpUserValidateHandler,
+  userController.signUpUserHandler
+);
 
 /* 로그인 */
 userRouter.post('/login', userController.logInUserHandler);
