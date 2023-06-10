@@ -35,6 +35,17 @@ export const editPortfolioInfo = async (
   }
 };
 
+/* 포트폴리오 삭제 */
+export const removePortfolio = async (user_id: number, portfolio_id: number): Promise<boolean> => {
+  try {
+    const isDeletedPortfolio = await portfolioRepo.deletePortfolioById(user_id, portfolio_id);
+
+    return isDeletedPortfolio;
+  } catch (error) {
+    throw error;
+  }
+};
+
 /* 전체 포트폴리오 목록 조회 */
 export const getAllPortfolios = async (
   user_id: number,

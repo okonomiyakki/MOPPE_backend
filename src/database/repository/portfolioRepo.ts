@@ -73,6 +73,30 @@ export const updatePortfolioInfo = async (
   }
 };
 
+/* 포트폴리오 삭제 */
+export const deletePortfolioById = async (
+  user_id: number,
+  portfolio_id: number
+): Promise<boolean> => {
+  try {
+    const SQL = `
+    DELETE FROM portfolio
+    WHERE user_id = ? AND portfolio_id = ?
+    `;
+
+    const [result, _] = await db.execute(SQL, [user_id, portfolio_id]);
+
+    const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+
+    if (!isAffected) AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 /* 전체 포트폴리오 목록 조회 */
 export const findAllPortfolios = async (): Promise<any> => {
   try {

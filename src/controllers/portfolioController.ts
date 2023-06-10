@@ -126,6 +126,32 @@ export const editPortfolioInfoHandler = async (
   }
 };
 
+/* 포트폴리오 삭제 */
+export const removePortfolioHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { portfolio_id } = req.params;
+
+    if (!portfolio_id) AppErrors.handleBadRequest('portfolio_id를 입력해 주세요.');
+
+    if (isNaN(Number(portfolio_id)))
+      AppErrors.handleBadRequest('유효한 portfolio_id를 입력해주세요.');
+
+    const isDeletedPortfolio = await portfolioService.removePortfolio(
+      user_id,
+      Number(portfolio_id)
+    );
+
+    if (isDeletedPortfolio) res.status(200).json({ message: '포트폴리오 삭제 성공', data: {} });
+  } catch (error) {
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+  }
+};
+
 /* 전체 포트폴리오 목록 조회 */
 export const getAllPortfoliosHandler = async (
   req: AuthRequest,
