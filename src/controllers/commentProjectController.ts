@@ -22,7 +22,7 @@ export const addCommentHandler = async (req: AuthRequest, res: Response, next: N
 
     const inputData: CommentProject.CreateCommentInput = {
       user_id,
-      project_id: project_id || 0,
+      project_id,
       comment_content,
     };
 
