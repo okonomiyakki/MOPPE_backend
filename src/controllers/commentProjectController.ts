@@ -5,7 +5,7 @@ import * as AppErrors from '../middlewares/errorHandler';
 import * as commentProjectService from '../services/commentProjectService';
 import * as CommentProject from '../types/CommentProjectType';
 
-/* 댓글 등록 - 기능 추가 시 수정 필요 */
+/* 댓글 등록 */
 export const addCommentHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
