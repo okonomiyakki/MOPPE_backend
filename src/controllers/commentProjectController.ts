@@ -138,7 +138,7 @@ export const getMyCommentsByIdHandler = async (
     const myComments = await commentProjectService.getMyCommentsById(user_id, Number(page));
 
     res.status(200).json({
-      message: '마이페이지 작성 댓글 목록 조회 성공',
+      message: '마이페이지 모집 글 작성 댓글 목록 조회 성공',
       data: myComments,
     });
   } catch (error) {

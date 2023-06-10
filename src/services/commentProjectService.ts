@@ -58,7 +58,7 @@ export const getProjectCommentsById = async (project_id: number, page: number): 
     const pagenatedCommentsInfo = {
       listLength: foundComments.length,
       pageSize: pagenatedRowsInfo.pageSize,
-      pagenatedPortfolio: pagenatedRowsInfo.pageRows,
+      pagenatedComments: pagenatedRowsInfo.pageRows,
     };
 
     return pagenatedCommentsInfo;
@@ -77,7 +77,7 @@ export const getMyCommentsById = async (user_id: number, page: number): Promise<
     const pagenatedCommentsInfo = {
       listLength: foundComments.length,
       pageSize: pagenatedRowsInfo.pageSize,
-      pagenatedPortfolio: pagenatedRowsInfo.pageRows,
+      pagenatedComments: pagenatedRowsInfo.pageRows,
     };
 
     return pagenatedCommentsInfo;

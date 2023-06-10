@@ -53,3 +53,22 @@ export const removeComment = async (user_id: number, comment_id: number): Promis
     throw error;
   }
 };
+
+/* 마이페이지 포트폴리오 댓글 목록 조회 */
+export const getMyCommentsById = async (user_id: number, page: number): Promise<any> => {
+  try {
+    const foundComments = await commentPortfolioRepo.findMyCommentsById(user_id);
+
+    const pagenatedRowsInfo = paginateList(foundComments, page, 5, true);
+
+    const pagenatedCommentsInfo = {
+      listLength: foundComments.length,
+      pageSize: pagenatedRowsInfo.pageSize,
+      pagenatedComments: pagenatedRowsInfo.pageRows,
+    };
+
+    return pagenatedCommentsInfo;
+  } catch (error) {
+    throw error;
+  }
+};

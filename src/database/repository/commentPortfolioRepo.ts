@@ -111,3 +111,31 @@ export const isPortfolioValid = async (comment_id: number): Promise<void> => {
     throw error;
   }
 };
+
+/* 마이페이지 포트폴리오 댓글 목록 조회 */
+export const findMyCommentsById = async (user_id: number): Promise<any> => {
+  try {
+    const selectColumns = `
+    portfolio_comment.comment_id,
+    portfolio.portfolio_id,
+    portfolio.portfolio_title,
+    portfolio_comment.comment_content,
+    portfolio_comment.comment_created_at
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM portfolio_comment
+    LEFT JOIN user ON user.user_id = portfolio_comment.user_id
+    LEFT JOIN portfolio ON portfolio.portfolio_id = portfolio_comment.portfolio_id
+    WHERE portfolio_comment.user_id = ?
+    `;
+
+    const [comments]: any = await db.query(SQL, [user_id]);
+
+    return comments;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

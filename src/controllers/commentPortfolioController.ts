@@ -94,3 +94,31 @@ export const removeCommentHandler = async (req: AuthRequest, res: Response, next
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
+
+/* 마이페이지 포트폴리오 댓글 목록 조회 */
+export const getMyCommentsByIdHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.user.user_id === 0)
+      throw new AppError(403, '잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+
+    const { user_id } = req.user;
+    const { page } = req.query;
+
+    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
+
+    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
+
+    const myComments = await commentPortfolioService.getMyCommentsById(user_id, Number(page));
+
+    res.status(200).json({
+      message: '마이페이지 포트폴리오 작성 댓글 목록 조회 성공',
+      data: myComments,
+    });
+  } catch (error) {
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+  }
+};
