@@ -114,7 +114,7 @@ export const editProjectInfoHandler = async (
       project_img: { imgList: [...imgFileRoots] },
     };
 
-    const updatedPeojectId: Project.Id = await projectService.editProjectInfo(
+    const updatedProjectId: Project.Id = await projectService.editProjectInfo(
       user_id,
       Number(project_id),
       inputData
@@ -122,7 +122,7 @@ export const editProjectInfoHandler = async (
 
     res
       .status(200)
-      .json({ message: '모집 글 상세 정보 수정 성공', data: { project_id: updatedPeojectId } });
+      .json({ message: '모집 글 상세 정보 수정 성공', data: { project_id: updatedProjectId } });
   } catch (error) {
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
