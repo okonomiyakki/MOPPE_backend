@@ -3,7 +3,6 @@ import fs from 'fs';
 import { Response, NextFunction } from 'express';
 import * as AppErrors from './errorHandler';
 import { AuthRequest } from '../types/RequestType';
-import { generateNewDate } from '../utils/dateGenerator';
 
 if (!fs.existsSync('public')) {
   fs.mkdirSync('public');
@@ -26,7 +25,6 @@ const userStorage = multer.diskStorage({
     cb(null, 'public/user/');
   },
   filename: function (req, file, cb) {
-    const timestamp = Date.now();
     const fileName = `${file.originalname}`;
     cb(null, fileName);
   },
