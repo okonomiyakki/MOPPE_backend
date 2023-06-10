@@ -2,7 +2,7 @@ import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
 import * as upload from '../middlewares/imageHandler';
 import * as projectController from '../controllers/projectController';
-import * as commentController from '../controllers/commentProjectController';
+import * as commentProjectController from '../controllers/commentProjectController';
 
 const projectRouter = Router();
 
@@ -57,7 +57,7 @@ projectRouter.get(
 projectRouter.get(
   '/:project_id/comments',
   AuthenticateHandler,
-  commentController.getProjectCommentsByIdHandler
+  commentProjectController.getProjectCommentsByIdHandler
 );
 
 /* 마이페이지 북마크 모집 글 목록 조회 */

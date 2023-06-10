@@ -2,6 +2,7 @@ import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
 import * as upload from '../middlewares/imageHandler';
 import * as portfolioController from '../controllers/portfolioController';
+import * as commentPortfolioController from '../controllers/commentPortfolioController';
 
 const portfolioRouter = Router();
 
@@ -21,6 +22,13 @@ portfolioRouter.get(
   '/info/:portfolio_id',
   AuthenticateHandler,
   portfolioController.getPortfolioByIdHandler
+);
+
+/* 포트폴리오 별 댓글 목록 조회 */
+portfolioRouter.get(
+  '/:portfolio_id/comments',
+  AuthenticateHandler,
+  commentPortfolioController.getProjectCommentsByIdHandler
 );
 
 /* 마이페이지 북마크 포트폴리오 목록 조회 */

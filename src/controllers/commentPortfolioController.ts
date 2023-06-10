@@ -95,6 +95,36 @@ export const removeCommentHandler = async (req: AuthRequest, res: Response, next
   }
 };
 
+/* 포트폴리오 별 댓글 목록 조회 */
+export const getProjectCommentsByIdHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { portfolio_id } = req.params;
+    const { page } = req.query;
+
+    if (!portfolio_id) AppErrors.handleBadRequest('portfolio_id를 입력해주세요.');
+
+    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
+
+    if (isNaN(Number(portfolio_id)))
+      AppErrors.handleBadRequest('유효한 portfolio_id를 입력해주세요.');
+
+    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
+
+    const portfolioComments = await commentPortfolioService.getPortfolioCommentsById(
+      Number(portfolio_id),
+      Number(page)
+    );
+
+    res.status(200).json({ message: '포트폴리오 별 댓글 목록 조회 성공', data: portfolioComments });
+  } catch (error) {
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+  }
+};
+
 /* 마이페이지 포트폴리오 댓글 목록 조회 */
 export const getMyCommentsByIdHandler = async (
   req: AuthRequest,
