@@ -25,7 +25,9 @@ export const signUpUserHandler = async (req: Request, res: Response, next: NextF
 
     res.status(201).json({ message: '회원 가입 성공', data: { user_id: createdUserId } });
   } catch (error) {
-    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+    error instanceof AppError
+      ? next(error)
+      : next(AppErrors.handleInternalServerError('이미 존재하는 이메일 입니다.'));
   }
 };
 
