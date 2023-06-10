@@ -11,14 +11,32 @@ commentRouter.post('/project', AuthenticateHandler, commentProjectController.add
 /* 포트폴리오 댓글 등록 */
 commentRouter.post('/portfolio', AuthenticateHandler, commentPortfolioController.addCommentHandler);
 
-/* 댓글 수정 */
-commentRouter.put('/:comment_id', AuthenticateHandler, commentProjectController.editCommentHandler);
+/* 모집 글 댓글 수정 */
+commentRouter.put(
+  '/project/:comment_id',
+  AuthenticateHandler,
+  commentProjectController.editCommentHandler
+);
 
-/* 댓글 삭제 */
+/* 포트폴리오 댓글 수정 */
+commentRouter.put(
+  '/portfolio/:comment_id',
+  AuthenticateHandler,
+  commentPortfolioController.editCommentHandler
+);
+
+/* 모집 글 댓글 삭제 */
 commentRouter.delete(
-  '/:comment_id',
+  '/project/:comment_id',
   AuthenticateHandler,
   commentProjectController.removeCommentHandler
+);
+
+/* 포트폴리오 댓글 삭제 */
+commentRouter.delete(
+  '/portfolio/:comment_id',
+  AuthenticateHandler,
+  commentPortfolioController.removeCommentHandler
 );
 
 /* 마이페이지 작성 모집 글 목록 조회 */

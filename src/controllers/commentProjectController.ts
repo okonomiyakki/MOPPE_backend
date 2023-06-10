@@ -63,7 +63,9 @@ export const editCommentHandler = async (req: AuthRequest, res: Response, next: 
       inputData
     );
 
-    res.status(200).json({ message: '댓글 수정 성공', data: { comment_id: updatedCommentId } });
+    res
+      .status(200)
+      .json({ message: '모집 글 댓글 수정 성공', data: { comment_id: updatedCommentId } });
   } catch (error) {
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
@@ -81,7 +83,7 @@ export const removeCommentHandler = async (req: AuthRequest, res: Response, next
 
     const isDeletedComment = await commentProjectService.removeComment(user_id, Number(comment_id));
 
-    if (isDeletedComment) res.status(200).json({ message: '댓글 삭제 성공', data: {} });
+    if (isDeletedComment) res.status(200).json({ message: '모집 글 댓글 삭제 성공', data: {} });
   } catch (error) {
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
