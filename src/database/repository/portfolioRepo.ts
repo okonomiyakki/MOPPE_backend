@@ -111,6 +111,26 @@ export const findPortfoliosByKeyword = async (portfolio_keyword: string): Promis
   }
 };
 
+/* 댓글 등록 및 북마크 등록, 삭제 시 포트폴리오 유효성 검사 */
+export const isPortfolioValid = async (portfolio_id: number): Promise<void> => {
+  try {
+    const SQL = `
+    SELECT *
+    FROM portfolio
+    WHERE portfolio_id = ?
+    `;
+
+    const [portfolio]: any = await db.query(SQL, [portfolio_id]);
+
+    const isPortfolioValid = portfolio[0];
+
+    if (!isPortfolioValid) AppErrors.handleNotFound('이미 삭제된 포트폴리오 입니다.');
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 /* 포트폴리오 상세 정보 조회 */
 export const findPortfolioById = async (portfolio_id: number): Promise<any> => {
   try {

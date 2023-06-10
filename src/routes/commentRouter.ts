@@ -1,11 +1,15 @@
 import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
 import * as commentProjectController from '../controllers/commentProjectController';
+import * as commentPortfolioController from '../controllers/commentPortfolioController';
 
 const commentRouter = Router();
 
-/* 댓글 등록 */
-commentRouter.post('/', AuthenticateHandler, commentProjectController.addCommentHandler);
+/* 모집 글 댓글 등록 */
+commentRouter.post('/project', AuthenticateHandler, commentProjectController.addCommentHandler);
+
+/* 포트폴리오 댓글 등록 */
+commentRouter.post('/portfolio', AuthenticateHandler, commentPortfolioController.addCommentHandler);
 
 /* 댓글 수정 */
 commentRouter.put('/:comment_id', AuthenticateHandler, commentProjectController.editCommentHandler);

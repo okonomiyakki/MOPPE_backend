@@ -6,11 +6,11 @@ interface CommentPortfolioProfile {
   comment_created_at: string;
 }
 
-export type CreateCommentInput = Pick<
+export type CreateInput = Pick<
   CommentPortfolioProfile,
   'user_id' | 'portfolio_id' | 'comment_content'
 >;
 
-export type UpdateCommentInput = Partial<Pick<CommentPortfolioProfile, 'comment_content'>>;
+export type UpdateInput = Partial<Pick<CommentPortfolioProfile, 'comment_content'>>;
 
 export type Id = number;
