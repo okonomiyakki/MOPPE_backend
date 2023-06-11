@@ -25,17 +25,6 @@ export const signUpUserValidateHandler = async (
 
         next(AppErrors.handleBadRequest(errorMessage));
 
-        // const errors: ValidationError[] = await validate(signupUser, { skipMissingProperties: true });
-
-        // if (errors.length > 0) {
-        //   const errorMessage = errors[0].constraints
-        //     ? Object.values(errors[0].constraints).join(' ')
-        //     : '';
-        //   next(AppErrors.handleBadRequest(errorMessage));
-        // } else {
-        //   next();
-        // }
-
         // await validateOrReject(signupUser)
         //   .then(next)
         //   .catch((errors: ValidationError[]) => {
