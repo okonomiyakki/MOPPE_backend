@@ -13,9 +13,9 @@ export const signUpUserValidateHandler = async (
   try {
     const { user_email, user_name, user_password } = req.body;
 
-    const userSignUp = new User.SignUpDto(user_email, user_name, user_password);
+    const signUp = new User.SignUpDto(user_email, user_name, user_password);
 
-    await validateOrReject(userSignUp)
+    await validateOrReject(signUp)
       .then(next)
       .catch((errors: ValidationError[]) => {
         console.log('Validation Info : ', errors);
@@ -39,9 +39,9 @@ export const logInUserValidateHandler = async (
   try {
     const { user_email, user_password } = req.body;
 
-    const userLogIn = new User.LogInDto(user_email, user_password);
+    const logIn = new User.LogInDto(user_email, user_password);
 
-    await validateOrReject(userLogIn)
+    await validateOrReject(logIn)
       .then(next)
       .catch((errors: ValidationError[]) => {
         console.log('Validation Info : ', errors);
@@ -78,10 +78,6 @@ export const editUserInfoValidateHandler = async (
       delete req.body.user_career_goal;
     }
 
-    if (user_stacks === undefined) {
-      delete req.body.user_career_goal;
-    }
-
     if (user_introduction === undefined) {
       delete req.body.user_introduction;
     }
@@ -92,7 +88,7 @@ export const editUserInfoValidateHandler = async (
       req.body.user_img = imgFileRoot;
     }
 
-    const userEditInfo = new User.EditInfoDto(
+    const editInfo = new User.EditInfoDto(
       user_id,
       user_name,
       user_career_goal,
@@ -101,8 +97,8 @@ export const editUserInfoValidateHandler = async (
       filename
     );
 
-    console.log('userEditInfo : ', userEditInfo);
-    await validateOrReject(userEditInfo)
+    console.log('editInfo : ', editInfo);
+    await validateOrReject(editInfo)
       .then(next)
       .catch((errors: ValidationError[]) => {
         console.log('Validation Info : ', errors);
@@ -184,9 +180,9 @@ export const getMembersValidateHandler = async (
     if (req.user.user_id === 0)
       next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
 
-    const GetMembers = new User.GetMembersDto(keyword);
+    const getMembers = new User.GetMembersDto(keyword);
 
-    await validateOrReject(GetMembers)
+    await validateOrReject(getMembers)
       .then(next)
       .catch((errors: ValidationError[]) => {
         console.log('Validation Info : ', errors);
