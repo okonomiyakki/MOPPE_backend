@@ -39,7 +39,7 @@ export class LogInDto {
 
 export class EditInfoDto {
   @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요' })
-  @IsInt({ message: 'user_id가 숫자 형식이 아닙니다.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
   public user_id: number;
 
   @IsOptional()
@@ -76,5 +76,25 @@ export class EditInfoDto {
     this.user_stacks = user_stacks;
     this.user_introduction = user_introduction;
     this.filename = filename;
+  }
+}
+
+export class GetMemberInfoDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  constructor(user_id: number) {
+    this.user_id = user_id;
+  }
+}
+
+export class GetMyInfoDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  constructor(user_id: number) {
+    this.user_id = user_id;
   }
 }

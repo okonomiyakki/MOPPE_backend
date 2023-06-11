@@ -29,9 +29,19 @@ userRouter.patch(
 );
 
 /* 다른 회원 마이페이지 상세 정보 조회 */
-userRouter.get('/profile/:user_id', AuthenticateHandler, userController.getUserInfoByIdHandler);
+userRouter.get(
+  '/profile/:user_id',
+  AuthenticateHandler,
+  userValidator.getMemberInfoValidateHandler,
+  userController.getMemberInfoByIdHandler
+);
 
 /* 회원 마이페이지 상세 정보 조회 */
-userRouter.get('/profile', AuthenticateHandler, userController.getMyInfoByIdHandler);
+userRouter.get(
+  '/profile',
+  AuthenticateHandler,
+  userValidator.getMyInfoValidateHandler,
+  userController.getMyInfoByIdHandler
+);
 
 export default userRouter;

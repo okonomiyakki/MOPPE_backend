@@ -1,6 +1,7 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../../types/RequestType';
 import { validateOrReject, ValidationError } from 'class-validator';
+import env from '../../config/envconfig';
 import * as AppErrors from '../../middlewares/errorHandler';
 import * as User from '../../database/dtos/userDto';
 
@@ -87,7 +88,7 @@ export const editUserInfoValidateHandler = async (
 
     /* 이미지 파일이 있으면 body 필드에 이미지 파일 경로 프러퍼티 추가 */
     if (filename !== undefined) {
-      const imgFileRoot = `http://localhost:5500/api/v1/static/user/${filename}`;
+      const imgFileRoot = `${env.USER_IMAGE_ROOT_LOCAL}${filename}`;
       req.body.user_img = imgFileRoot;
     }
 
@@ -102,6 +103,58 @@ export const editUserInfoValidateHandler = async (
 
     console.log('userEditInfo : ', userEditInfo);
     await validateOrReject(userEditInfo)
+      .then(next)
+      .catch((errors: ValidationError[]) => {
+        console.log('Validation Info : ', errors);
+        const errorMessage = errors
+          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
+          .join(' & ');
+
+        next(AppErrors.handleBadRequest(errorMessage));
+      });
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getMemberInfoValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.params;
+
+    const getMemberInfo = new User.GetMemberInfoDto(Number(user_id));
+
+    await validateOrReject(getMemberInfo)
+      .then(next)
+      .catch((errors: ValidationError[]) => {
+        console.log('Validation Info : ', errors);
+        const errorMessage = errors
+          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
+          .join(' & ');
+
+        next(AppErrors.handleBadRequest(errorMessage));
+      });
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getMyInfoValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+
+    const getMyInfo = new User.GetMyInfoDto(Number(user_id));
+
+    await validateOrReject(getMyInfo)
       .then(next)
       .catch((errors: ValidationError[]) => {
         console.log('Validation Info : ', errors);

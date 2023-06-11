@@ -75,7 +75,7 @@ export const editUserInfoHandler = async (req: AuthRequest, res: Response, next:
 };
 
 /* 다른 회원 마이페이지 상세 정보 조회 */
-export const getUserInfoByIdHandler = async (
+export const getMemberInfoByIdHandler = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
@@ -90,9 +90,9 @@ export const getUserInfoByIdHandler = async (
 
     if (isNaN(Number(user_id))) AppErrors.handleBadRequest('유효한 user_id를 입력해주세요.');
 
-    const userInfo = await userService.getUserInfoById(Number(user_id));
+    const memberInfo = await userService.getUserInfoById(Number(user_id));
 
-    res.status(200).json({ message: '다른 회원 마이페이지 정보 조회 성공', data: userInfo });
+    res.status(200).json({ message: '다른 회원 마이페이지 정보 조회 성공', data: memberInfo });
   } catch (error) {
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
