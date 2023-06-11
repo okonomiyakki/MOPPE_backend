@@ -15,7 +15,7 @@ interface ProjectProfile {
   project_created_at: string;
 }
 
-export type CreateProjectInput = Pick<
+export type CreateInput = Pick<
   ProjectProfile,
   | 'user_id'
   | 'project_type'

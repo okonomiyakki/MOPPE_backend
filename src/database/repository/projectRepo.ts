@@ -3,7 +3,7 @@ import * as AppErrors from '../../middlewares/errorHandler';
 import * as Project from '../../types/ProjectType';
 
 /* 모집 글 등록 */
-export const createProject = async (inputData: Project.CreateProjectInput): Promise<Project.Id> => {
+export const createProject = async (inputData: Project.CreateInput): Promise<Project.Id> => {
   try {
     const createColumns = `
     user_id,

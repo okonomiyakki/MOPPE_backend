@@ -7,7 +7,7 @@ import { generateNewDate } from '../utils/dateGenerator';
 import { searchProjectsByQuery } from '../utils/searchProjects';
 
 /* 모집 글 등록 */
-export const addProject = async (inputData: Project.CreateProjectInput): Promise<Project.Id> => {
+export const addProject = async (inputData: Project.CreateInput): Promise<Project.Id> => {
   try {
     const createdProjectId: Project.Id = await projectRepo.createProject(inputData);
 
