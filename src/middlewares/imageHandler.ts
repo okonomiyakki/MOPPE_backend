@@ -62,8 +62,8 @@ export const userProfileImageHandler = (req: AuthRequest, res: Response, next: N
       if (error) {
         console.log(error);
         next(AppErrors.handleBadRequest('프로필 업로드 중 오류가 발생했습니다.'));
-        console.log('user_img > ', req.files);
       }
+      console.log('user_img > ', req.files);
       next();
     });
   } catch (error) {
@@ -89,59 +89,16 @@ export const projectImageHandler = (req: AuthRequest, res: Response, next: NextF
 
 export const portfolioImageHandler = (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    // uploadPortfolio.single('portfolio_thumbnail')(req, res, (error) => {
-    //   if (error) {
-    //     console.log(error);
-    //     next(AppErrors.handleBadRequest('썸네일 업로드 중 오류가 발생했습니다.'));
-    //   }
-    //   next();
-    //   console.log('portfolio_thumbnail > ', req.files);
-    // });
     uploadPortfolio.array('portfolio_img')(req, res, (error) => {
       if (error) {
         console.log(error);
         next(AppErrors.handleBadRequest('포트폴리오 이미지 업로드 중 오류가 발생했습니다.'));
       }
-      next();
       console.log('portfolio_img > ', req.files);
+      next();
     });
   } catch (error) {
     console.log(error);
     next(error);
   }
 };
-
-// export const userProfileImageHandler = (req: AuthRequest, res: Response, next: NextFunction) => {
-//   uploadUser.single('user_img')(req, res, (error) => {
-//     try {
-//       console.log(1);
-//       console.log(req.file);
-//       next();
-//     } catch (error) {
-//       console.log(error);
-//       next(AppErrors.handleBadRequest('이미지 업로드 중 오류가 발생했습니다.'));
-//     }
-//   });
-// };
-
-// export const projectImageHandler = (req: AuthRequest, res: Response, next: NextFunction) => {
-//   try {
-//     uploadProject.array('project_img')(req, res, (error) => {
-//       if (error) {
-//         console.log(error);
-//         next(AppErrors.handleBadRequest('이미지 업로드 중 오류가 발생했습니다.'));
-//       } else if (!req.files) return next();
-//       else {
-//         const fileUrls = (req.files as any[]).map(
-//           (file) => `http://localhost:5500/api/v1/static/project/${file.filename}`
-//         );
-//         console.log('fileUrls : ', fileUrls);
-
-//         res.status(200).json({ data: { fileUrls } });
-//       }
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     next(error);
-//   }
-// };
