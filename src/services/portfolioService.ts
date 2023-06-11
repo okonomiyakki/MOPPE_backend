@@ -1,14 +1,22 @@
 import * as portfolioRepo from '../database/repository/portfolioRepo';
 import * as bookmarkPortfolioRepo from '../database/repository/bookmarkPortfolioRepo';
+import * as memberRepo from '../database/repository/memberRepo';
 import * as Portfolio from '../types/PortfolioType';
 import { paginateList } from '../utils/paginator';
 import { generateNewDate } from '../utils/dateGenerator';
 import { searchPortfoliosByQuery } from '../utils/searchPortfolio';
 
 /* 포트폴리오 등록 */
-export const addPorfolio = async (inputData: Portfolio.CreateInput): Promise<Portfolio.Id> => {
+export const addPorfolio = async (
+  inputData: Portfolio.CreateInput,
+  memberIds: number[]
+): Promise<Portfolio.Id> => {
   try {
     const createdPorfolioId: Portfolio.Id = await portfolioRepo.createPorfolio(inputData);
+
+    for (const userId of memberIds) {
+      await memberRepo.createMember(userId, createdPorfolioId);
+    }
 
     return createdPorfolioId;
   } catch (error) {

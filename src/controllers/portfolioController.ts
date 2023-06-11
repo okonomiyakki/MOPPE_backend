@@ -15,6 +15,7 @@ export const addPortfolioHandler = async (req: AuthRequest, res: Response, next:
       portfolio_github,
       portfolio_stacks,
       portfolio_description,
+      memberIds,
     } = req.body;
     const fileList = req.files || []; // 이미지 배열
 
@@ -32,7 +33,8 @@ export const addPortfolioHandler = async (req: AuthRequest, res: Response, next:
       !portfolio_summary ||
       !portfolio_github ||
       !portfolio_stacks ||
-      !portfolio_description
+      !portfolio_description ||
+      !memberIds
     )
       AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
 
@@ -49,7 +51,10 @@ export const addPortfolioHandler = async (req: AuthRequest, res: Response, next:
       portfolio_img: { imgList: [...editortImg] },
     };
 
-    const createdPortfolioId: Portfolio.Id = await portfolioService.addPorfolio(inputData);
+    const createdPortfolioId: Portfolio.Id = await portfolioService.addPorfolio(
+      inputData,
+      JSON.parse(memberIds)
+    );
 
     res
       .status(201)
@@ -122,7 +127,9 @@ export const editPortfolioInfoHandler = async (
     });
   } catch (error) {
     console.log(error);
-    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+    error instanceof AppError
+      ? next(error)
+      : next(AppErrors.handleInternalServerError('이미 존재하는 멤버 입니다.'));
   }
 };
 
