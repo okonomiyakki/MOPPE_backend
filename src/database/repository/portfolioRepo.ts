@@ -228,7 +228,7 @@ export const findPortfolioById = async (portfolio_id: number): Promise<any> => {
 
     const isPortfolioValid = portfolio[0].portfolio_id;
 
-    if (!isPortfolioValid) AppErrors.handleNotFound('이미 삭제된 포트폴리오 입니다.');
+    if (!isPortfolioValid) throw AppErrors.handleNotFound('이미 삭제된 포트폴리오 입니다.');
 
     return portfolio[0];
   } catch (error) {

@@ -182,7 +182,8 @@ export const findMembersBykeyword = async (user_keyword: string): Promise<any> =
     const selectColumns = `
     user_id,
     user_email,
-    user_name
+    user_name,
+    user_career_goal
     `;
 
     const SQL = `

@@ -28,3 +28,29 @@ export const createMember = async (user_id: number, portfolio_id: number): Promi
     throw error;
   }
 };
+
+/* 포트폴리오 별 참여한 멤버 정보 조회 */
+export const findParticipatedMembersById = async (portfolio_id: number): Promise<any> => {
+  try {
+    const selectColumns = `
+    user.user_id,
+    user.user_name,
+    user.user_email,
+    user.user_career_goal
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM member
+    INNER JOIN user ON member.user_id = user.user_id
+    WHERE member.portfolio_id = ?
+    `;
+
+    const [members]: any = await db.query(SQL, [portfolio_id]);
+
+    return members;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

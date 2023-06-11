@@ -100,6 +100,8 @@ export const getPortfolioById = async (user_id: number, portfolio_id: number): P
       user_id
     );
 
+    const foundParticipatedMembers = await memberRepo.findParticipatedMembersById(portfolio_id);
+
     const currentKorDate = generateNewDate();
 
     const isUserEnteredCurrentDate = await portfolioRepo.findUserViewDateById(
@@ -117,8 +119,18 @@ export const getPortfolioById = async (user_id: number, portfolio_id: number): P
     );
 
     const checkIsBookmarked = bookmarkedPortfolioIds.includes(portfolio_id)
-      ? { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
-      : { ...foundPortfolio, portfolio_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
+      ? {
+          ...foundPortfolio,
+          participated_members: foundParticipatedMembers,
+          portfolio_bookmark_users: foundBookmarkedUsers,
+          is_bookmarked: true,
+        }
+      : {
+          ...foundPortfolio,
+          participated_members: foundParticipatedMembers,
+          portfolio_bookmark_users: foundBookmarkedUsers,
+          is_bookmarked: false,
+        };
 
     // TODO] 참여한 멤버 정보 추가해야함 ***************************************************
 
