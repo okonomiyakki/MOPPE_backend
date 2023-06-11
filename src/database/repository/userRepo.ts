@@ -175,3 +175,29 @@ export const findBestStacks = async (): Promise<any> => {
     throw error;
   }
 };
+
+/* 키워드 별 회원 검색  */
+export const findMembersBykeyword = async (user_keyword: string): Promise<any> => {
+  try {
+    const selectColumns = `
+    user_id,
+    user_email,
+    user_name
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM user
+    WHERE user.user_name LIKE CONCAT('%', ?, '%')
+    OR user.user_email LIKE CONCAT('%', ?, '%')
+    GROUP BY user.user_id
+    `;
+
+    const [members]: any = await db.query(SQL, [user_keyword, user_keyword]);
+
+    return members;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

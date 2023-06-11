@@ -81,14 +81,7 @@ export const getMemberInfoByIdHandler = async (
   next: NextFunction
 ) => {
   try {
-    if (req.user.user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
-
     const { user_id } = req.params;
-
-    if (!user_id) AppErrors.handleBadRequest('user_id를 입력해주세요.');
-
-    if (isNaN(Number(user_id))) AppErrors.handleBadRequest('유효한 user_id를 입력해주세요.');
 
     const memberInfo = await userService.getUserInfoById(Number(user_id));
 
@@ -101,14 +94,28 @@ export const getMemberInfoByIdHandler = async (
 /* 회원 마이페이지 상세 정보 조회 */
 export const getMyInfoByIdHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    if (req.user.user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
-
     const { user_id } = req.user;
 
     const myInfo = await userService.getUserInfoById(user_id);
 
     res.status(200).json({ message: '회원 마이페이지 정보 조회 성공', data: myInfo });
+  } catch (error) {
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+  }
+};
+
+/* 키워드 별 회원 검색  */
+export const getMembersBykeywordHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { keyword } = req.query as { keyword: string };
+
+    const members = await userService.getMembersBykeyword(keyword);
+
+    res.status(200).json({ message: '키워드 별 회원 검색 성공', data: members });
   } catch (error) {
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }

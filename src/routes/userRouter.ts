@@ -44,4 +44,12 @@ userRouter.get(
   userController.getMyInfoByIdHandler
 );
 
+/* 키워드 별 회원 검색 */
+userRouter.get(
+  '/members',
+  AuthenticateHandler,
+  userValidator.getMembersValidateHandler,
+  userController.getMembersBykeywordHandler
+);
+
 export default userRouter;

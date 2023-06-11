@@ -98,3 +98,13 @@ export class GetMyInfoDto {
     this.user_id = user_id;
   }
 }
+
+export class GetMembersDto {
+  @IsOptional()
+  @IsString({ message: 'keyword가 문자열 형식이 아닙니다.' })
+  public keyword: string;
+
+  constructor(keyword: string) {
+    this.keyword = keyword;
+  }
+}

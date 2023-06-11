@@ -99,3 +99,14 @@ export const getUserInfoById = async (user_id: number): Promise<any> => {
     throw error;
   }
 };
+
+/* 키워드 별 회원 검색  */
+export const getMembersBykeyword = async (user_keyword: string): Promise<any> => {
+  try {
+    const foundMembers = await userRepo.findMembersBykeyword(user_keyword);
+
+    return foundMembers;
+  } catch (error) {
+    throw error;
+  }
+};

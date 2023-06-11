@@ -152,9 +152,41 @@ export const getMyInfoValidateHandler = async (
   try {
     const { user_id } = req.user;
 
+    if (req.user.user_id === 0)
+      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+
     const getMyInfo = new User.GetMyInfoDto(Number(user_id));
 
     await validateOrReject(getMyInfo)
+      .then(next)
+      .catch((errors: ValidationError[]) => {
+        console.log('Validation Info : ', errors);
+        const errorMessage = errors
+          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
+          .join(' & ');
+
+        next(AppErrors.handleBadRequest(errorMessage));
+      });
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getMembersValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { keyword } = req.query as { keyword: string };
+
+    if (req.user.user_id === 0)
+      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+
+    const GetMembers = new User.GetMembersDto(keyword);
+
+    await validateOrReject(GetMembers)
       .then(next)
       .catch((errors: ValidationError[]) => {
         console.log('Validation Info : ', errors);
