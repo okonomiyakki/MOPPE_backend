@@ -24,6 +24,7 @@ userRouter.patch(
   '/profile',
   AuthenticateHandler,
   upload.userProfileImageHandler,
+  userValidator.editUserInfoValidateHandler,
   userController.editUserInfoHandler
 );
 

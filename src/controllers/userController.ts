@@ -36,18 +36,7 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
       user_password,
     };
 
-    const infoWithTokens: User.InfoWithTokens = await userService.logInUser(inputData);
-
-    const userInfoWithTokens = {
-      accessToken: infoWithTokens.accessToken,
-      refreshToken: infoWithTokens.refreshToken,
-      user_id: infoWithTokens.user_id,
-      user_name: infoWithTokens.user_name,
-      user_img: infoWithTokens.user_img,
-      user_career_goal: infoWithTokens.user_career_goal,
-      user_stacks: infoWithTokens.user_stacks,
-      user_introduction: infoWithTokens.user_introduction,
-    };
+    const userInfoWithTokens: User.InfoWithTokens = await userService.logInUser(inputData);
 
     res.status(200).json({ message: '로그인 성공', data: userInfoWithTokens });
   } catch (error) {
@@ -69,30 +58,13 @@ export const logOutUserHandler = async (req: AuthRequest, res: Response, next: N
 /* 회원 상세 정보 수정 */
 export const editUserInfoHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    if (req.user.user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
-
     const { user_id } = req.user;
-    const { user_name, user_career_goal, user_stacks, user_introduction } = req.body;
-    const { filename } = req.file || {};
 
-    const imgFileRoot =
-      filename === undefined ? undefined : `http://localhost:5500/api/v1/static/user/${filename}`;
+    const updateReqBody = req.body;
 
-    if (!user_name && !user_career_goal && !user_stacks && !user_introduction && !filename)
-      AppErrors.handleBadRequest('수정하실 정보를 하나 이상 입력해 주세요.');
+    updateReqBody.user_stacks = { stackList: JSON.parse(updateReqBody.user_stacks) };
 
-    // TODO] validator 에서 요청 body 타입 유효성 검사 추가
-
-    const inputData: User.UpdatUserInput = {
-      user_name,
-      user_career_goal,
-      user_stacks: {
-        stackList: JSON.parse(user_stacks),
-      },
-      user_introduction,
-      user_img: imgFileRoot,
-    };
+    const inputData: User.UpdatUserInput = { ...updateReqBody };
 
     const updatedUserId: User.Id = await userService.editUserInfo(user_id, inputData);
 
