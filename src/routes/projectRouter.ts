@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
 import * as upload from '../middlewares/imageHandler';
+import * as projectValidator from '../middlewares/validationHandler/projectValidator';
 import * as projectController from '../controllers/projectController';
 import * as commentProjectController from '../controllers/commentProjectController';
 
@@ -11,6 +12,7 @@ projectRouter.post(
   '/recruitment',
   AuthenticateHandler,
   upload.projectImageHandler,
+  projectValidator.addProjectValidateHandler,
   projectController.addProjectHandler
 );
 

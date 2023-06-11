@@ -9,47 +9,22 @@ import * as Project from '../types/ProjectType';
 export const addProjectHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
-    const {
-      project_type,
-      project_title,
-      project_summary,
-      project_recruitment_roles,
-      project_required_stacks,
-      project_goal,
-      project_participation_time,
-      project_introduction,
-    } = req.body;
-    const fileList = req.files || [];
 
-    const imgFileRoots = (fileList as any[]).map((file) =>
-      file === undefined ? '' : `http://localhost:5500/api/v1/static/project/${file.filename}`
-    );
+    const createReqbody = req.body;
 
-    if (
-      !project_type ||
-      !project_title ||
-      !project_summary ||
-      !project_recruitment_roles ||
-      !project_goal ||
-      !project_participation_time ||
-      !project_introduction
-    )
-      AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
-
-    // TODO] validator 에서 요청 body 타입 유효성 검사 추가
-
-    const inputData: Project.CreateProjectInput = {
-      user_id,
-      project_type,
-      project_title,
-      project_summary,
-      project_recruitment_roles: { roleList: JSON.parse(project_recruitment_roles) },
-      project_required_stacks: { stackList: JSON.parse(project_required_stacks) },
-      project_goal,
-      project_participation_time,
-      project_introduction,
-      project_img: { imgList: [...imgFileRoots] },
+    createReqbody.project_recruitment_roles = {
+      stackList: JSON.parse(createReqbody.project_recruitment_roles),
     };
+
+    createReqbody.project_required_stacks = {
+      stackList: JSON.parse(createReqbody.project_required_stacks),
+    };
+
+    createReqbody.project_img = {
+      imgList: createReqbody.project_img,
+    };
+
+    const inputData: Project.CreateInput = { user_id, ...createReqbody };
 
     const createdProjectId: Project.Id = await projectService.addProject(inputData);
 
