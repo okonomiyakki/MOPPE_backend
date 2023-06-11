@@ -10,13 +10,13 @@ export const signUpUserValidateHandler = async (
   next: NextFunction
 ) => {
   try {
-    const signupUser = new User.SignUpDto(
+    const userSignUp = new User.SignUpDto(
       req.body.user_email,
       req.body.user_name,
       req.body.user_password
     );
 
-    await validateOrReject(signupUser)
+    await validateOrReject(userSignUp)
       .then(next)
       .catch((errors: ValidationError[]) => {
         const errorMessage = errors
@@ -24,27 +24,31 @@ export const signUpUserValidateHandler = async (
           .join(' & ');
 
         next(AppErrors.handleBadRequest(errorMessage));
-
-        // await validateOrReject(signupUser)
-        //   .then(next)
-        //   .catch((errors: ValidationError[]) => {
-        //     console.log(errors);
-        //     const errorMessages = errors.map((error) => {
-        //       if (error.constraints) {
-        //         return Object.values(error.constraints).join(' ');
-        //       } else if (error.children && error.children.length > 0) {
-        //         return error.children
-        //           .map((childError) =>
-        //             childError.constraints ? Object.values(childError.constraints) : ''
-        //           )
-        //           .join(', ');
-        //       } else {
-        //         return '';
-        //       }
-        //     });
-        // const errorMessage = errorMessages.filter((message) => message !== '').join(', ');
       });
-    next();
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const logInUserValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userLogIn = new User.LogInDto(req.body.user_email, req.body.user_password);
+    console.log(userLogIn);
+    await validateOrReject(userLogIn)
+      .then(next)
+      .catch((errors: ValidationError[]) => {
+        console.log(errors);
+        const errorMessage = errors
+          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
+          .join(' & ');
+
+        next(AppErrors.handleBadRequest(errorMessage));
+      });
   } catch (error) {
     console.log(error);
     next(AppErrors.handleInternalServerError());

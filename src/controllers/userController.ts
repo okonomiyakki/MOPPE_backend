@@ -31,11 +31,6 @@ export const logInUserHandler = async (req: Request, res: Response, next: NextFu
   try {
     const { user_email, user_password } = req.body;
 
-    if (!user_email || !user_password)
-      AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
-
-    // TODO] validator 에서 요청 body 타입 유효성 검사 추가
-
     const inputData: User.LogInUserInput = {
       user_email,
       user_password,

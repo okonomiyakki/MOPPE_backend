@@ -14,7 +14,7 @@ userRouter.post(
 );
 
 /* 로그인 */
-userRouter.post('/login', userController.logInUserHandler);
+userRouter.post('/login', userValidator.logInUserValidateHandler, userController.logInUserHandler);
 
 /* 로그아웃 */
 userRouter.post('/logout', userController.logOutUserHandler);
