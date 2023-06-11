@@ -44,7 +44,7 @@ export const deleteBookmarkById = async (
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
 
-    if (!isAffected) AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
+    if (!isAffected) throw AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
 
     return true;
   } catch (error) {

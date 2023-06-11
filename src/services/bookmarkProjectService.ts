@@ -16,7 +16,7 @@ export const addBookmark = async (inputData: BookmarkProject.CreateInput): Promi
 
     const isBookmarked = bookmarkedProjectIds.includes(inputData.project_id) ? true : false;
 
-    if (isBookmarked) AppErrors.handleBadRequest('이미 북마크된 모집 글 입니다.');
+    if (isBookmarked) throw AppErrors.handleBadRequest('이미 북마크된 모집 글 입니다.');
 
     const createdBookmarkId: BookmarkProject.Id = await bookmarkProjectRepo.createBookmark(
       inputData

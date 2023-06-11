@@ -79,7 +79,7 @@ export const searchProjectsByQuery = async (inputQuery: Project.QueryInput) => {
         console.log(9);
         return foundProjects;
       }
-    } else AppErrors.handleBadRequest('키워드와 모집 역할은 동시에 선택하실 수 없습니다.');
+    } else throw AppErrors.handleBadRequest('키워드와 모집 역할은 동시에 선택하실 수 없습니다.');
   } catch (error) {
     throw error;
   }

@@ -66,7 +66,7 @@ export const updateProjectInfo = async (
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
     if (!isAffected && !isMatched && !isChanged)
-      AppErrors.handleForbidden('본인만 수정 가능 합니다.');
+      throw AppErrors.handleForbidden('본인만 수정 가능 합니다.');
 
     return project_id;
   } catch (error) {
@@ -97,7 +97,7 @@ export const updateProjectStatus = async (
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
     if (!isAffected && !isMatched && !isChanged)
-      AppErrors.handleForbidden('본인만 수정 가능 합니다.');
+      throw AppErrors.handleForbidden('본인만 수정 가능 합니다.');
 
     return project_id;
   } catch (error) {
@@ -118,7 +118,7 @@ export const deleteProjectById = async (user_id: number, project_id: number): Pr
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
 
-    if (!isAffected) AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
+    if (!isAffected) throw AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
 
     return true;
   } catch (error) {
@@ -392,7 +392,7 @@ export const isProjectValid = async (project_id: number): Promise<void> => {
     const isProjectValid = project[0];
     console.log(isProjectValid);
 
-    if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
+    if (!isProjectValid) throw AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
   } catch (error) {
     console.log(error);
     throw error;
@@ -437,7 +437,7 @@ export const findProjectById = async (project_id: number): Promise<any> => {
 
     const isProjectValid = project[0].project_id;
 
-    if (!isProjectValid) AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
+    if (!isProjectValid) throw AppErrors.handleNotFound('이미 삭제된 모집 글 입니다.');
 
     return project[0];
   } catch (error) {

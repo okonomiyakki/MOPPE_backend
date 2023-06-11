@@ -64,7 +64,7 @@ export const updatePortfolioInfo = async (
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
     if (!isAffected && !isMatched && !isChanged)
-      AppErrors.handleForbidden('본인만 수정 가능 합니다.');
+      throw AppErrors.handleForbidden('본인만 수정 가능 합니다.');
 
     return portfolio_id;
   } catch (error) {
@@ -88,7 +88,7 @@ export const deletePortfolioById = async (
 
     const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
 
-    if (!isAffected) AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
+    if (!isAffected) throw AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
 
     return true;
   } catch (error) {
@@ -186,7 +186,7 @@ export const isPortfolioValid = async (portfolio_id: number): Promise<void> => {
 
     const isPortfolioValid = portfolio[0];
 
-    if (!isPortfolioValid) AppErrors.handleNotFound('이미 삭제된 포트폴리오 입니다.');
+    if (!isPortfolioValid) throw AppErrors.handleNotFound('이미 삭제된 포트폴리오 입니다.');
   } catch (error) {
     console.log(error);
     throw error;

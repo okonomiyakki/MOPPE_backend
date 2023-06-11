@@ -132,8 +132,6 @@ export const getPortfolioById = async (user_id: number, portfolio_id: number): P
           is_bookmarked: false,
         };
 
-    // TODO] 참여한 멤버 정보 추가해야함 ***************************************************
-
     return checkIsBookmarked;
   } catch (error) {
     throw error;

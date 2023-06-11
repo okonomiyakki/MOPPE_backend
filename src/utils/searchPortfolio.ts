@@ -17,7 +17,7 @@ export const searchPortfoliosByQuery = async (inputQuery: Portfolio.QueryInput) 
       );
       console.log('키워드 검색 중');
       return foundPortfolios;
-    } else AppErrors.handleBadRequest('키워드 검색 중 오류가 발생했습니다.');
+    } else throw AppErrors.handleBadRequest('키워드 검색 중 오류가 발생했습니다.');
   } catch (error) {
     throw error;
   }

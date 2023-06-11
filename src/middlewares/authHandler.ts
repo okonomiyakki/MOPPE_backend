@@ -26,7 +26,9 @@ const generateNewAccessTokenHandler = async (
     const refreshToken = refreshHeader !== undefined ? refreshHeader : undefined;
 
     if (refreshToken === undefined)
-      AppErrors.handleUnauthorized('AccessToken이 만료되었습니다. RefreshToken을 보내주세요.');
+      throw AppErrors.handleUnauthorized(
+        'AccessToken이 만료되었습니다. RefreshToken을 보내주세요.'
+      );
 
     const refreshTokenSecret = env.REFRESH_TOKEN_SECRET || 'MOGAKPPO_REFRESH_TOKEN_SECRET';
 
@@ -66,7 +68,9 @@ const AuthenticateHandler = async (req: AuthRequest, res: Response, next: NextFu
     if (accessToken === undefined && req.method === 'GET') return nextForGuest(req, next);
 
     if (accessToken === undefined)
-      AppErrors.handleUnauthorized('AccessToken이 존재하지 않습니다. 로그인 후 이용해 주세요.');
+      throw AppErrors.handleUnauthorized(
+        'AccessToken이 존재하지 않습니다. 로그인 후 이용해 주세요.'
+      );
 
     const accessTokenSecret = env.ACCESS_TOKEN_SECRET || 'MOGAKPPO_ACCESS_TOKEN_SECRET';
 

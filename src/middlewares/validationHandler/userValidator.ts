@@ -68,7 +68,7 @@ export const editUserInfoValidateHandler = async (
     const { filename } = req.file || {};
 
     if (user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
 
     if (user_name === undefined) {
       delete req.body.user_name;
@@ -153,7 +153,7 @@ export const getMyInfoValidateHandler = async (
     const { user_id } = req.user;
 
     if (req.user.user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
 
     const getMyInfo = new User.GetMyInfoDto(Number(user_id));
 
@@ -182,7 +182,7 @@ export const getMembersValidateHandler = async (
     const { keyword } = req.query as { keyword: string };
 
     if (req.user.user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
+      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
 
     const GetMembers = new User.GetMembersDto(keyword);
 

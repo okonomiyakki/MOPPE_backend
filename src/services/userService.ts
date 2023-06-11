@@ -33,7 +33,7 @@ export const logInUser = async (inputData: User.LogInUserInput): Promise<User.In
       foundUserInfoWithPayload.user_password
     );
 
-    if (!isPasswordMatch) AppErrors.handleBadRequest('비밀번호가 일치하지 않습니다.');
+    if (!isPasswordMatch) throw AppErrors.handleBadRequest('비밀번호가 일치하지 않습니다.');
 
     const payload: User.Payload = {
       user_id: foundUserInfoWithPayload.user_id,

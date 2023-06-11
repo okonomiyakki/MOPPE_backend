@@ -43,7 +43,7 @@ export const isUserValid = async (user_id: number): Promise<void> => {
 
     const isUserIdValid = user[0].user_id;
 
-    if (!isUserIdValid) AppErrors.handleNotFound('존재하지 않는 회원입니다.');
+    if (!isUserIdValid) throw AppErrors.handleNotFound('존재하지 않는 회원입니다.');
   } catch (error) {
     console.log(error);
     throw error;
@@ -75,7 +75,7 @@ export const findUserPayloadByEmail = async (user_email: string): Promise<User.I
     const userInfoWithPayload = user[0].user_id;
 
     if (!userInfoWithPayload)
-      AppErrors.handleNotFound('존재하지 않는 회원입니다. 회원 가입 후 이용해 주세요.');
+      throw AppErrors.handleNotFound('존재하지 않는 회원입니다. 회원 가입 후 이용해 주세요.');
 
     return user[0];
   } catch (error) {
@@ -111,7 +111,7 @@ export const updateUserInfo = async (
     const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
 
     if (!isAffected && !isMatched && !isChanged)
-      AppErrors.handleForbidden('본인만 수정 가능 합니다.');
+      throw AppErrors.handleForbidden('본인만 수정 가능 합니다.');
 
     return user_id;
   } catch (error) {
@@ -142,7 +142,7 @@ export const findUserInfoById = async (user_id: number): Promise<any> => {
 
     const userInfo = user[0].user_id;
 
-    if (!userInfo) AppErrors.handleNotFound('존재하지 않는 회원입니다.');
+    if (!userInfo) throw AppErrors.handleNotFound('존재하지 않는 회원입니다.');
 
     return user[0];
   } catch (error) {
