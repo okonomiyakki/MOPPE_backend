@@ -190,24 +190,110 @@ export const getAllProjectsValidateHandler = async (
 ) => {
   try {
     const { user_id } = req.user;
-    const { cate, recruiting, keyword, page } = req.query as {
-      cate: string;
-      recruiting: string;
-      keyword: string;
-      page: string;
-    };
+    const { cate, recruiting, keyword, page } = req.query;
 
     const getAllProjects = new Project.GetAllProjectsDto(
       user_id,
-      cate,
-      recruiting,
-      keyword,
+      cate as string,
+      recruiting as string,
+      keyword as string,
       Number(page)
     );
 
     console.log('getAllProjects : ', getAllProjects);
 
     validateDto(getAllProjects, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getProjectByIdValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { project_id } = req.params;
+
+    const GetProjectById = new Project.GetProjectByIdDto(user_id, Number(project_id));
+
+    console.log('GetProjectById : ', GetProjectById);
+
+    validateDto(GetProjectById, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getUserProjectsByIdValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const my_user_id = req.user.user_id;
+    const { page } = req.query;
+    const { user_id } = req.params;
+
+    const GetUserProjectsById = new Project.GetUserProjectsByIdDto(
+      my_user_id,
+      Number(page),
+      Number(user_id)
+    );
+
+    console.log('GetUserProjectsById : ', GetUserProjectsById);
+
+    validateDto(GetUserProjectsById, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getMyProjectsValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { page } = req.query;
+
+    if (user_id === 0)
+      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
+
+    const GetUserProjects = new Project.GetMyProjectsDto(user_id, Number(page));
+
+    console.log('GetUserProjects : ', GetUserProjects);
+
+    validateDto(GetUserProjects, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getProjectCommentsByIdValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { project_id } = req.params;
+    const { page } = req.query;
+
+    const GetMyProjectCommentsById = new Project.GetMyProjectCommentsByIdDto(
+      Number(project_id),
+      Number(page)
+    );
+
+    console.log('GetMyProjectCommentsById : ', GetMyProjectCommentsById);
+
+    validateDto(GetMyProjectCommentsById, next);
   } catch (error) {
     console.log(error);
     next(AppErrors.handleInternalServerError());

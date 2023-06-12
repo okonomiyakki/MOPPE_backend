@@ -60,6 +60,7 @@ projectRouter.get(
 projectRouter.get(
   '/info/:project_id',
   AuthenticateHandler,
+  projectValidator.getProjectByIdValidateHandler,
   projectController.getProjectByIdHandler
 );
 
@@ -67,6 +68,7 @@ projectRouter.get(
 projectRouter.get(
   '/:project_id/comments',
   AuthenticateHandler,
+  projectValidator.getProjectCommentsByIdValidateHandler,
   commentProjectController.getProjectCommentsByIdHandler
 );
 
@@ -74,6 +76,7 @@ projectRouter.get(
 projectRouter.get(
   '/user/bookmark',
   AuthenticateHandler,
+  projectValidator.getMyProjectsValidateHandler,
   projectController.getMyBookmarkedProjectsByIdHandler
 );
 
@@ -81,10 +84,16 @@ projectRouter.get(
 projectRouter.get(
   '/user/:user_id',
   AuthenticateHandler,
+  projectValidator.getUserProjectsByIdValidateHandler,
   projectController.getUserProjectsByIdHandler
 );
 
 /* 마이페이지 작성 모집 글 목록 조회 */
-projectRouter.get('/user', AuthenticateHandler, projectController.getMyProjectsByIdHandler);
+projectRouter.get(
+  '/user',
+  AuthenticateHandler,
+  projectValidator.getMyProjectsValidateHandler,
+  projectController.getMyProjectsByIdHandler
+);
 
 export default projectRouter;

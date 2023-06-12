@@ -99,14 +99,6 @@ export const getProjectCommentsByIdHandler = async (
     const { project_id } = req.params;
     const { page } = req.query;
 
-    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해주세요.');
-
-    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
-
-    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
-
-    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
-
     const projectComments = await commentProjectService.getProjectCommentsById(
       Number(project_id),
       Number(page)

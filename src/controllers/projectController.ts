@@ -152,11 +152,6 @@ export const getProjectsByRoleHandler = async (
     const { user_id } = req.user;
     const { project_role } = req.params;
 
-    if (!project_role) AppErrors.handleBadRequest('project_role를 입력해 주세요.');
-
-    if (typeof project_role !== 'string')
-      AppErrors.handleBadRequest('유효한 project_role를 입력해주세요.');
-
     const projectsByRole = await projectService.getProjectsByRole(user_id, project_role);
 
     res.status(200).json({ message: '역할별 모집 글 목록 조회 성공', data: projectsByRole });
@@ -175,10 +170,6 @@ export const getProjectByIdHandler = async (
     const { user_id } = req.user;
     const { project_id } = req.params;
 
-    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
-
-    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
-
     const projectInfo = await projectService.getProjectById(user_id, Number(project_id));
 
     res.status(200).json({ message: '모집 글 상세 정보 조회 성공', data: projectInfo });
@@ -194,20 +185,9 @@ export const getUserProjectsByIdHandler = async (
   next: NextFunction
 ) => {
   try {
-    if (req.user.user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
-
     const my_user_id = req.user.user_id;
     const { page } = req.query;
     const { user_id } = req.params;
-
-    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
-
-    if (!user_id) AppErrors.handleBadRequest('user_id를 입력해주세요.');
-
-    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
-
-    if (isNaN(Number(user_id))) AppErrors.handleBadRequest('유효한 user_id를 입력해주세요.');
 
     const userProjects = await projectService.getMyProjectsById(
       my_user_id,
@@ -230,15 +210,8 @@ export const getMyProjectsByIdHandler = async (
   next: NextFunction
 ) => {
   try {
-    if (req.user.user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
-
     const { user_id } = req.user;
     const { page } = req.query;
-
-    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
-
-    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
 
     const myProjects = await projectService.getMyProjectsById(user_id, user_id, Number(page));
 
@@ -255,15 +228,8 @@ export const getMyBookmarkedProjectsByIdHandler = async (
   next: NextFunction
 ) => {
   try {
-    if (req.user.user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
-
     const { user_id } = req.user;
     const { page } = req.query;
-
-    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
-
-    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
 
     const myProjects = await projectService.getMyBookmarkedProjectsById(user_id, Number(page));
 

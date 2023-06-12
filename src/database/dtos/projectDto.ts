@@ -71,7 +71,7 @@ export class EditProjectInfoDto {
   @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
   public user_id: number;
 
-  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다. 다시 로그인해 주세요' })
+  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다.' })
   @IsInt({ message: 'project_id가 정수 형식이 아닙니다.' })
   public project_id: number;
 
@@ -139,11 +139,11 @@ export class EditProjectInfoDto {
 }
 
 export class EditProjectStatusDto {
-  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다.' })
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
   @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
   public user_id: number;
 
-  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다. 다시 로그인해 주세요' })
+  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다.' })
   @IsInt({ message: 'project_id가 정수 형식이 아닙니다.' })
   public project_id: number;
 
@@ -159,11 +159,11 @@ export class EditProjectStatusDto {
 }
 
 export class RemoveProjectDto {
-  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다.' })
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
   @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
   public user_id: number;
 
-  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다. 다시 로그인해 주세요' })
+  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다.' })
   @IsInt({ message: 'project_id가 정수 형식이 아닙니다.' })
   public project_id: number;
 
@@ -174,7 +174,7 @@ export class RemoveProjectDto {
 }
 
 export class GetAllProjectsDto {
-  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다.' })
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
   @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
   public user_id: number;
 
@@ -199,6 +199,71 @@ export class GetAllProjectsDto {
     this.cate = cate;
     this.recruiting = recruiting;
     this.keyword = keyword;
+    this.page = page;
+  }
+}
+
+export class GetProjectByIdDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'project_id가 정수 형식이 아닙니다.' })
+  public project_id: number;
+
+  constructor(user_id: number, project_id: number) {
+    this.user_id = user_id;
+    this.project_id = project_id;
+  }
+}
+
+export class GetUserProjectsByIdDto {
+  @IsNotEmpty({ message: 'my_user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
+  @IsInt({ message: 'my_user_id가 정수 형식이 아닙니다.' })
+  public my_user_id: number;
+
+  @IsNotEmpty({ message: 'page가 입력되지 않았습니다.' })
+  @IsInt({ message: 'page가 정수 형식이 아닙니다.' })
+  public page: number;
+
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  constructor(my_user_id: number, page: number, user_id: number) {
+    this.my_user_id = my_user_id;
+    this.page = page;
+    this.user_id = user_id;
+  }
+}
+
+export class GetMyProjectsDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  @IsNotEmpty({ message: 'page가 입력되지 않았습니다.' })
+  @IsInt({ message: 'page가 정수 형식이 아닙니다.' })
+  public page: number;
+
+  constructor(user_id: number, page: number) {
+    this.user_id = user_id;
+    this.page = page;
+  }
+}
+
+export class GetMyProjectCommentsByIdDto {
+  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'project_id가 정수 형식이 아닙니다.' })
+  public project_id: number;
+
+  @IsNotEmpty({ message: 'page가 입력되지 않았습니다.' })
+  @IsInt({ message: 'page가 정수 형식이 아닙니다.' })
+  public page: number;
+
+  constructor(project_id: number, page: number) {
+    this.project_id = project_id;
     this.page = page;
   }
 }
