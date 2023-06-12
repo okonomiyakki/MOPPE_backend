@@ -13,7 +13,7 @@ export const addProjectHandler = async (req: AuthRequest, res: Response, next: N
     const createReqbody = req.body;
 
     createReqbody.project_recruitment_roles = {
-      stackList: JSON.parse(createReqbody.project_recruitment_roles),
+      roleList: JSON.parse(createReqbody.project_recruitment_roles),
     };
 
     createReqbody.project_required_stacks = {
