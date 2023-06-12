@@ -44,51 +44,22 @@ export const editProjectInfoHandler = async (
   try {
     const { user_id } = req.user;
     const { project_id } = req.params;
-    const {
-      project_type,
-      project_title,
-      project_summary,
-      project_recruitment_roles,
-      project_required_stacks,
-      project_goal,
-      project_participation_time,
-      project_introduction,
-    } = req.body;
-    const fileList = req.files || [];
 
-    const imgFileRoots = (fileList as any[]).map((file) =>
-      file === undefined ? '' : `${env.PROJECT_IMAGE_ROOT_LOCAL}${file.filename}`
-    );
+    const updateReqBody = req.body;
 
-    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
-
-    if (
-      !project_type &&
-      !project_title &&
-      !project_summary &&
-      !project_recruitment_roles &&
-      !project_required_stacks &&
-      !project_goal &&
-      !project_participation_time &&
-      !project_introduction
-    )
-      AppErrors.handleBadRequest('수정하실 정보를 하나 이상 입력해 주세요.');
-
-    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
-
-    // TODO] validator 에서 요청 body 타입 유효성 검사 추가
-
-    const inputData: Project.UpdateInput = {
-      project_type,
-      project_title,
-      project_summary,
-      project_recruitment_roles: { roleList: JSON.parse(project_recruitment_roles) },
-      project_required_stacks: { stackList: JSON.parse(project_required_stacks) },
-      project_goal,
-      project_participation_time,
-      project_introduction,
-      project_img: { imgList: [...imgFileRoots] },
+    updateReqBody.project_recruitment_roles = {
+      roleList: JSON.parse(updateReqBody.project_recruitment_roles),
     };
+
+    updateReqBody.project_required_stacks = {
+      stackList: JSON.parse(updateReqBody.project_required_stacks),
+    };
+
+    updateReqBody.project_img = {
+      imgList: updateReqBody.project_img,
+    };
+
+    const inputData: Project.UpdateInput = updateReqBody;
 
     const updatedProjectId: Project.Id = await projectService.editProjectInfo(
       user_id,
