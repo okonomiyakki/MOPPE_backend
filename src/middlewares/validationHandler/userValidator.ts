@@ -13,7 +13,7 @@ export const signUpUserValidateHandler = async (
   try {
     const { user_email, user_name, user_password } = req.body;
 
-    const signUp = new User.SignUpDto(user_email, user_name, user_password);
+    const signUp = new User.SignUpDto(user_name, user_email, user_password);
 
     await validateOrReject(signUp)
       .then(next)
