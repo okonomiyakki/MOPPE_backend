@@ -25,8 +25,8 @@ export class AddProjectDto {
   @IsString({ message: 'project_goal이 문자열 형식이 아닙니다.' })
   public project_goal: string;
 
-  @IsNotEmpty({ message: 'project_participation_time가 입력되지 않았습니다.' })
-  @IsString({ message: 'project_participation_time가 문자열 형식이 아닙니다.' })
+  @IsNotEmpty({ message: 'project_participation_time이 입력되지 않았습니다.' })
+  @IsString({ message: 'project_participation_time이 문자열 형식이 아닙니다.' })
   public project_participation_time: string;
 
   @IsNotEmpty({ message: 'project_introduction이 입력되지 않았습니다.' })
@@ -38,7 +38,7 @@ export class AddProjectDto {
   public project_required_stacks?: string[];
 
   @IsOptional()
-  @IsArray({ message: 'fileList이 배열 형식이 아닙니다.' })
+  @IsArray({ message: 'fileList가 배열 형식이 아닙니다.' })
   public fileList?: string[];
 
   constructor(
@@ -96,7 +96,7 @@ export class EditProjectInfoDto {
   public project_goal?: string;
 
   @IsOptional()
-  @IsString({ message: 'project_participation_time가 문자열 형식이 아닙니다.' })
+  @IsString({ message: 'project_participation_time이 문자열 형식이 아닙니다.' })
   public project_participation_time?: string;
 
   @IsOptional()
@@ -108,7 +108,7 @@ export class EditProjectInfoDto {
   public project_required_stacks?: string[];
 
   @IsOptional()
-  @IsArray({ message: 'fileList이 배열 형식이 아닙니다.' })
+  @IsArray({ message: 'fileList가 배열 형식이 아닙니다.' })
   public fileList?: string[];
 
   constructor(
@@ -147,8 +147,8 @@ export class EditProjectStatusDto {
   @IsInt({ message: 'project_id가 정수 형식이 아닙니다.' })
   public project_id: number;
 
-  @IsNotEmpty({ message: 'project_recruitment_status이 입력되지 않았습니다.' })
-  @IsString({ message: 'project_recruitment_status이 문자열 형식이 아닙니다.' })
+  @IsNotEmpty({ message: 'project_recruitment_status가 입력되지 않았습니다.' })
+  @IsString({ message: 'project_recruitment_status가 문자열 형식이 아닙니다.' })
   public project_recruitment_status: string;
 
   constructor(user_id: number, project_id: number, project_recruitment_status: string) {
@@ -170,5 +170,35 @@ export class RemoveProjectDto {
   constructor(user_id: number, project_id: number) {
     this.user_id = user_id;
     this.project_id = project_id;
+  }
+}
+
+export class GetAllProjectsDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  @IsNotEmpty({ message: 'cate가 입력되지 않았습니다.' })
+  @IsString({ message: 'cate가 문자열 형식이 아닙니다.' })
+  public cate: string;
+
+  @IsNotEmpty({ message: 'recruiting이 입력되지 않았습니다.' })
+  @IsString({ message: 'recruiting이 문자열 형식이 아닙니다.' })
+  public recruiting: string;
+
+  @IsNotEmpty({ message: 'keyword가 입력되지 않았습니다.' })
+  @IsString({ message: 'keyword가 문자열 형식이 아닙니다.' })
+  public keyword: string;
+
+  @IsNotEmpty({ message: 'page가 입력되지 않았습니다.' })
+  @IsInt({ message: 'page가 정수 형식이 아닙니다.' })
+  public page: number;
+
+  constructor(user_id: number, cate: string, recruiting: string, keyword: string, page: number) {
+    this.user_id = user_id;
+    this.cate = cate;
+    this.recruiting = recruiting;
+    this.keyword = keyword;
+    this.page = page;
   }
 }

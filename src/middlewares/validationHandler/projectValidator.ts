@@ -182,3 +182,34 @@ export const removeProjectValidateHandler = async (
     next(AppErrors.handleInternalServerError());
   }
 };
+
+export const getAllProjectsValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { cate, recruiting, keyword, page } = req.query as {
+      cate: string;
+      recruiting: string;
+      keyword: string;
+      page: string;
+    };
+
+    const getAllProjects = new Project.GetAllProjectsDto(
+      user_id,
+      cate,
+      recruiting,
+      keyword,
+      Number(page)
+    );
+
+    console.log('getAllProjects : ', getAllProjects);
+
+    validateDto(getAllProjects, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};

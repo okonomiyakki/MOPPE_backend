@@ -42,7 +42,12 @@ projectRouter.delete(
 );
 
 /* 전체 모집 글 목록 조회 */
-projectRouter.get('/', AuthenticateHandler, projectController.getAllProjectsHandler);
+projectRouter.get(
+  '/',
+  AuthenticateHandler,
+  projectValidator.getAllProjectsValidateHandler,
+  projectController.getAllProjectsHandler
+);
 
 /* 역할 별 모집 글 목록 조회 */
 projectRouter.get(

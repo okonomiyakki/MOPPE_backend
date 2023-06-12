@@ -122,11 +122,6 @@ export const getAllProjectsHandler = async (
     const { user_id } = req.user;
     const { cate, recruiting, keyword, page } = req.query;
 
-    if (!cate || !recruiting || !keyword || !page)
-      AppErrors.handleBadRequest('요청 query에 모든 정보를 입력해 주세요.');
-
-    // TODO] validator 에서 요청 query 타입 유효성 검사 추가
-
     const project_role = cate === 'all' ? undefined : (cate as string);
     const project_status =
       recruiting === 'true' ? 'RECRUITING' : recruiting === 'false' ? 'COMPLETE' : 'all';
