@@ -109,7 +109,7 @@ export const editProjectInfoValidateHandler = async (
 
     if (fileList.length === 0) req.body.project_img = [];
 
-    const edirProjectInfo = new Project.EditProjectInfoDto(
+    const editProjectInfo = new Project.EditProjectInfoDto(
       user_id,
       Number(project_id),
       project_type,
@@ -123,9 +123,9 @@ export const editProjectInfoValidateHandler = async (
       fileList
     );
 
-    console.log('edirProjectInfo : ', edirProjectInfo);
+    console.log('editProjectInfo : ', editProjectInfo);
 
-    validateDto(edirProjectInfo, next);
+    validateDto(editProjectInfo, next);
   } catch (error) {
     console.log(error);
     next(AppErrors.handleInternalServerError());
