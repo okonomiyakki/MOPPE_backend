@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../../types/RequestType';
-import { validateOrReject, ValidationError } from 'class-validator';
+import { validateDto } from '../../utils/dtoValidator';
 import env from '../../config/envconfig';
 import * as AppErrors from '../../middlewares/errorHandler';
 import * as User from '../../database/dtos/userDto';
@@ -15,16 +15,7 @@ export const signUpUserValidateHandler = async (
 
     const signUp = new User.SignUpDto(user_name, user_email, user_password);
 
-    await validateOrReject(signUp)
-      .then(next)
-      .catch((errors: ValidationError[]) => {
-        console.log('Validation Info : ', errors);
-        const errorMessage = errors
-          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
-          .join(' & ');
-
-        next(AppErrors.handleBadRequest(errorMessage));
-      });
+    validateDto(signUp, next);
   } catch (error) {
     console.log(error);
     next(AppErrors.handleInternalServerError());
@@ -41,16 +32,7 @@ export const logInUserValidateHandler = async (
 
     const logIn = new User.LogInDto(user_email, user_password);
 
-    await validateOrReject(logIn)
-      .then(next)
-      .catch((errors: ValidationError[]) => {
-        console.log('Validation Info : ', errors);
-        const errorMessage = errors
-          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
-          .join(' & ');
-
-        next(AppErrors.handleBadRequest(errorMessage));
-      });
+    validateDto(logIn, next);
   } catch (error) {
     console.log(error);
     next(AppErrors.handleInternalServerError());
@@ -68,16 +50,7 @@ export const editUserPassWordValidateHandler = async (
 
     const EditPassWord = new User.EditPassWordDto(user_id, user_password, user_new_password);
 
-    await validateOrReject(EditPassWord)
-      .then(next)
-      .catch((errors: ValidationError[]) => {
-        console.log('Validation Info : ', errors);
-        const errorMessage = errors
-          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
-          .join(' & ');
-
-        next(AppErrors.handleBadRequest(errorMessage));
-      });
+    validateDto(EditPassWord, next);
   } catch (error) {
     console.log(error);
     next(AppErrors.handleInternalServerError());
@@ -124,17 +97,7 @@ export const editUserInfoValidateHandler = async (
       filename
     );
 
-    console.log('editInfo : ', editInfo);
-    await validateOrReject(editInfo)
-      .then(next)
-      .catch((errors: ValidationError[]) => {
-        console.log('Validation Info : ', errors);
-        const errorMessage = errors
-          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
-          .join(' & ');
-
-        next(AppErrors.handleBadRequest(errorMessage));
-      });
+    validateDto(editInfo, next);
   } catch (error) {
     console.log(error);
     next(AppErrors.handleInternalServerError());
@@ -151,16 +114,7 @@ export const getMemberInfoValidateHandler = async (
 
     const getMemberInfo = new User.GetMemberInfoDto(Number(user_id));
 
-    await validateOrReject(getMemberInfo)
-      .then(next)
-      .catch((errors: ValidationError[]) => {
-        console.log('Validation Info : ', errors);
-        const errorMessage = errors
-          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
-          .join(' & ');
-
-        next(AppErrors.handleBadRequest(errorMessage));
-      });
+    validateDto(getMemberInfo, next);
   } catch (error) {
     console.log(error);
     next(AppErrors.handleInternalServerError());
@@ -180,16 +134,7 @@ export const getMyInfoValidateHandler = async (
 
     const getMyInfo = new User.GetMyInfoDto(Number(user_id));
 
-    await validateOrReject(getMyInfo)
-      .then(next)
-      .catch((errors: ValidationError[]) => {
-        console.log('Validation Info : ', errors);
-        const errorMessage = errors
-          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
-          .join(' & ');
-
-        next(AppErrors.handleBadRequest(errorMessage));
-      });
+    validateDto(getMyInfo, next);
   } catch (error) {
     console.log(error);
     next(AppErrors.handleInternalServerError());
@@ -209,16 +154,7 @@ export const getMembersValidateHandler = async (
 
     const getMembers = new User.GetMembersDto(keyword);
 
-    await validateOrReject(getMembers)
-      .then(next)
-      .catch((errors: ValidationError[]) => {
-        console.log('Validation Info : ', errors);
-        const errorMessage = errors
-          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
-          .join(' & ');
-
-        next(AppErrors.handleBadRequest(errorMessage));
-      });
+    validateDto(getMembers, next);
   } catch (error) {
     console.log(error);
     next(AppErrors.handleInternalServerError());
