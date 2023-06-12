@@ -79,6 +79,7 @@ export const editPortfolioInfoHandler = async (
       portfolio_github,
       portfolio_stacks,
       portfolio_description,
+      memberIds,
     } = req.body;
     const fileList = req.files || [];
 
@@ -96,7 +97,8 @@ export const editPortfolioInfoHandler = async (
       !portfolio_summary &&
       !portfolio_github &&
       !portfolio_stacks &&
-      !portfolio_description
+      !portfolio_description &&
+      !memberIds
     )
       AppErrors.handleBadRequest('수정하실 정보를 하나 이상 입력해 주세요.');
 
@@ -118,7 +120,8 @@ export const editPortfolioInfoHandler = async (
     const updatedPortfolioId: Portfolio.Id = await portfolioService.editPortfolioInfo(
       user_id,
       Number(portfolio_id),
-      inputData
+      inputData,
+      JSON.parse(memberIds)
     );
 
     res.status(200).json({
