@@ -1,5 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
+import env from '../config/envconfig';
 import AppError from '../types/AppErrorType';
 import * as AppErrors from '../middlewares/errorHandler';
 import * as projectService from '../services/projectService';
@@ -56,7 +57,7 @@ export const editProjectInfoHandler = async (
     const fileList = req.files || [];
 
     const imgFileRoots = (fileList as any[]).map((file) =>
-      file === undefined ? '' : `http://localhost:5500/api/v1/static/project/${file.filename}`
+      file === undefined ? '' : `${env.PROJECT_IMAGE_ROOT_LOCAL}${file.filename}`
     );
 
     if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');

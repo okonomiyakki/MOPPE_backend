@@ -1,7 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../../types/RequestType';
 import { validateOrReject, ValidationError } from 'class-validator';
-import multer from 'multer';
 import env from '../../config/envconfig';
 import * as AppErrors from '../../middlewares/errorHandler';
 import * as Project from '../../database/dtos/projectDto';

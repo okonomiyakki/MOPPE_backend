@@ -1,5 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
+import env from '../config/envconfig';
 import AppError from '../types/AppErrorType';
 import * as AppErrors from '../middlewares/errorHandler';
 import * as Portfolio from '../types/PortfolioType';
@@ -22,7 +23,7 @@ export const addPortfolioHandler = async (req: AuthRequest, res: Response, next:
     console.log('fileList : ', fileList);
 
     const imgFileRoots = (fileList as any[]).map(
-      (file) => `http://localhost:5500/api/v1/static/portfolio/${file.filename}`
+      (file) => `${env.PORTFOLIO_IMAGE_ROOT_LOCAL}${file.filename}`
     );
 
     const thumbnail = imgFileRoots[0];
@@ -84,7 +85,7 @@ export const editPortfolioInfoHandler = async (
     const fileList = req.files || [];
 
     const imgFileRoots = (fileList as any[]).map((file) =>
-      file === undefined ? '' : `http://localhost:5500/api/v1/static/portfolio/${file.filename}`
+      file === undefined ? '' : `${env.PORTFOLIO_IMAGE_ROOT_LOCAL}${file.filename}`
     );
 
     const thumbnail = imgFileRoots[0];
