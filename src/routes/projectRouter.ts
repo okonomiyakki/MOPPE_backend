@@ -37,6 +37,7 @@ projectRouter.patch(
 projectRouter.delete(
   '/recruitment/:project_id',
   AuthenticateHandler,
+  projectValidator.removeProjectValidateHandler,
   projectController.removeProjectHandler
 );
 

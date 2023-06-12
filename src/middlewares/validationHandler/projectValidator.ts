@@ -159,3 +159,26 @@ export const editProjectStatusValidateHandler = async (
     next(AppErrors.handleInternalServerError());
   }
 };
+
+export const removeProjectValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { project_id } = req.params;
+
+    if (user_id === 0)
+      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
+
+    const removeProject = new Project.RemoveProjectDto(user_id, Number(project_id));
+
+    console.log('removeProject : ', removeProject);
+
+    validateDto(removeProject, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
