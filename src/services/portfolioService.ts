@@ -28,7 +28,8 @@ export const addPorfolio = async (
 export const editPortfolioInfo = async (
   user_id: number,
   portfolio_id: number,
-  inputData: Portfolio.UpdateInput
+  inputData: Portfolio.UpdateInput,
+  memberIds: number[]
 ): Promise<any> => {
   try {
     const updatedPortfolioId = await portfolioRepo.updatePortfolioInfo(
@@ -36,6 +37,10 @@ export const editPortfolioInfo = async (
       portfolio_id,
       inputData
     );
+
+    // for (const userId of memberIds) {
+    //   await memberRepo.createMember(userId, portfolio_id);
+    // }
 
     return updatedPortfolioId;
   } catch (error) {
@@ -102,16 +107,18 @@ export const getPortfolioById = async (user_id: number, portfolio_id: number): P
 
     const foundParticipatedMembers = await memberRepo.findParticipatedMembersById(portfolio_id);
 
-    const currentKorDate = generateNewDate();
+    if (user_id !== 0) {
+      const currentKorDate = generateNewDate();
 
-    const isUserEnteredCurrentDate = await portfolioRepo.findUserViewDateById(
-      user_id,
-      portfolio_id,
-      currentKorDate
-    );
+      const isUserEnteredCurrentDate = await portfolioRepo.findUserViewDateById(
+        user_id,
+        portfolio_id,
+        currentKorDate
+      );
 
-    if (!isUserEnteredCurrentDate) {
-      await portfolioRepo.updatePortfolioViewsCount(user_id, portfolio_id, currentKorDate);
+      if (!isUserEnteredCurrentDate) {
+        await portfolioRepo.updatePortfolioViewsCount(user_id, portfolio_id, currentKorDate);
+      }
     }
 
     const bookmarkedPortfolioIds = foundBookmarkedPortfolios.map(

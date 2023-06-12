@@ -124,16 +124,18 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
 
     const foundBookmarkedProjects = await bookmarkProjectRepo.findBookmarkedProjectsById(user_id);
 
-    const currentKorDate = generateNewDate();
+    if (user_id !== 0) {
+      const currentKorDate = generateNewDate();
 
-    const isUserEnteredCurrentDate = await projectRepo.findUserViewDateById(
-      user_id,
-      project_id,
-      currentKorDate
-    );
+      const isUserEnteredCurrentDate = await projectRepo.findUserViewDateById(
+        user_id,
+        project_id,
+        currentKorDate
+      );
 
-    if (!isUserEnteredCurrentDate) {
-      await projectRepo.updateProjectViewsCount(user_id, project_id, currentKorDate);
+      if (!isUserEnteredCurrentDate) {
+        await projectRepo.updateProjectViewsCount(user_id, project_id, currentKorDate);
+      }
     }
 
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
