@@ -86,7 +86,12 @@ export const getAllPortfolios = async (
 
     const sortedPortfolios = sortPortfoliosByBookmarkCount(checkIsBookmarked, inputQuery.sort);
 
-    const pagenatedRowsInfo = paginateList(sortedPortfolios, inputQuery.page, 9, !inputQuery.sort);
+    const pagenatedRowsInfo = paginateList(
+      sortedPortfolios,
+      inputQuery.page,
+      9,
+      inputQuery.sort === 'true' ? false : true
+    );
 
     const pagenatedPortfoliosInfo = {
       pageSize: pagenatedRowsInfo.pageSize,
