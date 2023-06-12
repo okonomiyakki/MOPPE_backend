@@ -57,6 +57,33 @@ export const logInUserValidateHandler = async (
   }
 };
 
+export const editUserPassWordValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { user_password, user_new_password } = req.body;
+
+    const EditPassWord = new User.EditPassWordDto(user_id, user_password, user_new_password);
+
+    await validateOrReject(EditPassWord)
+      .then(next)
+      .catch((errors: ValidationError[]) => {
+        console.log('Validation Info : ', errors);
+        const errorMessage = errors
+          .map((error) => (error.constraints ? Object.values(error.constraints).join(' ') : ''))
+          .join(' & ');
+
+        next(AppErrors.handleBadRequest(errorMessage));
+      });
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
 export const editUserInfoValidateHandler = async (
   req: AuthRequest,
   res: Response,

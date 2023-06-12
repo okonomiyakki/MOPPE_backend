@@ -73,6 +73,29 @@ export const logInUser = async (inputData: User.LogInUserInput): Promise<User.In
   }
 };
 
+/* 회원 비밀번호 수정*/
+export const editUserPassWord = async (
+  user_id: number,
+  user_password: string,
+  user_new_password: string
+): Promise<any> => {
+  try {
+    const foundUserPassWord = await userRepo.isUserValid(user_id);
+
+    const isPasswordMatch = await bcrypt.compare(user_password, foundUserPassWord.user_password);
+
+    if (!isPasswordMatch) throw AppErrors.handleBadRequest('비밀번호가 일치하지 않습니다.');
+
+    const foundHashedNewPassword = await hashPassword(user_new_password);
+
+    const updatedUserId = await userRepo.updateUserPassWord(user_id, foundHashedNewPassword);
+
+    return updatedUserId;
+  } catch (error) {
+    throw error;
+  }
+};
+
 /* 회원 상세 정보 수정 */
 export const editUserInfo = async (
   user_id: number,

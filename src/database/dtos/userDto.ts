@@ -37,6 +37,26 @@ export class LogInDto {
   }
 }
 
+export class EditPassWordDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  @IsNotEmpty({ message: 'user_password가 입력되지 않았습니다.' })
+  @IsString({ message: 'user_password가 문자열 형식이 아닙니다.' })
+  public user_password: string;
+
+  @IsNotEmpty({ message: 'user_new_password가 입력되지 않았습니다.' })
+  @IsString({ message: 'user_new_password가 문자열 형식이 아닙니다.' })
+  public user_new_password: string;
+
+  constructor(user_id: number, user_password: string, user_new_password: string) {
+    this.user_id = user_id;
+    this.user_password = user_password;
+    this.user_new_password = user_new_password;
+  }
+}
+
 export class EditInfoDto {
   @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요' })
   @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })

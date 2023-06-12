@@ -55,6 +55,28 @@ export const logOutUserHandler = async (req: AuthRequest, res: Response, next: N
   }
 };
 
+/* 회원 비밀번호 수정  */
+export const editUserPassWordHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { user_password, user_new_password } = req.body;
+
+    const updatedUserId = await userService.editUserPassWord(
+      user_id,
+      user_password,
+      user_new_password
+    );
+
+    res.status(200).json({ message: '회원 비밀번호 수정 성공', data: { user_id: updatedUserId } });
+  } catch (error) {
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+  }
+};
+
 /* 회원 상세 정보 수정 */
 export const editUserInfoHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {

@@ -31,7 +31,7 @@ export const createUser = async (inputData: User.SignUpUserInput): Promise<User.
 };
 
 /*  회원 존재 여부 검사 */
-export const isUserValid = async (user_id: number): Promise<void> => {
+export const isUserValid = async (user_id: number): Promise<any> => {
   try {
     const SQL = `
     SELECT *
@@ -43,10 +43,10 @@ export const isUserValid = async (user_id: number): Promise<void> => {
 
     const isUserIdValid = user[0].user_id;
 
-    if (!isUserIdValid) throw AppErrors.handleNotFound('존재하지 않는 회원입니다.');
+    return user[0];
   } catch (error) {
     console.log(error);
-    throw error;
+    throw AppErrors.handleNotFound('존재하지 않는 회원입니다.');
   }
 };
 
@@ -74,10 +74,40 @@ export const findUserPayloadByEmail = async (user_email: string): Promise<User.I
 
     const userInfoWithPayload = user[0].user_id;
 
-    if (!userInfoWithPayload)
-      throw AppErrors.handleNotFound('존재하지 않는 회원입니다. 회원 가입 후 이용해 주세요.');
-
     return user[0];
+  } catch (error) {
+    console.log(error);
+    throw AppErrors.handleNotFound('존재하지 않는 회원입니다. 회원 가입 후 이용해 주세요.');
+  }
+};
+
+/* 회원 비밀번호 수정 */
+export const updateUserPassWord = async (
+  user_id: number,
+  user_new_password: string
+): Promise<number> => {
+  try {
+    const updateColums = `
+    user_password = ?
+    `;
+    const SQL = `
+    UPDATE user
+    SET ${updateColums}
+    WHERE user_id = ?
+    `;
+
+    const [result, _] = await db.execute(SQL, [user_new_password, user_id]);
+
+    const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+
+    const isMatched = Number((result as { info: string }).info.split(' ')[2]) === 1 ? true : false;
+
+    const isChanged = Number((result as { info: string }).info.split(' ')[5]) === 1 ? true : false;
+
+    if (!isAffected && !isMatched && !isChanged)
+      throw AppErrors.handleForbidden('본인만 수정 가능 합니다.');
+
+    return user_id;
   } catch (error) {
     console.log(error);
     throw error;
@@ -142,12 +172,10 @@ export const findUserInfoById = async (user_id: number): Promise<any> => {
 
     const userInfo = user[0].user_id;
 
-    if (!userInfo) throw AppErrors.handleNotFound('존재하지 않는 회원입니다.');
-
     return user[0];
   } catch (error) {
     console.log(error);
-    throw error;
+    throw AppErrors.handleNotFound('존재하지 않는 회원입니다.');
   }
 };
 

@@ -19,6 +19,14 @@ userRouter.post('/login', userValidator.logInUserValidateHandler, userController
 /* 로그아웃 */
 userRouter.post('/logout', userController.logOutUserHandler);
 
+/* 회원 비밀번호 수정 */
+userRouter.patch(
+  '/password',
+  AuthenticateHandler,
+  userValidator.editUserPassWordValidateHandler,
+  userController.editUserPassWordHandler
+);
+
 /* 회원 상세 정보 수정 */
 userRouter.patch(
   '/profile',
