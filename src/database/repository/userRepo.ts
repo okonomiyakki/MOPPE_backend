@@ -183,7 +183,8 @@ export const findMembersBykeyword = async (user_keyword: string): Promise<any> =
     user_id,
     user_email,
     user_name,
-    user_career_goal
+    user_career_goal,
+    user.user_img
     `;
 
     const SQL = `

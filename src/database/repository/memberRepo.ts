@@ -36,7 +36,8 @@ export const findParticipatedMembersById = async (portfolio_id: number): Promise
     user.user_id,
     user.user_name,
     user.user_email,
-    user.user_career_goal
+    user.user_career_goal,
+    user.user_img
     `;
 
     const SQL = `
