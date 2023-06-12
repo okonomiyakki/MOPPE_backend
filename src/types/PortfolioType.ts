@@ -39,6 +39,7 @@ export type UpdateInput = Partial<
 
 export type QueryInput = {
   portfolio_keyword?: string;
+  sort: string;
   page: number;
 };
 

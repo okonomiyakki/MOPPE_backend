@@ -5,6 +5,7 @@ import * as Portfolio from '../types/PortfolioType';
 import { paginateList } from '../utils/paginator';
 import { generateNewDate } from '../utils/dateGenerator';
 import { searchPortfoliosByQuery } from '../utils/searchPortfolio';
+import { sortPortfoliosByBookmarkCount } from '../utils/sortPortfolios';
 
 /* 포트폴리오 등록 */
 export const addPorfolio = async (
@@ -83,7 +84,9 @@ export const getAllPortfolios = async (
       else return { ...portfolio, is_bookmarked: false };
     });
 
-    const pagenatedRowsInfo = paginateList(checkIsBookmarked, inputQuery.page, 9, true);
+    const sortedPortfolios = sortPortfoliosByBookmarkCount(checkIsBookmarked, inputQuery.sort);
+
+    const pagenatedRowsInfo = paginateList(sortedPortfolios, inputQuery.page, 9, !inputQuery.sort);
 
     const pagenatedPortfoliosInfo = {
       pageSize: pagenatedRowsInfo.pageSize,

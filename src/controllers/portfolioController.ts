@@ -170,9 +170,10 @@ export const getAllPortfoliosHandler = async (
 ) => {
   try {
     const { user_id } = req.user;
-    const { keyword, page } = req.query;
+    const { keyword, sort, page } = req.query;
 
-    if (!keyword || !page) AppErrors.handleBadRequest('요청 query에 모든 정보를 입력해 주세요.');
+    if (!keyword || !sort || !page)
+      AppErrors.handleBadRequest('요청 query에 모든 정보를 입력해 주세요.');
 
     // TODO] validator 에서 요청 query 타입 유효성 검사 추가
 
@@ -180,6 +181,7 @@ export const getAllPortfoliosHandler = async (
 
     const inputQuery: Portfolio.QueryInput = {
       portfolio_keyword,
+      sort: sort as string,
       page: Number(page),
     };
 
