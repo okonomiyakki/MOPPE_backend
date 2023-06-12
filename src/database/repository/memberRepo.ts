@@ -3,7 +3,7 @@ import * as AppErrors from '../../middlewares/errorHandler';
 import * as Member from '../../types/MemberType';
 
 /* 포트폴리오 멤버 등록 */
-export const createMember = async (user_id: number, portfolio_id: number): Promise<Member.Id> => {
+export const createMembers = async (user_id: number, portfolio_id: number): Promise<Member.Id> => {
   try {
     const createColumn = `
     user_id,
@@ -29,32 +29,20 @@ export const createMember = async (user_id: number, portfolio_id: number): Promi
   }
 };
 
-// /* 포트폴리오 멤버 수정 */
-// export const updateMember = async (user_id: number, portfolio_id: number): Promise<Member.Id> => {
-//   try {
-//     const createColumn = `
-//     user_id,
-//     portfolio_id
-//     `;
+/* 포트폴리오 멤버 수정 */
+export const deleteMembers = async (portfolio_id: number): Promise<void> => {
+  try {
+    const SQL = `
+    DELETE FROM member
+    WHERE portfolio_id = ?
+    `;
 
-//     // const createValues = Object.values(inputData);
-
-//     const SQL = `
-//     UPDATE member
-//     SET ${updateColums}
-//     WHERE user_id = ? AND comment_id = ?
-//     `;
-
-//     const [createdInfo, _] = await db.execute(SQL, [user_id, portfolio_id]);
-
-//     const createdMemberId: Member.Id = (createdInfo as { insertId: number }).insertId;
-
-//     return createdMemberId;
-//   } catch (error) {
-//     console.log(error);
-//     throw error;
-//   }
-// };
+    await db.execute(SQL, [portfolio_id]);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 /* 포트폴리오 별 참여한 멤버 정보 조회 */
 export const findParticipatedMembersById = async (portfolio_id: number): Promise<any> => {

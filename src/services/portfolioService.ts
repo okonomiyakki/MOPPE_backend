@@ -15,7 +15,7 @@ export const addPorfolio = async (
     const createdPorfolioId: Portfolio.Id = await portfolioRepo.createPorfolio(inputData);
 
     for (const userId of memberIds) {
-      await memberRepo.createMember(userId, createdPorfolioId);
+      await memberRepo.createMembers(userId, createdPorfolioId);
     }
 
     return createdPorfolioId;
@@ -38,9 +38,11 @@ export const editPortfolioInfo = async (
       inputData
     );
 
-    // for (const userId of memberIds) {
-    //   await memberRepo.createMember(userId, portfolio_id);
-    // }
+    await memberRepo.deleteMembers(portfolio_id);
+
+    for (const userId of memberIds) {
+      await memberRepo.createMembers(userId, portfolio_id);
+    }
 
     return updatedPortfolioId;
   } catch (error) {
