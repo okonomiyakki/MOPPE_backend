@@ -10,7 +10,6 @@ import * as Project from '../types/ProjectType';
 export const addProjectHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
-
     const createReqbody = req.body;
 
     createReqbody.project_recruitment_roles = {
@@ -44,7 +43,6 @@ export const editProjectInfoHandler = async (
   try {
     const { user_id } = req.user;
     const { project_id } = req.params;
-
     const updateReqBody = req.body;
 
     updateReqBody.project_recruitment_roles = {
@@ -85,16 +83,6 @@ export const editProjectStatusHandler = async (
     const { user_id } = req.user;
     const { project_id } = req.params;
     const { project_recruitment_status } = req.body;
-
-    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
-
-    if (!project_recruitment_status)
-      AppErrors.handleBadRequest('project_recruitment_status를 입력해 주세요.');
-
-    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
-
-    if (typeof project_recruitment_status !== 'string')
-      AppErrors.handleBadRequest('유효한 project_recruitment_status를 입력해주세요.');
 
     const updatedPeojectId: Project.Id = await projectService.editProjectStatus(
       user_id,

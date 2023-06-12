@@ -137,3 +137,23 @@ export class EditProjectInfoDto {
     this.fileList = fileList;
   }
 }
+
+export class EditProjectStatusDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다. 다시 로그인해 주세요' })
+  @IsInt({ message: 'project_id가 정수 형식이 아닙니다.' })
+  public project_id: number;
+
+  @IsNotEmpty({ message: 'project_recruitment_status이 입력되지 않았습니다.' })
+  @IsString({ message: 'project_recruitment_status이 문자열 형식이 아닙니다.' })
+  public project_recruitment_status: string;
+
+  constructor(user_id: number, project_id: number, project_recruitment_status: string) {
+    this.user_id = user_id;
+    this.project_id = project_id;
+    this.project_recruitment_status = project_recruitment_status;
+  }
+}

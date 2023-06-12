@@ -29,6 +29,7 @@ projectRouter.patch(
 projectRouter.patch(
   '/recruitment/status/:project_id',
   AuthenticateHandler,
+  projectValidator.editProjectStatusValidateHandler,
   projectController.editProjectStatusHandler
 );
 

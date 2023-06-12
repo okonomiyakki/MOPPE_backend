@@ -131,3 +131,31 @@ export const editProjectInfoValidateHandler = async (
     next(AppErrors.handleInternalServerError());
   }
 };
+
+export const editProjectStatusValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { project_id } = req.params;
+    const { project_recruitment_status } = req.body;
+
+    if (user_id === 0)
+      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
+
+    const editProjectStatus = new Project.EditProjectStatusDto(
+      user_id,
+      Number(project_id),
+      project_recruitment_status
+    );
+
+    console.log('editProjectStatus : ', editProjectStatus);
+
+    validateDto(editProjectStatus, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
