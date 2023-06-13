@@ -1,6 +1,5 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
-import env from '../config/envconfig';
 import AppError from '../types/AppErrorType';
 import * as AppErrors from '../middlewares/errorHandler';
 import * as Portfolio from '../types/PortfolioType';

@@ -49,8 +49,6 @@ export const addProjectValidateHandler = async (
       fileList
     );
 
-    console.log('addProject : ', addProject);
-
     validateDto(addProject, next);
   } catch (error) {
     console.log(error);
@@ -123,8 +121,6 @@ export const editProjectInfoValidateHandler = async (
       fileList
     );
 
-    console.log('editProjectInfo : ', editProjectInfo);
-
     validateDto(editProjectInfo, next);
   } catch (error) {
     console.log(error);
@@ -151,8 +147,6 @@ export const editProjectStatusValidateHandler = async (
       project_recruitment_status
     );
 
-    console.log('editProjectStatus : ', editProjectStatus);
-
     validateDto(editProjectStatus, next);
   } catch (error) {
     console.log(error);
@@ -173,8 +167,6 @@ export const removeProjectValidateHandler = async (
       next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
 
     const removeProject = new Project.RemoveProjectDto(user_id, Number(project_id));
-
-    console.log('removeProject : ', removeProject);
 
     validateDto(removeProject, next);
   } catch (error) {
@@ -200,8 +192,6 @@ export const getAllProjectsValidateHandler = async (
       Number(page)
     );
 
-    console.log('getAllProjects : ', getAllProjects);
-
     validateDto(getAllProjects, next);
   } catch (error) {
     console.log(error);
@@ -219,8 +209,6 @@ export const getProjectByIdValidateHandler = async (
     const { project_id } = req.params;
 
     const GetProjectById = new Project.GetProjectByIdDto(user_id, Number(project_id));
-
-    console.log('GetProjectById : ', GetProjectById);
 
     validateDto(GetProjectById, next);
   } catch (error) {
@@ -245,8 +233,6 @@ export const getUserProjectsByIdValidateHandler = async (
       Number(user_id)
     );
 
-    console.log('GetUserProjectsById : ', GetUserProjectsById);
-
     validateDto(GetUserProjectsById, next);
   } catch (error) {
     console.log(error);
@@ -268,8 +254,6 @@ export const getMyProjectsValidateHandler = async (
 
     const GetUserProjects = new Project.GetMyProjectsDto(user_id, Number(page));
 
-    console.log('GetUserProjects : ', GetUserProjects);
-
     validateDto(GetUserProjects, next);
   } catch (error) {
     console.log(error);
@@ -290,8 +274,6 @@ export const getProjectCommentsByIdValidateHandler = async (
       Number(project_id),
       Number(page)
     );
-
-    console.log('GetMyProjectCommentsById : ', GetMyProjectCommentsById);
 
     validateDto(GetMyProjectCommentsById, next);
   } catch (error) {

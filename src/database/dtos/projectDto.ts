@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, IsArray, IsInt, IsEmail } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsArray, IsInt } from 'class-validator';
 
 export class AddProjectDto {
   @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요' })
