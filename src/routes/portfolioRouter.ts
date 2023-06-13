@@ -21,6 +21,7 @@ portfolioRouter.patch(
   '/posts/:portfolio_id',
   AuthenticateHandler,
   upload.portfolioImageHandler,
+  portfolioValidator.editPortfolioValidateHandler,
   portfolioController.editPortfolioInfoHandler
 );
 

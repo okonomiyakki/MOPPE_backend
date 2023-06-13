@@ -43,11 +43,10 @@ export const updatePortfolioInfo = async (
 ): Promise<number> => {
   try {
     const updateColums = Object.entries(inputData)
-      .filter(([_, value]) => value !== undefined)
       .map(([key, _]) => `${key} = ?`)
       .join(', ');
 
-    const updateValues = Object.values(inputData).filter((value) => value !== undefined);
+    const updateValues = Object.values(inputData);
 
     const SQL = `
     UPDATE portfolio
