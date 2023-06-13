@@ -63,10 +63,6 @@ export class EditPortfolioDto {
   @IsInt({ message: 'portfolio_id가 정수 형식이 아닙니다.' })
   public portfolio_id: number;
 
-  @IsNotEmpty({ message: 'portfolio_title이 입력되지 않았습니다.' })
-  @IsString({ message: 'portfolio_title이 문자열 형식이 아닙니다.' })
-  public portfolio_title: string;
-
   @IsNotEmpty({ message: 'portfolio_stacks가 입력되지 않았습니다.' })
   @IsArray({ message: 'portfolio_stacks가 배열 형식이 아닙니다.' })
   public portfolio_stacks: string[];
@@ -74,6 +70,10 @@ export class EditPortfolioDto {
   @IsNotEmpty({ message: 'memberIds가 입력되지 않았습니다.' })
   @IsArray({ message: 'memberIds가 배열 형식이 아닙니다.' })
   public memberIds: number[];
+
+  @IsOptional()
+  @IsString({ message: 'portfolio_title이 문자열 형식이 아닙니다.' })
+  public portfolio_title?: string;
 
   @IsOptional()
   @IsString({ message: 'portfolio_summary가 문자열 형식이 아닙니다.' })
@@ -94,9 +94,9 @@ export class EditPortfolioDto {
   constructor(
     user_id: number,
     portfolio_id: number,
-    portfolio_title: string,
     portfolio_stacks: string[],
     memberIds: number[],
+    portfolio_title?: string,
     portfolio_summary?: string,
     portfolio_github?: string,
     portfolio_description?: string,
@@ -104,9 +104,9 @@ export class EditPortfolioDto {
   ) {
     this.user_id = user_id;
     this.portfolio_id = portfolio_id;
-    this.portfolio_title = portfolio_title;
     this.portfolio_stacks = portfolio_stacks;
     this.memberIds = memberIds;
+    this.portfolio_title = portfolio_title;
     this.portfolio_summary = portfolio_summary;
     this.portfolio_github = portfolio_github;
     this.portfolio_description = portfolio_description;

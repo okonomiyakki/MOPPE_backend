@@ -109,9 +109,9 @@ export const editPortfolioValidateHandler = async (
     const editPortfolio = new Portfolio.EditPortfolioDto(
       user_id,
       Number(portfolio_id),
-      portfolio_title,
       JSON.parse(portfolio_stacks),
       JSON.parse(memberIds),
+      portfolio_title,
       portfolio_summary,
       portfolio_github,
       portfolio_description,
