@@ -24,9 +24,6 @@ export const addProjectValidateHandler = async (
     } = req.body;
     const fileList = req.files as any[];
 
-    if (user_id === 0)
-      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
-
     if (fileList.length > 0) {
       const imgFileRoots = fileList.map(
         (file) => `${env.PROJECT_IMAGE_ROOT_LOCAL}${file.filename}`
@@ -75,9 +72,6 @@ export const editProjectInfoValidateHandler = async (
       project_introduction,
     } = req.body;
     const fileList = req.files as any[];
-
-    if (user_id === 0)
-      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
 
     if (project_type === undefined) {
       delete req.body.project_type;
@@ -138,9 +132,6 @@ export const editProjectStatusValidateHandler = async (
     const { project_id } = req.params;
     const { project_recruitment_status } = req.body;
 
-    if (user_id === 0)
-      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
-
     const editProjectStatus = new Project.EditProjectStatusDto(
       user_id,
       Number(project_id),
@@ -162,9 +153,6 @@ export const removeProjectValidateHandler = async (
   try {
     const { user_id } = req.user;
     const { project_id } = req.params;
-
-    if (user_id === 0)
-      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
 
     const removeProject = new Project.RemoveProjectDto(user_id, Number(project_id));
 

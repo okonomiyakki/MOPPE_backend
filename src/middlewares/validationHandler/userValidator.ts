@@ -67,9 +67,6 @@ export const editUserInfoValidateHandler = async (
     const { user_name, user_career_goal, user_stacks, user_introduction } = req.body;
     const { filename } = req.file || {};
 
-    if (user_id === 0)
-      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
-
     if (user_name === undefined) {
       delete req.body.user_name;
     }

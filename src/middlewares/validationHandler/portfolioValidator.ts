@@ -22,9 +22,6 @@ export const addPortfolioValidateHandler = async (
     } = req.body;
     const fileList = req.files as any[];
 
-    if (user_id === 0)
-      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
-
     if (fileList.length > 0) {
       const imgFileRoots = fileList.map(
         (file) => `${env.PORTFOLIO_IMAGE_ROOT_LOCAL}${file.filename}`
@@ -71,9 +68,6 @@ export const editPortfolioValidateHandler = async (
       memberIds,
     } = req.body;
     const fileList = req.files as any[];
-
-    if (user_id === 0)
-      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
 
     if (portfolio_title === undefined) {
       delete req.body.portfolio_title;
@@ -133,9 +127,6 @@ export const removePortfolioValidateHandler = async (
   try {
     const { user_id } = req.user;
     const { portfolio_id } = req.params;
-
-    if (user_id === 0)
-      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
 
     const removePortfolio = new Portfolio.RemovePortfolioDto(user_id, Number(portfolio_id));
 
