@@ -92,11 +92,6 @@ export const removePortfolioHandler = async (
     const { user_id } = req.user;
     const { portfolio_id } = req.params;
 
-    if (!portfolio_id) AppErrors.handleBadRequest('portfolio_id를 입력해 주세요.');
-
-    if (isNaN(Number(portfolio_id)))
-      AppErrors.handleBadRequest('유효한 portfolio_id를 입력해주세요.');
-
     const isDeletedPortfolio = await portfolioService.removePortfolio(
       user_id,
       Number(portfolio_id)
@@ -117,11 +112,6 @@ export const getAllPortfoliosHandler = async (
   try {
     const { user_id } = req.user;
     const { keyword, sort, page } = req.query;
-
-    if (!keyword || !sort || !page)
-      AppErrors.handleBadRequest('요청 query에 모든 정보를 입력해 주세요.');
-
-    // TODO] validator 에서 요청 query 타입 유효성 검사 추가
 
     const portfolio_keyword = keyword === 'false' ? undefined : (keyword as string);
 
@@ -149,11 +139,6 @@ export const getPortfolioByIdHandler = async (
     const { user_id } = req.user;
     const { portfolio_id } = req.params;
 
-    if (!portfolio_id) AppErrors.handleBadRequest('portfolio_id를 입력해 주세요.');
-
-    if (isNaN(Number(portfolio_id)))
-      AppErrors.handleBadRequest('유효한 portfolio_id를 입력해주세요.');
-
     const portfolioInfo = await portfolioService.getPortfolioById(user_id, Number(portfolio_id));
 
     res.status(200).json({ message: '포트폴리오 상세 정보 조회 성공', data: portfolioInfo });
@@ -169,20 +154,9 @@ export const getUserPortfoliosByIdHandler = async (
   next: NextFunction
 ) => {
   try {
-    if (req.user.user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
-
     const my_user_id = req.user.user_id;
     const { page } = req.query;
     const { user_id } = req.params;
-
-    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
-
-    if (!user_id) AppErrors.handleBadRequest('user_id를 입력해주세요.');
-
-    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
-
-    if (isNaN(Number(user_id))) AppErrors.handleBadRequest('유효한 user_id를 입력해주세요.');
 
     const userPortfolios = await portfolioService.getMyPortfoliosById(
       my_user_id,
@@ -206,15 +180,8 @@ export const getMyPortfoliosByIdHandler = async (
   next: NextFunction
 ) => {
   try {
-    if (req.user.user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
-
     const { user_id } = req.user;
     const { page } = req.query;
-
-    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
-
-    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
 
     const myPortfolios = await portfolioService.getMyPortfoliosById(user_id, user_id, Number(page));
 
@@ -233,15 +200,8 @@ export const getMyBookmarkedPortfoliosByIdHandler = async (
   next: NextFunction
 ) => {
   try {
-    if (req.user.user_id === 0)
-      AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.');
-
     const { user_id } = req.user;
     const { page } = req.query;
-
-    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
-
-    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
 
     const myPortfolios = await portfolioService.getMyBookmarkedPortfoliosById(
       user_id,

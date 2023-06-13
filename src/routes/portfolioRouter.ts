@@ -29,16 +29,23 @@ portfolioRouter.patch(
 portfolioRouter.delete(
   '/posts/:portfolio_id',
   AuthenticateHandler,
+  portfolioValidator.removePortfolioValidateHandler,
   portfolioController.removePortfolioHandler
 );
 
 /* 전체 포트폴리오 목록 조회 */
-portfolioRouter.get('/', AuthenticateHandler, portfolioController.getAllPortfoliosHandler);
+portfolioRouter.get(
+  '/',
+  AuthenticateHandler,
+  portfolioValidator.getAllPortfoliosValidateHandler,
+  portfolioController.getAllPortfoliosHandler
+);
 
 /* 포트폴리오 상세 정보 조회 */
 portfolioRouter.get(
   '/info/:portfolio_id',
   AuthenticateHandler,
+  portfolioValidator.getPortfolioByIdValidateHandler,
   portfolioController.getPortfolioByIdHandler
 );
 
@@ -46,13 +53,15 @@ portfolioRouter.get(
 portfolioRouter.get(
   '/:portfolio_id/comments',
   AuthenticateHandler,
-  commentPortfolioController.getProjectCommentsByIdHandler
+  portfolioValidator.getPortfolioCommentsByIdValidateHandler,
+  commentPortfolioController.getPortfolioCommentsByIdHandler
 );
 
 /* 마이페이지 북마크 포트폴리오 목록 조회 */
 portfolioRouter.get(
   '/user/bookmark',
   AuthenticateHandler,
+  portfolioValidator.getMyPortfoliosValidateHandler,
   portfolioController.getMyBookmarkedPortfoliosByIdHandler
 );
 
@@ -60,10 +69,16 @@ portfolioRouter.get(
 portfolioRouter.get(
   '/user/:user_id',
   AuthenticateHandler,
+  portfolioValidator.getUserPortfoliosByIdValidateHandler,
   portfolioController.getUserPortfoliosByIdHandler
 );
 
 /* 마이페이지 작성 포트폴리오 목록 조회 */
-portfolioRouter.get('/user', AuthenticateHandler, portfolioController.getMyPortfoliosByIdHandler);
+portfolioRouter.get(
+  '/user',
+  AuthenticateHandler,
+  portfolioValidator.getMyPortfoliosValidateHandler,
+  portfolioController.getMyPortfoliosByIdHandler
+);
 
 export default portfolioRouter;

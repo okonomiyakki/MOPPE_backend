@@ -96,7 +96,7 @@ export const removeCommentHandler = async (req: AuthRequest, res: Response, next
 };
 
 /* 포트폴리오 별 댓글 목록 조회 */
-export const getProjectCommentsByIdHandler = async (
+export const getPortfolioCommentsByIdHandler = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
@@ -104,15 +104,6 @@ export const getProjectCommentsByIdHandler = async (
   try {
     const { portfolio_id } = req.params;
     const { page } = req.query;
-
-    if (!portfolio_id) AppErrors.handleBadRequest('portfolio_id를 입력해주세요.');
-
-    if (!page) AppErrors.handleBadRequest('page를 입력해주세요.');
-
-    if (isNaN(Number(portfolio_id)))
-      AppErrors.handleBadRequest('유효한 portfolio_id를 입력해주세요.');
-
-    if (isNaN(Number(page))) AppErrors.handleBadRequest('유효한 page를 입력해주세요.');
 
     const portfolioComments = await commentPortfolioService.getPortfolioCommentsById(
       Number(portfolio_id),

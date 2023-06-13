@@ -124,3 +124,130 @@ export const editPortfolioValidateHandler = async (
     next(AppErrors.handleInternalServerError());
   }
 };
+
+export const removePortfolioValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { portfolio_id } = req.params;
+
+    if (user_id === 0)
+      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
+
+    const removePortfolio = new Portfolio.RemovePortfolioDto(user_id, Number(portfolio_id));
+
+    validateDto(removePortfolio, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getAllPortfoliosValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { keyword, sort, page } = req.query;
+
+    const getAllPortfolios = new Portfolio.GetAllPortfoliosDto(
+      user_id,
+      keyword as string,
+      sort as string,
+      Number(page)
+    );
+
+    validateDto(getAllPortfolios, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getPortfolioByIdValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { portfolio_id } = req.params;
+
+    const getPortfolio = new Portfolio.GetPortfolioByIdDto(user_id, Number(portfolio_id));
+
+    validateDto(getPortfolio, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getUserPortfoliosByIdValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const my_user_id = req.user.user_id;
+    const { page } = req.query;
+    const { user_id } = req.params;
+
+    const getUserPortfoliosById = new Portfolio.GetUserPortfoliosByIdDto(
+      my_user_id,
+      Number(page),
+      Number(user_id)
+    );
+
+    validateDto(getUserPortfoliosById, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getMyPortfoliosValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { page } = req.query;
+
+    if (user_id === 0)
+      next(AppErrors.handleForbidden('잘못된 접근입니다. 회원가입 및 로그인 후 이용해 주세요.'));
+
+    const GetUserPortfolios = new Portfolio.GetMyPortfoliosDto(user_id, Number(page));
+
+    validateDto(GetUserPortfolios, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
+export const getPortfolioCommentsByIdValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { portfolio_id } = req.params;
+    const { page } = req.query;
+
+    const GetMyPortfolioCommentsById = new Portfolio.GetMyPortfolioCommentsByIdDto(
+      Number(portfolio_id),
+      Number(page)
+    );
+
+    validateDto(GetMyPortfolioCommentsById, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};

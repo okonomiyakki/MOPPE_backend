@@ -113,3 +113,108 @@ export class EditPortfolioDto {
     this.fileList = fileList;
   }
 }
+
+export class RemovePortfolioDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  @IsNotEmpty({ message: 'portfolio_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'portfolio_id가 정수 형식이 아닙니다.' })
+  public portfolio_id: number;
+
+  constructor(user_id: number, portfolio_id: number) {
+    this.user_id = user_id;
+    this.portfolio_id = portfolio_id;
+  }
+}
+
+export class GetAllPortfoliosDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  @IsNotEmpty({ message: 'keyword가 입력되지 않았습니다.' })
+  @IsString({ message: 'keyword가 문자열 형식이 아닙니다.' })
+  public keyword: string;
+
+  @IsNotEmpty({ message: 'sort가 입력되지 않았습니다.' })
+  @IsString({ message: 'sort가 문자열 형식이 아닙니다.' })
+  public sort: string;
+
+  @IsNotEmpty({ message: 'page가 입력되지 않았습니다.' })
+  @IsInt({ message: 'page가 정수 형식이 아닙니다.' })
+  public page: number;
+
+  constructor(user_id: number, keyword: string, sort: string, page: number) {
+    this.user_id = user_id;
+    this.keyword = keyword;
+    this.sort = sort;
+    this.page = page;
+  }
+}
+
+export class GetPortfolioByIdDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  @IsNotEmpty({ message: 'portfolio_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'portfolio_id가 정수 형식이 아닙니다.' })
+  public portfolio_id: number;
+
+  constructor(user_id: number, portfolio_id: number) {
+    this.user_id = user_id;
+    this.portfolio_id = portfolio_id;
+  }
+}
+
+export class GetUserPortfoliosByIdDto {
+  @IsNotEmpty({ message: 'my_user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
+  @IsInt({ message: 'my_user_id가 정수 형식이 아닙니다.' })
+  public my_user_id: number;
+
+  @IsNotEmpty({ message: 'page가 입력되지 않았습니다.' })
+  @IsInt({ message: 'page가 정수 형식이 아닙니다.' })
+  public page: number;
+
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  constructor(my_user_id: number, page: number, user_id: number) {
+    this.my_user_id = my_user_id;
+    this.page = page;
+    this.user_id = user_id;
+  }
+}
+
+export class GetMyPortfoliosDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  @IsNotEmpty({ message: 'page가 입력되지 않았습니다.' })
+  @IsInt({ message: 'page가 정수 형식이 아닙니다.' })
+  public page: number;
+
+  constructor(user_id: number, page: number) {
+    this.user_id = user_id;
+    this.page = page;
+  }
+}
+
+export class GetMyPortfolioCommentsByIdDto {
+  @IsNotEmpty({ message: 'portfolio_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'portfolio_id가 정수 형식이 아닙니다.' })
+  public portfolio_id: number;
+
+  @IsNotEmpty({ message: 'page가 입력되지 않았습니다.' })
+  @IsInt({ message: 'page가 정수 형식이 아닙니다.' })
+  public page: number;
+
+  constructor(portfolio_id: number, page: number) {
+    this.portfolio_id = portfolio_id;
+    this.page = page;
+  }
+}
