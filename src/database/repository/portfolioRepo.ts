@@ -9,10 +9,10 @@ export const createPorfolio = async (inputData: Portfolio.CreateInput): Promise<
     user_id,
     portfolio_title, 
     portfolio_summary,
-    portfolio_thumbnail,
     portfolio_github,
     portfolio_stacks,
     portfolio_description,
+    portfolio_thumbnail,
     portfolio_img
     `;
 

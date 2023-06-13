@@ -10,47 +10,62 @@ import * as portfolioService from '../services/portfolioService';
 export const addPortfolioHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
-    const {
-      portfolio_title,
-      portfolio_summary,
-      portfolio_github,
-      portfolio_stacks,
-      portfolio_description,
-      memberIds,
-    } = req.body;
-    const fileList = req.files || []; // 이미지 배열
+    const { memberIds } = req.body;
+    const createReqbody = req.body;
 
-    console.log('fileList : ', fileList);
+    delete createReqbody.memberIds;
 
-    const imgFileRoots = (fileList as any[]).map(
-      (file) => `${env.PORTFOLIO_IMAGE_ROOT_LOCAL}${file.filename}`
-    );
-
-    const thumbnail = imgFileRoots[0];
-    const editortImg = imgFileRoots.slice(1);
-
-    if (
-      !portfolio_title ||
-      !portfolio_summary ||
-      !portfolio_github ||
-      !portfolio_stacks ||
-      !portfolio_description ||
-      !memberIds
-    )
-      AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
-
-    // TODO] validator 에서 요청 body 타입 유효성 검사 추가
-
-    const inputData: Portfolio.CreateInput = {
-      user_id,
-      portfolio_title,
-      portfolio_summary,
-      portfolio_thumbnail: thumbnail,
-      portfolio_github,
-      portfolio_stacks: { stackList: JSON.parse(portfolio_stacks) },
-      portfolio_description,
-      portfolio_img: { imgList: [...editortImg] },
+    createReqbody.portfolio_stacks = {
+      stackList: JSON.parse(createReqbody.portfolio_stacks),
     };
+
+    createReqbody.portfolio_img = {
+      imgList: createReqbody.portfolio_img,
+    };
+
+    const inputData: Portfolio.CreateInput = { user_id, ...createReqbody };
+
+    // const {
+    //   portfolio_title,
+    //   portfolio_summary,
+    //   portfolio_github,
+    //   portfolio_stacks,
+    //   portfolio_description,
+    //   memberIds,
+    // } = req.body;
+    // const fileList = req.files || []; // 이미지 배열
+
+    // console.log('fileList : ', fileList);
+
+    // const imgFileRoots = (fileList as any[]).map(
+    //   (file) => `${env.PORTFOLIO_IMAGE_ROOT_LOCAL}${file.filename}`
+    // );
+
+    // const thumbnail = imgFileRoots[0];
+    // const editortImg = imgFileRoots.slice(1);
+
+    // if (
+    //   !portfolio_title ||
+    //   !portfolio_summary ||
+    //   !portfolio_github ||
+    //   !portfolio_stacks ||
+    //   !portfolio_description ||
+    //   !memberIds
+    // )
+    //   AppErrors.handleBadRequest('요청 body에 모든 정보를 입력해 주세요.');
+
+    // // TODO] validator 에서 요청 body 타입 유효성 검사 추가
+
+    // const inputData: Portfolio.CreateInput = {
+    //   user_id,
+    //   portfolio_title,
+    //   portfolio_summary,
+    //   portfolio_thumbnail: thumbnail,
+    //   portfolio_github,
+    //   portfolio_stacks: { stackList: JSON.parse(portfolio_stacks) },
+    //   portfolio_description,
+    //   portfolio_img: { imgList: [...editortImg] },
+    // };
 
     const createdPortfolioId: Portfolio.Id = await portfolioService.addPorfolio(
       inputData,
@@ -88,8 +103,14 @@ export const editPortfolioInfoHandler = async (
       file === undefined ? '' : `${env.PORTFOLIO_IMAGE_ROOT_LOCAL}${file.filename}`
     );
 
+    // imgFileRoots[0] 에 thumbnail 문자열이 있으면 아래,
     const thumbnail = imgFileRoots[0];
     const editortImg = imgFileRoots.slice(1);
+
+    // 없으면
+    const editortImg2 = imgFileRoots;
+
+    //if (file.filename.split('-')[0] === 'thumbnail')
 
     if (!portfolio_id) AppErrors.handleBadRequest('portfolio_id를 입력해 주세요.');
 

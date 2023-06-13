@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
 import * as upload from '../middlewares/imageHandler';
+import * as portfolioValidator from '../middlewares/validationHandler/portfolioValidator';
 import * as portfolioController from '../controllers/portfolioController';
 import * as commentPortfolioController from '../controllers/commentPortfolioController';
 
@@ -11,6 +12,7 @@ portfolioRouter.post(
   '/posts',
   AuthenticateHandler,
   upload.portfolioImageHandler,
+  portfolioValidator.addPortfolioValidateHandler,
   portfolioController.addPortfolioHandler
 );
 
