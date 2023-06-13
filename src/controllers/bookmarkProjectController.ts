@@ -5,15 +5,11 @@ import * as AppErrors from '../middlewares/errorHandler';
 import * as bookmarkProjectService from '../services/bookmarkProjectService';
 import * as BookmarkProject from '../types/BookmarkProjectType';
 
-/* 북마크 등록 - 기능 추가 시 수정 필요 */
+/* 북마크 등록  */
 export const addBookmarkHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
     const { project_id } = req.body;
-
-    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
-
-    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
 
     const inputData: BookmarkProject.CreateInput = {
       user_id,
@@ -42,10 +38,6 @@ export const removeBookmarkHandler = async (
   try {
     const { user_id } = req.user;
     const { project_id } = req.params;
-
-    if (!project_id) AppErrors.handleBadRequest('project_id를 입력해 주세요.');
-
-    if (isNaN(Number(project_id))) AppErrors.handleBadRequest('유효한 project_id를 입력해주세요.');
 
     const isDeletedBookmark = await bookmarkProjectService.removeBookmark(
       user_id,

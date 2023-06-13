@@ -11,11 +11,6 @@ export const addBookmarkHandler = async (req: AuthRequest, res: Response, next: 
     const { user_id } = req.user;
     const { portfolio_id } = req.body;
 
-    if (!portfolio_id) AppErrors.handleBadRequest('portfolio_id를 입력해 주세요.');
-
-    if (isNaN(Number(portfolio_id)))
-      AppErrors.handleBadRequest('유효한 portfolio_id를 입력해주세요.');
-
     const inputData: BookmarkPortfolio.CreateInput = {
       user_id,
       portfolio_id,
@@ -43,11 +38,6 @@ export const removeBookmarkHandler = async (
   try {
     const { user_id } = req.user;
     const { portfolio_id } = req.params;
-
-    if (!portfolio_id) AppErrors.handleBadRequest('portfolio_id를 입력해 주세요.');
-
-    if (isNaN(Number(portfolio_id)))
-      AppErrors.handleBadRequest('유효한 portfolio_id를 입력해주세요.');
 
     const isDeletedBookmark = await bookmarkPortfolioService.removeBookmark(
       user_id,
