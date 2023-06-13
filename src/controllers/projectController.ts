@@ -10,21 +10,21 @@ import * as Project from '../types/ProjectType';
 export const addProjectHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
-    const createReqbody = req.body;
+    const createReqBody = req.body;
 
-    createReqbody.project_recruitment_roles = {
-      roleList: JSON.parse(createReqbody.project_recruitment_roles),
+    createReqBody.project_recruitment_roles = {
+      roleList: JSON.parse(createReqBody.project_recruitment_roles),
     };
 
-    createReqbody.project_required_stacks = {
-      stackList: JSON.parse(createReqbody.project_required_stacks),
+    createReqBody.project_required_stacks = {
+      stackList: JSON.parse(createReqBody.project_required_stacks),
     };
 
-    createReqbody.project_img = {
-      imgList: createReqbody.project_img,
+    createReqBody.project_img = {
+      imgList: createReqBody.project_img,
     };
 
-    const inputData: Project.CreateInput = { user_id, ...createReqbody };
+    const inputData: Project.CreateInput = { user_id, ...createReqBody };
 
     const createdProjectId: Project.Id = await projectService.addProject(inputData);
 
@@ -53,9 +53,11 @@ export const editProjectInfoHandler = async (
       stackList: JSON.parse(updateReqBody.project_required_stacks),
     };
 
-    updateReqBody.project_img = {
-      imgList: updateReqBody.project_img,
-    };
+    if (updateReqBody.project_img.length === 0) delete updateReqBody.project_img;
+    else
+      updateReqBody.project_img = {
+        imgList: updateReqBody.project_img,
+      };
 
     const inputData: Project.UpdateInput = updateReqBody;
 
