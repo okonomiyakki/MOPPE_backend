@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/RequestType';
 import axios from 'axios';
 import AppError from '../types/AppErrorType';
+import env from '../config/envconfig';
 import * as AppErrors from '../middlewares/errorHandler';
 import * as userService from '../services/userService';
 import * as User from '../types/UserType';
@@ -34,8 +35,8 @@ export const kakaoLoginHandler = async (req: Request, res: Response, next: NextF
 
     const tokenParams = new URLSearchParams();
     tokenParams.append('grant_type', 'authorization_code');
-    tokenParams.append('client_id', '3d7a11e63027aef74354e247728d509d');
-    tokenParams.append('redirect_uri', 'http://localhost:3000/login');
+    tokenParams.append('client_id', `${env.KAKAO_LOGIN_API_CLIENT_ID}`);
+    tokenParams.append('redirect_uri', `${env.KAKAO_LOGIN_API_REDIRECT_URI}`);
     tokenParams.append('code', code as string);
 
     const tokenResponse = await axios.post('https://kauth.kakao.com/oauth/token', tokenParams);

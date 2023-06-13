@@ -81,7 +81,7 @@ export const editUserInfoValidateHandler = async (
 
     /* 이미지 파일이 있으면 body 필드에 이미지 파일 경로 프러퍼티 추가 */
     if (filename !== undefined) {
-      const imgFileRoot = `${env.USER_IMAGE_ROOT_LOCAL}${filename}`;
+      const imgFileRoot = `${env.UPLOAD_IMAGE_FILE_ROOT}/user/${filename}`;
       req.body.user_img = imgFileRoot;
     }
 

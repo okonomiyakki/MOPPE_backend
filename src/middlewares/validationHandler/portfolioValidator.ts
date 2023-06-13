@@ -24,7 +24,7 @@ export const addPortfolioValidateHandler = async (
 
     if (fileList.length > 0) {
       const imgFileRoots = fileList.map(
-        (file) => `${env.PORTFOLIO_IMAGE_ROOT_LOCAL}${file.filename}`
+        (file) => `${env.UPLOAD_IMAGE_FILE_ROOT}/portfolio/${file.filename}`
       );
 
       req.body.portfolio_thumbnail = imgFileRoots[0];
@@ -86,11 +86,11 @@ export const editPortfolioValidateHandler = async (
     if (fileList.length > 0) {
       const thumbnailImgFileRoots = fileList
         .filter((file) => file.filename.split('-')[0] === 'thumbnail')
-        .map((file) => `${env.PORTFOLIO_IMAGE_ROOT_LOCAL}${file.filename}`);
+        .map((file) => `${env.UPLOAD_IMAGE_FILE_ROOT}/portfolio/${file.filename}`);
 
       const editorImgFileRoots = fileList
         .filter((file) => file.filename.split('-')[0] !== 'thumbnail')
-        .map((file) => `${env.PORTFOLIO_IMAGE_ROOT_LOCAL}${file.filename}`);
+        .map((file) => `${env.UPLOAD_IMAGE_FILE_ROOT}/portfolio/${file.filename}`);
 
       if (thumbnailImgFileRoots.length === 0) delete req.body.portfolio_thumbnail;
       else req.body.portfolio_thumbnail = thumbnailImgFileRoots[0];

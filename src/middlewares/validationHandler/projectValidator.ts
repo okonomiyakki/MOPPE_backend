@@ -26,7 +26,7 @@ export const addProjectValidateHandler = async (
 
     if (fileList.length > 0) {
       const imgFileRoots = fileList.map(
-        (file) => `${env.PROJECT_IMAGE_ROOT_LOCAL}${file.filename}`
+        (file) => `${env.UPLOAD_IMAGE_FILE_ROOT}/project/${file.filename}`
       );
       req.body.project_img = imgFileRoots;
     }
@@ -94,7 +94,7 @@ export const editProjectInfoValidateHandler = async (
 
     if (fileList.length > 0) {
       const imgFileRoots = fileList.map(
-        (file) => `${env.PROJECT_IMAGE_ROOT_LOCAL}${file.filename}`
+        (file) => `${env.UPLOAD_IMAGE_FILE_ROOT}/project/${file.filename}`
       );
       req.body.project_img = imgFileRoots;
     }

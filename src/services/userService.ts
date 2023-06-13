@@ -29,9 +29,6 @@ export const kakaoLogin = async (inputData: User.KakaoLogInInput): Promise<User.
       inputData.user_email
     );
 
-    console.log(foundUser);
-    console.log(inputData);
-
     if (!foundUser) {
       await userRepo.createUserByKakao(inputData);
 

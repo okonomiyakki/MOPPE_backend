@@ -18,13 +18,10 @@ interface EnvType {
   REFRESH_TOKEN_SECRET: string | undefined;
   REFRESH_TOKEN_EXPIRES_IN: string | undefined;
 
-  USER_IMAGE_ROOT_LOCAL: string | undefined;
-  PROJECT_IMAGE_ROOT_LOCAL: string | undefined;
-  PORTFOLIO_IMAGE_ROOT_LOCAL: string | undefined;
+  UPLOAD_IMAGE_FILE_ROOT: string | undefined;
 
-  USER_IMAGE_ROOT_VM: string | undefined;
-  PROJECT_IMAGE_ROOT_VM: string | undefined;
-  PORTFOLIO_IMAGE_ROOT_VM: string | undefined;
+  KAKAO_LOGIN_API_CLIENT_ID: string | undefined;
+  KAKAO_LOGIN_API_REDIRECT_URI: string | undefined;
 }
 
 export type EnvConfig = EnvType;
