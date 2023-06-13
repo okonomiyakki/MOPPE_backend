@@ -1,20 +1,32 @@
 import { Router } from 'express';
 import AuthenticateHandler from '../middlewares/authHandler';
+import * as commentValidator from '../middlewares/validationHandler/commentValidator';
 import * as commentProjectController from '../controllers/commentProjectController';
 import * as commentPortfolioController from '../controllers/commentPortfolioController';
 
 const commentRouter = Router();
 
 /* 모집 글 댓글 등록 */
-commentRouter.post('/project', AuthenticateHandler, commentProjectController.addCommentHandler);
+commentRouter.post(
+  '/project',
+  AuthenticateHandler,
+  commentValidator.addProjectCommentValidateHandler,
+  commentProjectController.addCommentHandler
+);
 
 /* 포트폴리오 댓글 등록 */
-commentRouter.post('/portfolio', AuthenticateHandler, commentPortfolioController.addCommentHandler);
+commentRouter.post(
+  '/portfolio',
+  AuthenticateHandler,
+  commentValidator.addPortfolioCommentValidateHandler,
+  commentPortfolioController.addCommentHandler
+);
 
 /* 모집 글 댓글 수정 */
 commentRouter.put(
   '/project/:comment_id',
   AuthenticateHandler,
+  commentValidator.editCommentValidateHandler,
   commentProjectController.editCommentHandler
 );
 
@@ -22,6 +34,7 @@ commentRouter.put(
 commentRouter.put(
   '/portfolio/:comment_id',
   AuthenticateHandler,
+  commentValidator.editCommentValidateHandler,
   commentPortfolioController.editCommentHandler
 );
 
@@ -29,6 +42,7 @@ commentRouter.put(
 commentRouter.delete(
   '/project/:comment_id',
   AuthenticateHandler,
+  commentValidator.removeCommentValidateHandler,
   commentProjectController.removeCommentHandler
 );
 
@@ -36,6 +50,7 @@ commentRouter.delete(
 commentRouter.delete(
   '/portfolio/:comment_id',
   AuthenticateHandler,
+  commentValidator.removeCommentValidateHandler,
   commentPortfolioController.removeCommentHandler
 );
 
@@ -43,6 +58,7 @@ commentRouter.delete(
 commentRouter.get(
   '/project/user',
   AuthenticateHandler,
+  commentValidator.getMyCommentsByIdValidateHandler,
   commentProjectController.getMyCommentsByIdHandler
 );
 
@@ -50,6 +66,7 @@ commentRouter.get(
 commentRouter.get(
   '/portfolio/user',
   AuthenticateHandler,
+  commentValidator.getMyCommentsByIdValidateHandler,
   commentPortfolioController.getMyCommentsByIdHandler
 );
 
