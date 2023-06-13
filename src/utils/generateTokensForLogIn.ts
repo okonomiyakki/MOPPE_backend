@@ -1,10 +1,13 @@
 import jwt from 'jsonwebtoken';
 import env from '../config/envconfig';
+import * as userRepo from '../database/repository/userRepo';
 import * as User from '../types/UserType';
 
-export const login = async (
-  foundUserInfoWithPayload: User.InfoWithPayload
-): Promise<User.InfoWithTokens> => {
+export const login = async (inputData: User.KakaoLogInInput): Promise<User.InfoWithTokens> => {
+  const foundUserInfoWithPayload: User.InfoWithPayload = await userRepo.findUserPayloadByEmail(
+    inputData.user_email
+  );
+
   const payload: User.Payload = {
     user_id: foundUserInfoWithPayload.user_id,
     user_email: foundUserInfoWithPayload.user_email,
