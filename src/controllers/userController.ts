@@ -64,7 +64,7 @@ export const kakaoLoginHandler = async (req: Request, res: Response, next: NextF
 
     const userInfoWithTokens: User.InfoWithTokens = await userService.kakaoLogin(inputData);
 
-    res.status(200).json({ message: '로그인 성공', data: userInfoWithTokens });
+    res.status(200).json({ message: '카카오 로그인 성공', data: userInfoWithTokens });
   } catch (error) {
     console.log(error);
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());

@@ -7,7 +7,6 @@ export const searchPortfoliosByQuery = async (inputQuery: Portfolio.QueryInput) 
     // 전체 조회
     if (!inputQuery.portfolio_keyword) {
       const foundPortfolios = await portfolioRepo.findAllPortfolios();
-      console.log('전체 검색 중');
       return foundPortfolios;
     }
     // 키워드 별 조회
@@ -15,7 +14,6 @@ export const searchPortfoliosByQuery = async (inputQuery: Portfolio.QueryInput) 
       const foundPortfolios = await portfolioRepo.findPortfoliosByKeyword(
         inputQuery.portfolio_keyword
       );
-      console.log('키워드 검색 중');
       return foundPortfolios;
     } else throw AppErrors.handleBadRequest('키워드 검색 중 오류가 발생했습니다.');
   } catch (error) {
