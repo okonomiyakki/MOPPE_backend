@@ -16,6 +16,8 @@ export type SignUpUserInput = Pick<UserProfile, 'user_email' | 'user_name' | 'us
 
 export type LogInUserInput = Pick<UserProfile, 'user_email' | 'user_password'>;
 
+export type KakaoLogInInput = Pick<UserProfile, 'user_email' | 'user_name'>;
+
 export type UpdatUserInput = Partial<
   Pick<
     UserProfile,

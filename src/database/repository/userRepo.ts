@@ -30,6 +30,82 @@ export const createUser = async (inputData: User.SignUpUserInput): Promise<User.
   }
 };
 
+/* 카카오 회원 가입 */
+export const createUserByKakao = async (inputData: User.KakaoLogInInput): Promise<User.Id> => {
+  try {
+    const createColums = `
+    user_email,
+    user_name
+    `;
+
+    const createValues = Object.values(inputData);
+
+    const SQL = `
+    INSERT INTO
+    user (${createColums}) 
+    VALUES (?, ?)
+    `;
+
+    const [createdInfo, _] = await db.execute(SQL, createValues);
+
+    const createdUserId: User.Id = (createdInfo as { insertId: number }).insertId;
+
+    return createdUserId;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/*  카카오 회원 존재 여부 검사 */
+export const isUserEmailValid = async (user_email: string): Promise<any> => {
+  try {
+    const selectColumns = `
+    user_id,
+    user_name
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM user
+    WHERE user_email = ?
+    `;
+
+    const [user]: any = await db.query(SQL, [user_email]);
+
+    if (!user[0]) return null; // 같은 이메일 없을때
+    else return user[0]; // 같은 이메일 있을때
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/* 카카오 회원 기존 계정 통합하기 */
+export const updateUserNameByKakao = async (
+  user_id: number,
+  user_name: string
+): Promise<number> => {
+  try {
+    const updateColums = `
+    user_name = ?
+    `;
+
+    const SQL = `
+    UPDATE user
+    SET ${updateColums}
+    WHERE user_id = ?
+    `;
+
+    await db.execute(SQL, [user_name, user_id]);
+
+    return user_id;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 /*  회원 존재 여부 검사 */
 export const isUserValid = async (user_id: number): Promise<any> => {
   try {
@@ -90,6 +166,7 @@ export const updateUserPassWord = async (
     const updateColums = `
     user_password = ?
     `;
+
     const SQL = `
     UPDATE user
     SET ${updateColums}

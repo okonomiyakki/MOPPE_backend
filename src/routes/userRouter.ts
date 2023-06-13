@@ -16,6 +16,9 @@ userRouter.post(
 /* 로그인 */
 userRouter.post('/login', userValidator.logInUserValidateHandler, userController.logInUserHandler);
 
+/* 카카오 로그인 */
+userRouter.get('/kakao', userController.kakaoLoginHandler);
+
 /* 로그아웃 */
 userRouter.post('/logout', userController.logOutUserHandler);
 
