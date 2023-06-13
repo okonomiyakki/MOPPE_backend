@@ -42,10 +42,10 @@ export const addProjectValidateHandler = async (
       project_title,
       project_summary,
       JSON.parse(project_recruitment_roles),
+      JSON.parse(project_required_stacks),
       project_goal,
       project_participation_time,
       project_introduction,
-      JSON.parse(project_required_stacks),
       fileList
     );
 
@@ -112,14 +112,14 @@ export const editProjectInfoValidateHandler = async (
     const editProjectInfo = new Project.EditProjectInfoDto(
       user_id,
       Number(project_id),
+      JSON.parse(project_recruitment_roles),
+      JSON.parse(project_required_stacks),
       project_type,
       project_title,
       project_summary,
-      JSON.parse(project_recruitment_roles),
       project_goal,
       project_participation_time,
       project_introduction,
-      JSON.parse(project_required_stacks),
       fileList
     );
 
