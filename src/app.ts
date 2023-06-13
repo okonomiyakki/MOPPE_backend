@@ -19,6 +19,7 @@ const allowedOrigins = [
   'http://34.64.242.119:80',
   'https://34.64.242.119',
   'https://34.64.242.119:80',
+  'http://kdt-sw-4-team07.elicecoding.com/',
 ];
 
 const corsOptions = {
