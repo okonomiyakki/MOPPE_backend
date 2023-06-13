@@ -63,7 +63,6 @@ export const userProfileImageHandler = (req: AuthRequest, res: Response, next: N
         console.log(error);
         next(AppErrors.handleBadRequest('프로필 업로드 중 오류가 발생했습니다.'));
       }
-      console.log('user_img > ', req.files);
       next();
     });
   } catch (error) {
@@ -78,7 +77,6 @@ export const projectImageHandler = (req: AuthRequest, res: Response, next: NextF
         console.log(error);
         next(AppErrors.handleBadRequest('프로젝트 이미지 업로드 중 오류가 발생했습니다.'));
       }
-      console.log('project_img > ', req.files);
       next();
     });
   } catch (error) {
@@ -94,7 +92,6 @@ export const portfolioImageHandler = (req: AuthRequest, res: Response, next: Nex
         console.log(error);
         next(AppErrors.handleBadRequest('포트폴리오 이미지 업로드 중 오류가 발생했습니다.'));
       }
-      console.log('portfolio_img > ', req.files);
       next();
     });
   } catch (error) {
