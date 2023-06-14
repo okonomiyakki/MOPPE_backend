@@ -39,18 +39,31 @@ export const kakaoLoginHandler = async (req: Request, res: Response, next: NextF
     tokenParams.append('redirect_uri', `${env.KAKAO_LOGIN_API_REDIRECT_URI}`);
     tokenParams.append('code', code as string);
 
-    const tokenResponse = await axios.post('https://kauth.kakao.com/oauth/token', tokenParams);
+    // KAKAO_LOGIN_API_REDIRECT_URI=http://localhost:3000/login
+    // KAKAO_LOGIN_API_REDIRECT_VM=http://34.64.242.119/login
+
+    const codeConfig = {
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      },
+    };
+
+    const tokenResponse = await axios.post(
+      'https://kauth.kakao.com/oauth/token',
+      tokenParams,
+      codeConfig
+    );
     const { access_token } = tokenResponse.data;
 
     // 사용자 정보 요청을 위한 헤더 설정
-    const config = {
+    const authConfig = {
       headers: {
         Authorization: `Bearer ${access_token}`,
       },
     };
 
     // 사용자 정보 요청
-    const userResponse = await axios.get('https://kapi.kakao.com/v2/user/me', config);
+    const userResponse = await axios.get('https://kapi.kakao.com/v2/user/me', authConfig);
     const userData = userResponse.data;
 
     console.log(userData);
