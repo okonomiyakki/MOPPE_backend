@@ -39,9 +39,6 @@ export const kakaoLoginHandler = async (req: Request, res: Response, next: NextF
     tokenParams.append('redirect_uri', `${env.KAKAO_LOGIN_API_REDIRECT_URI}`);
     tokenParams.append('code', code as string);
 
-    // KAKAO_LOGIN_API_REDIRECT_URI=http://localhost:3000/login
-    // KAKAO_LOGIN_API_REDIRECT_VM=http://34.64.242.119/login
-
     const codeConfig = {
       headers: {
         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
