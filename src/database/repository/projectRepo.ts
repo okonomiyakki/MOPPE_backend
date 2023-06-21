@@ -573,7 +573,12 @@ export const findCompletedProjectsById = async (user_id: number, status: string)
     const SQL = `
     SELECT ${selectColumns}
     FROM project
-    WHERE user_id = ? AND project_recruitment_status = ?
+    WHERE user_id = ? 
+    AND project_recruitment_status = ? 
+    AND project_id NOT IN (
+      SELECT project_id
+      FROM project_complete
+    )
     `;
 
     const [projects]: any = await db.query(SQL, [user_id, status]);
