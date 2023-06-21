@@ -9,12 +9,13 @@ import * as CommentPortfolio from '../types/CommentPortfolioType';
 export const addCommentHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
-    const { portfolio_id, comment_content } = req.body;
+    const { portfolio_id, comment_content, parent_id } = req.body;
 
     const inputData: CommentPortfolio.CreateInput = {
       user_id,
       portfolio_id,
       comment_content,
+      parent_id,
     };
 
     const createdCommentId: CommentPortfolio.Id = await commentPortfolioService.addComment(

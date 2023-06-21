@@ -10,7 +10,8 @@ export const createComment = async (
     const createColumn = `
     user_id,
     portfolio_id,
-    comment_content
+    comment_content,
+    parent_id
     `;
 
     const createValues = Object.values(inputData);
@@ -18,7 +19,7 @@ export const createComment = async (
     const SQL = `
     INSERT INTO
     portfolio_comment (${createColumn}) 
-    VALUES (?, ?, ?)
+    VALUES (?, ?, ?, ?)
     `;
 
     const [createdInfo, _] = await db.execute(SQL, createValues);
@@ -40,11 +41,10 @@ export const updateComment = async (
 ): Promise<number> => {
   try {
     const updateColums = Object.entries(inputData)
-      .filter(([_, value]) => value !== undefined)
       .map(([key, _]) => `${key} = ?`)
       .join(', ');
 
-    const updateValues = Object.values(inputData).filter((value) => value !== undefined);
+    const updateValues = Object.values(inputData);
 
     const SQL = `
     UPDATE portfolio_comment
