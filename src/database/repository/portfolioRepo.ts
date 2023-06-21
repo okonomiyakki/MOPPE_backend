@@ -196,6 +196,7 @@ export const isPortfolioValid = async (portfolio_id: number): Promise<void> => {
 export const findPortfolioById = async (portfolio_id: number): Promise<any> => {
   try {
     const selectColumns = `
+    project_complete.project_id,
     portfolio.portfolio_id,
     portfolio.portfolio_title,
     portfolio.portfolio_summary,
@@ -219,6 +220,7 @@ export const findPortfolioById = async (portfolio_id: number): Promise<any> => {
     FROM portfolio
     LEFT JOIN portfolio_bookmark ON portfolio_bookmark.portfolio_id = portfolio.portfolio_id
     LEFT JOIN portfolio_comment ON portfolio_comment.portfolio_id = portfolio.portfolio_id
+    LEFT JOIN project_complete ON project_complete.portfolio_id = portfolio.portfolio_id
     JOIN user ON user.user_id = portfolio.user_id
     WHERE portfolio.portfolio_id = ?
     `;
