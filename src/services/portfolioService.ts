@@ -1,6 +1,7 @@
 import * as portfolioRepo from '../database/repository/portfolioRepo';
 import * as bookmarkPortfolioRepo from '../database/repository/bookmarkPortfolioRepo';
 import * as memberRepo from '../database/repository/memberRepo';
+import * as completeProject from '../database/repository/completeProjectRepo';
 import * as Portfolio from '../types/PortfolioType';
 import { paginateList } from '../utils/paginator';
 import { generateNewDate } from '../utils/dateGenerator';
@@ -10,7 +11,8 @@ import { sortPortfoliosByBookmarkCount } from '../utils/sortPortfolios';
 /* 포트폴리오 등록 */
 export const addPorfolio = async (
   inputData: Portfolio.CreateInput,
-  memberIds: number[]
+  memberIds: number[],
+  project_id: number
 ): Promise<Portfolio.Id> => {
   try {
     const createdPorfolioId: Portfolio.Id = await portfolioRepo.createPorfolio(inputData);
@@ -18,6 +20,8 @@ export const addPorfolio = async (
     for (const userId of memberIds) {
       await memberRepo.createMembers(userId, createdPorfolioId);
     }
+
+    if (project_id) await completeProject.createCompletedProject(project_id, createdPorfolioId);
 
     return createdPorfolioId;
   } catch (error) {
@@ -30,7 +34,8 @@ export const editPortfolioInfo = async (
   user_id: number,
   portfolio_id: number,
   inputData: Portfolio.UpdateInput,
-  memberIds: number[]
+  memberIds: number[],
+  project_id: number
 ): Promise<any> => {
   try {
     const updatedPortfolioId = await portfolioRepo.updatePortfolioInfo(
@@ -41,9 +46,13 @@ export const editPortfolioInfo = async (
 
     await memberRepo.deleteMembers(portfolio_id);
 
+    await completeProject.deleteCompletedProject(portfolio_id);
+
     for (const userId of memberIds) {
       await memberRepo.createMembers(userId, portfolio_id);
     }
+
+    if (project_id) await completeProject.createCompletedProject(project_id, portfolio_id);
 
     return updatedPortfolioId;
   } catch (error) {

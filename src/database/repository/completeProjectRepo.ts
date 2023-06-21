@@ -1,4 +1,48 @@
 import db from '../../config/dbconfig';
+import * as CompleteProject from '../../types/CompleteProjectType';
+
+/* 모집 완료 프로젝트 포트폴리오에 등록 */
+export const createCompletedProject = async (
+  project_id: number,
+  portfolio_id: number
+): Promise<CompleteProject.Id> => {
+  try {
+    const createColumn = `
+    project_id,
+    portfolio_id
+    `;
+
+    const SQL = `
+    INSERT INTO
+    project_complete (${createColumn}) 
+    VALUES (?, ?)
+    `;
+
+    const [createdInfo, _] = await db.execute(SQL, [project_id, portfolio_id]);
+
+    const createdProjectId: CompleteProject.Id = (createdInfo as { insertId: number }).insertId;
+
+    return createdProjectId;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/* 포트폴리오로 등록된 모집 글 수정 */
+export const deleteCompletedProject = async (portfolio_id: number): Promise<void> => {
+  try {
+    const SQL = `
+    DELETE FROM project_complete
+    WHERE portfolio_id = ?
+    `;
+
+    await db.execute(SQL, [portfolio_id]);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 /* 모집 글 관련 포트폴리오 조회 */
 export const findPortfolioByCompletedProjectId = async (project_id: number): Promise<any> => {
@@ -26,7 +70,8 @@ export const findPortfolioByCompletedProjectId = async (project_id: number): Pro
 
     const [portfolio]: any = await db.query(SQL, [project_id]);
 
-    return portfolio[0];
+    if (!portfolio[0].portfolio_id) return [];
+    else return portfolio;
   } catch (error) {
     console.log(error);
     throw error;

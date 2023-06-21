@@ -9,10 +9,12 @@ import * as portfolioService from '../services/portfolioService';
 export const addPortfolioHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
-    const { memberIds } = req.body;
+    const { memberIds, project_id } = req.body;
     const createReqBody = req.body;
 
     delete createReqBody.memberIds;
+
+    delete createReqBody.project_id;
 
     createReqBody.portfolio_stacks = {
       stackList: JSON.parse(createReqBody.portfolio_stacks),
@@ -26,7 +28,8 @@ export const addPortfolioHandler = async (req: AuthRequest, res: Response, next:
 
     const createdPortfolioId: Portfolio.Id = await portfolioService.addPorfolio(
       inputData,
-      JSON.parse(memberIds)
+      JSON.parse(memberIds),
+      Number(project_id)
     );
 
     res
@@ -46,10 +49,12 @@ export const editPortfolioInfoHandler = async (
   try {
     const { user_id } = req.user;
     const { portfolio_id } = req.params;
-    const { memberIds } = req.body;
+    const { memberIds, project_id } = req.body;
     const updateReqBody = req.body;
 
     delete updateReqBody.memberIds;
+
+    delete updateReqBody.project_id;
 
     updateReqBody.portfolio_stacks = {
       stackList: JSON.parse(updateReqBody.portfolio_stacks),
@@ -67,7 +72,8 @@ export const editPortfolioInfoHandler = async (
       user_id,
       Number(portfolio_id),
       inputData,
-      JSON.parse(memberIds)
+      JSON.parse(memberIds),
+      Number(project_id)
     );
 
     res.status(200).json({

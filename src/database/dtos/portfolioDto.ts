@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, IsArray, IsInt } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsArray, IsInt, ValidateIf } from 'class-validator';
 
 export class AddPortfolioDto {
   @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요' })
@@ -33,6 +33,10 @@ export class AddPortfolioDto {
   @IsArray({ message: 'fileList가 배열 형식이 아닙니다.' })
   public fileList: string[];
 
+  @ValidateIf((_, value) => value !== null)
+  @IsInt({ message: 'project_id이 정수 형식이 아닙니다.' })
+  public project_id?: number;
+
   constructor(
     user_id: number,
     portfolio_title: string,
@@ -41,7 +45,8 @@ export class AddPortfolioDto {
     portfolio_stacks: string[],
     portfolio_description: string,
     memberIds: number[],
-    fileList: string[]
+    fileList: string[],
+    project_id?: number
   ) {
     this.user_id = user_id;
     this.portfolio_title = portfolio_title;
@@ -51,6 +56,7 @@ export class AddPortfolioDto {
     this.portfolio_description = portfolio_description;
     this.memberIds = memberIds;
     this.fileList = fileList;
+    this.project_id = project_id;
   }
 }
 
@@ -91,6 +97,10 @@ export class EditPortfolioDto {
   @IsArray({ message: 'fileList가 배열 형식이 아닙니다.' })
   public fileList?: string[];
 
+  @ValidateIf((_, value) => value !== null)
+  @IsInt({ message: 'project_id이 정수 형식이 아닙니다.' })
+  public project_id?: number;
+
   constructor(
     user_id: number,
     portfolio_id: number,
@@ -100,7 +110,8 @@ export class EditPortfolioDto {
     portfolio_summary?: string,
     portfolio_github?: string,
     portfolio_description?: string,
-    fileList?: string[]
+    fileList?: string[],
+    project_id?: number
   ) {
     this.user_id = user_id;
     this.portfolio_id = portfolio_id;
@@ -111,6 +122,7 @@ export class EditPortfolioDto {
     this.portfolio_github = portfolio_github;
     this.portfolio_description = portfolio_description;
     this.fileList = fileList;
+    this.project_id = project_id;
   }
 }
 
