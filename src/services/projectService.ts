@@ -1,5 +1,6 @@
 import * as projectRepo from '../database/repository/projectRepo';
 import * as bookmarkProjectRepo from '../database/repository/bookmarkProjectRepo';
+import * as completeProject from '../database/repository/completeProjectRepo';
 import * as Project from '../types/ProjectType';
 import * as BookmarkProject from '../types/BookmarkProjectType';
 import { paginateList } from '../utils/paginator';
@@ -124,6 +125,8 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
 
     const foundBookmarkedProjects = await bookmarkProjectRepo.findBookmarkedProjectsById(user_id);
 
+    const foundPortfolio = await completeProject.findPortfolioByCompletedProjectId(project_id);
+
     if (user_id !== 0) {
       const currentKorDate = generateNewDate();
 
@@ -141,8 +144,18 @@ export const getProjectById = async (user_id: number, project_id: number): Promi
     const bookmarkedProjectIds = foundBookmarkedProjects.map((project) => project.project_id);
 
     const checkIsBookmarked = bookmarkedProjectIds.includes(project_id)
-      ? { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: true }
-      : { ...foundProject, project_bookmark_users: foundBookmarkedUsers, is_bookmarked: false };
+      ? {
+          ...foundProject,
+          project_bookmark_users: foundBookmarkedUsers,
+          related_portfolio: foundPortfolio,
+          is_bookmarked: true,
+        }
+      : {
+          ...foundProject,
+          project_bookmark_users: foundBookmarkedUsers,
+          related_portfolio: foundPortfolio,
+          is_bookmarked: false,
+        };
 
     return checkIsBookmarked;
   } catch (error) {
