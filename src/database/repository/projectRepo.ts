@@ -561,3 +561,26 @@ export const updateProjectViewsCount = async (
     throw error;
   }
 };
+
+/* 모집 완료 모집 글 목록 조회 */
+export const findCompletedProjectsById = async (user_id: number, status: string): Promise<any> => {
+  try {
+    const selectColumns = `
+    project_id,
+    project_title
+    `;
+
+    const SQL = `
+    SELECT ${selectColumns}
+    FROM project
+    WHERE user_id = ? AND project_recruitment_status = ?
+    `;
+
+    const [projects]: any = await db.query(SQL, [user_id, status]);
+
+    return projects;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

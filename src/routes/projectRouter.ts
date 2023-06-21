@@ -96,4 +96,12 @@ projectRouter.get(
   projectController.getMyProjectsByIdHandler
 );
 
+/* 모집 완료 모집 글 목록 조회 */
+projectRouter.get(
+  '/recruitment',
+  AuthenticateHandler,
+  projectValidator.getCompletedProjectsByIdValidateHandler,
+  projectController.getCompletedProjectsByIdHandler
+);
+
 export default projectRouter;

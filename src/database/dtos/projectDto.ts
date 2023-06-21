@@ -267,3 +267,18 @@ export class GetMyProjectCommentsByIdDto {
     this.page = page;
   }
 }
+
+export class GetCompletedProjectsByIdDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  @IsNotEmpty({ message: 'status가 입력되지 않았습니다.' })
+  @IsString({ message: 'status가 문자열 형식이 아닙니다.' })
+  public status: string;
+
+  constructor(user_id: number, status: string) {
+    this.user_id = user_id;
+    this.status = status;
+  }
+}

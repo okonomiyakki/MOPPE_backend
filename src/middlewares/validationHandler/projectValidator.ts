@@ -269,3 +269,24 @@ export const getProjectCommentsByIdValidateHandler = async (
     next(AppErrors.handleInternalServerError());
   }
 };
+
+export const getCompletedProjectsByIdValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { status } = req.query;
+
+    const getCompletedProjectsById = new Project.GetCompletedProjectsByIdDto(
+      user_id,
+      status as string
+    );
+
+    validateDto(getCompletedProjectsById, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};

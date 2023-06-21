@@ -208,3 +208,19 @@ export const getMyBookmarkedProjectsById = async (user_id: number, page: number)
     throw error;
   }
 };
+
+/* 모집 완료 모집 글 목록 조회 */
+export const getCompletedProjectsById = async (user_id: number, status: string): Promise<any> => {
+  try {
+    const foundCompletedProjects = await projectRepo.findCompletedProjectsById(user_id, status);
+
+    const completedProjectsInfo = {
+      listLength: foundCompletedProjects.length,
+      completedProjects: foundCompletedProjects,
+    };
+
+    return completedProjectsInfo;
+  } catch (error) {
+    throw error;
+  }
+};

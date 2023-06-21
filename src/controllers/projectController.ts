@@ -239,3 +239,21 @@ export const getMyBookmarkedProjectsByIdHandler = async (
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
+
+/* 모집 완료 모집 글 목록 조회 */
+export const getCompletedProjectsByIdHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { status } = req.query;
+
+    const myProjects = await projectService.getCompletedProjectsById(user_id, status as string);
+
+    res.status(200).json({ message: '모집 완료 모집 글 목록 조회 성공', data: myProjects });
+  } catch (error) {
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+  }
+};
