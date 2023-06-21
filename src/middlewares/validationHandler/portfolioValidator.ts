@@ -23,7 +23,7 @@ export const addPortfolioValidateHandler = async (
     } = req.body;
     const fileList = req.files as any[];
 
-    if (project_id === 0) {
+    if (Number(project_id) === 0) {
       delete req.body.project_id;
     }
 
@@ -90,7 +90,7 @@ export const editPortfolioValidateHandler = async (
       delete req.body.portfolio_description;
     }
 
-    if (project_id === 0) {
+    if (Number(project_id) === 0) {
       delete req.body.project_id;
     }
 
