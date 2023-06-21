@@ -23,9 +23,6 @@ export const addPortfolioValidateHandler = async (
     } = req.body;
     const fileList = req.files as any[];
 
-    console.log('project_id : ', project_id);
-    console.log('type of : ', typeof project_id);
-
     if (Number(project_id) === 0) {
       delete req.body.project_id;
     }
