@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsInt } from 'class-validator';
+import { IsNotEmpty, IsString, IsInt, ValidateIf } from 'class-validator';
 
 export class AddProjectCommentDto {
   @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요.' })
@@ -13,11 +13,11 @@ export class AddProjectCommentDto {
   @IsString({ message: 'comment_content가 문자열 형식이 아닙니다.' })
   public comment_content: string;
 
-  @IsNotEmpty({ message: 'parent_id가 입력되지 않았습니다.' })
+  @ValidateIf((_, value) => value !== null)
   @IsInt({ message: 'parent_id가 정수 형식이 아닙니다.' })
-  public parent_id: number;
+  public parent_id?: number;
 
-  constructor(user_id: number, project_id: number, comment_content: string, parent_id: number) {
+  constructor(user_id: number, project_id: number, comment_content: string, parent_id?: number) {
     this.user_id = user_id;
     this.project_id = project_id;
     this.comment_content = comment_content;
@@ -38,11 +38,11 @@ export class AddPortfolioCommentDto {
   @IsString({ message: 'comment_content가 문자열 형식이 아닙니다.' })
   public comment_content: string;
 
-  @IsNotEmpty({ message: 'parent_id가 입력되지 않았습니다.' })
+  @ValidateIf((_, value) => value !== null)
   @IsInt({ message: 'parent_id가 정수 형식이 아닙니다.' })
-  public parent_id: number;
+  public parent_id?: number;
 
-  constructor(user_id: number, portfolio_id: number, comment_content: string, parent_id: number) {
+  constructor(user_id: number, portfolio_id: number, comment_content: string, parent_id?: number) {
     this.user_id = user_id;
     this.portfolio_id = portfolio_id;
     this.comment_content = comment_content;

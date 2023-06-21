@@ -117,6 +117,7 @@ export const findProjectCommentsById = async (project_id: number): Promise<any> 
   try {
     const selectColumns = `
     comment.comment_id,
+    comment.parent_id,
     user.user_id,
     user.user_name,
     user.user_img,

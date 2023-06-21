@@ -2,6 +2,7 @@ import * as commentProjectRepo from '../database/repository/commentProjectRepo';
 import * as projectRepo from '../database/repository/projectRepo';
 import * as CommentProject from '../types/CommentProjectType';
 import { paginateList } from '../utils/paginator';
+import { sortForReplies } from '../utils/sortCommentsReplies';
 
 /* 댓글 등록 */
 export const addComment = async (
@@ -53,7 +54,9 @@ export const getProjectCommentsById = async (project_id: number, page: number): 
   try {
     const foundComments = await commentProjectRepo.findProjectCommentsById(project_id);
 
-    const pagenatedRowsInfo = paginateList(foundComments, page, 10, false);
+    const sortedComments = sortForReplies(foundComments);
+
+    const pagenatedRowsInfo = paginateList(sortedComments, page, 10, false);
 
     const pagenatedCommentsInfo = {
       listLength: foundComments.length,

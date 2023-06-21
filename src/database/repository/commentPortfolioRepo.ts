@@ -117,6 +117,7 @@ export const findPortfolioCommentsById = async (portfolio_id: number): Promise<a
   try {
     const selectColumns = `
     portfolio_comment.comment_id,
+    portfolio_comment.parent_id,
     user.user_id,
     user.user_name,
     user.user_img,

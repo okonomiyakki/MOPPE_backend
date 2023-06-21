@@ -2,6 +2,7 @@ import * as commentPortfolioRepo from '../database/repository/commentPortfolioRe
 import * as portfolioRepo from '../database/repository/portfolioRepo';
 import * as CommentPortfolio from '../types/CommentPortfolioType';
 import { paginateList } from '../utils/paginator';
+import { sortForReplies } from '../utils/sortCommentsReplies';
 
 /* 포트폴리오 댓글 등록 */
 export const addComment = async (
@@ -62,7 +63,9 @@ export const getPortfolioCommentsById = async (
   try {
     const foundComments = await commentPortfolioRepo.findPortfolioCommentsById(portfolio_id);
 
-    const pagenatedRowsInfo = paginateList(foundComments, page, 10, false);
+    const sortedComments = sortForReplies(foundComments);
+
+    const pagenatedRowsInfo = paginateList(sortedComments, page, 10, false);
 
     const pagenatedCommentsInfo = {
       listLength: foundComments.length,
