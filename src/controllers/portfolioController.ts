@@ -82,9 +82,7 @@ export const editPortfolioInfoHandler = async (
     });
   } catch (error) {
     console.log(error);
-    error instanceof AppError
-      ? next(error)
-      : next(AppErrors.handleInternalServerError('이미 존재하는 멤버 입니다.'));
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }
 };
 

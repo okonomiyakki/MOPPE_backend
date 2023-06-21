@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, IsArray, IsInt, ValidateIf } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsArray, IsInt } from 'class-validator';
 
 export class AddPortfolioDto {
   @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다. 다시 로그인해 주세요' })
@@ -33,22 +33,23 @@ export class AddPortfolioDto {
   @IsArray({ message: 'fileList가 배열 형식이 아닙니다.' })
   public fileList: string[];
 
-  @ValidateIf((_, value) => value !== null)
-  @IsInt({ message: 'project_id이 정수 형식이 아닙니다.' })
-  public project_id?: number;
+  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'project_id가 정수 형식이 아닙니다.' })
+  public project_id: number;
 
   constructor(
     user_id: number,
+    project_id: number,
     portfolio_title: string,
     portfolio_summary: string,
     portfolio_github: string,
     portfolio_stacks: string[],
     portfolio_description: string,
     memberIds: number[],
-    fileList: string[],
-    project_id?: number
+    fileList: string[]
   ) {
     this.user_id = user_id;
+    this.project_id = project_id;
     this.portfolio_title = portfolio_title;
     this.portfolio_summary = portfolio_summary;
     this.portfolio_github = portfolio_github;
@@ -56,7 +57,6 @@ export class AddPortfolioDto {
     this.portfolio_description = portfolio_description;
     this.memberIds = memberIds;
     this.fileList = fileList;
-    this.project_id = project_id;
   }
 }
 
@@ -68,6 +68,10 @@ export class EditPortfolioDto {
   @IsNotEmpty({ message: 'portfolio_id가 입력되지 않았습니다.' })
   @IsInt({ message: 'portfolio_id가 정수 형식이 아닙니다.' })
   public portfolio_id: number;
+
+  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'project_id가 정수 형식이 아닙니다.' })
+  public project_id: number;
 
   @IsNotEmpty({ message: 'portfolio_stacks가 입력되지 않았습니다.' })
   @IsArray({ message: 'portfolio_stacks가 배열 형식이 아닙니다.' })
@@ -97,24 +101,21 @@ export class EditPortfolioDto {
   @IsArray({ message: 'fileList가 배열 형식이 아닙니다.' })
   public fileList?: string[];
 
-  @ValidateIf((_, value) => value !== null)
-  @IsInt({ message: 'project_id이 정수 형식이 아닙니다.' })
-  public project_id?: number;
-
   constructor(
     user_id: number,
     portfolio_id: number,
+    project_id: number,
     portfolio_stacks: string[],
     memberIds: number[],
     portfolio_title?: string,
     portfolio_summary?: string,
     portfolio_github?: string,
     portfolio_description?: string,
-    fileList?: string[],
-    project_id?: number
+    fileList?: string[]
   ) {
     this.user_id = user_id;
     this.portfolio_id = portfolio_id;
+    this.project_id = project_id;
     this.portfolio_stacks = portfolio_stacks;
     this.memberIds = memberIds;
     this.portfolio_title = portfolio_title;
@@ -122,7 +123,6 @@ export class EditPortfolioDto {
     this.portfolio_github = portfolio_github;
     this.portfolio_description = portfolio_description;
     this.fileList = fileList;
-    this.project_id = project_id;
   }
 }
 

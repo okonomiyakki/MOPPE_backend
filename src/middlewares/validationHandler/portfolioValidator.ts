@@ -23,7 +23,7 @@ export const addPortfolioValidateHandler = async (
     } = req.body;
     const fileList = req.files as any[];
 
-    if (project_id === undefined || project_id === null) {
+    if (project_id === 0) {
       delete req.body.project_id;
     }
 
@@ -40,14 +40,14 @@ export const addPortfolioValidateHandler = async (
 
     const addPortfolio = new Portfolio.AddPortfolioDto(
       user_id,
+      Number(project_id),
       portfolio_title,
       portfolio_summary,
       portfolio_github,
       JSON.parse(portfolio_stacks),
       portfolio_description,
       JSON.parse(memberIds),
-      fileList,
-      Number(project_id)
+      fileList
     );
 
     validateDto(addPortfolio, next);
@@ -90,7 +90,7 @@ export const editPortfolioValidateHandler = async (
       delete req.body.portfolio_description;
     }
 
-    if (project_id === undefined || project_id === null) {
+    if (project_id === 0) {
       delete req.body.project_id;
     }
 
@@ -114,14 +114,14 @@ export const editPortfolioValidateHandler = async (
     const editPortfolio = new Portfolio.EditPortfolioDto(
       user_id,
       Number(portfolio_id),
+      Number(project_id),
       JSON.parse(portfolio_stacks),
       JSON.parse(memberIds),
       portfolio_title,
       portfolio_summary,
       portfolio_github,
       portfolio_description,
-      fileList,
-      Number(project_id)
+      fileList
     );
 
     validateDto(editPortfolio, next);

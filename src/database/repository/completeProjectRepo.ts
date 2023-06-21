@@ -1,4 +1,5 @@
 import db from '../../config/dbconfig';
+import * as AppErrors from '../../middlewares/errorHandler';
 import * as CompleteProject from '../../types/CompleteProjectType';
 
 /* 모집 완료 프로젝트 포트폴리오에 등록 */
@@ -25,7 +26,7 @@ export const createCompletedProject = async (
     return createdProjectId;
   } catch (error) {
     console.log(error);
-    throw error;
+    throw AppErrors.handleBadRequest('이미 등록된 모집 글입니다.');
   }
 };
 
@@ -40,7 +41,7 @@ export const deleteCompletedProject = async (portfolio_id: number): Promise<void
     await db.execute(SQL, [portfolio_id]);
   } catch (error) {
     console.log(error);
-    throw error;
+    throw AppErrors.handleBadRequest('이미 등록된 모집 글입니다.');
   }
 };
 
