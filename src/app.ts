@@ -24,6 +24,7 @@ const allowedOrigins = [
   'http://kdt-sw-4-team07.elicecoding.com:80',
   'http://kdt-sw-4-team07.elicecoding.com:3000',
   'http://kdt-sw-4-team07.elicecoding.com:5000',
+  '0.0.0.0/0',
 ];
 
 const corsOptions = {
