@@ -99,6 +99,21 @@ export class EditInfoDto {
   }
 }
 
+export class RemoveUserDto {
+  @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
+  public user_id: number;
+
+  @IsNotEmpty({ message: 'user_password가 입력되지 않았습니다.' })
+  @IsString({ message: 'user_password가 문자열 형식이 아닙니다.' })
+  public user_password: string;
+
+  constructor(user_id: number, user_password: string) {
+    this.user_id = user_id;
+    this.user_password = user_password;
+  }
+}
+
 export class GetMemberInfoDto {
   @IsNotEmpty({ message: 'user_id가 입력되지 않았습니다.' })
   @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })

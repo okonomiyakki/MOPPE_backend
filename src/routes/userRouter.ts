@@ -39,6 +39,14 @@ userRouter.patch(
   userController.editUserInfoHandler
 );
 
+/* 회원 탈퇴 */
+userRouter.delete(
+  '/withdrawal',
+  AuthenticateHandler,
+  userValidator.removeUserValidateHandler,
+  userController.removeUserHandler
+);
+
 /* 다른 회원 마이페이지 상세 정보 조회 */
 userRouter.get(
   '/profile/:user_id',

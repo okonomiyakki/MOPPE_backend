@@ -101,6 +101,24 @@ export const editUserInfoValidateHandler = async (
   }
 };
 
+export const removeUserValidateHandler = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_id } = req.user;
+    const { user_password } = req.body;
+
+    const RemoveUser = new User.RemoveUserDto(user_id, user_password);
+
+    validateDto(RemoveUser, next);
+  } catch (error) {
+    console.log(error);
+    next(AppErrors.handleInternalServerError());
+  }
+};
+
 export const getMemberInfoValidateHandler = async (
   req: AuthRequest,
   res: Response,

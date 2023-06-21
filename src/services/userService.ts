@@ -131,6 +131,23 @@ export const editUserInfo = async (
   }
 };
 
+/* 회원 탈퇴 */
+export const removeUser = async (user_id: number, user_password: string): Promise<boolean> => {
+  try {
+    const foundUserPassWord = await userRepo.isUserValid(user_id);
+
+    const isPasswordMatch = await bcrypt.compare(user_password, foundUserPassWord.user_password);
+
+    if (!isPasswordMatch) throw AppErrors.handleBadRequest('비밀번호가 일치하지 않습니다.');
+
+    const isDeletedUser = await userRepo.deleteUserById(user_id);
+
+    return isDeletedUser;
+  } catch (error) {
+    throw error;
+  }
+};
+
 /* 회원 마이페이지 상세 정보 조회 */
 export const getUserInfoById = async (user_id: number): Promise<any> => {
   try {

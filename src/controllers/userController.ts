@@ -137,7 +137,6 @@ export const editUserPassWordHandler = async (
 export const editUserInfoHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
-
     const updateReqBody = req.body;
 
     updateReqBody.user_stacks = { stackList: JSON.parse(updateReqBody.user_stacks) };
@@ -147,6 +146,20 @@ export const editUserInfoHandler = async (req: AuthRequest, res: Response, next:
     const updatedUserId: User.Id = await userService.editUserInfo(user_id, inputData);
 
     res.status(200).json({ message: '회원 상세 정보 수정 성공', data: { user_id: updatedUserId } });
+  } catch (error) {
+    error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
+  }
+};
+
+/* 회원 탈퇴 */
+export const removeUserHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { user_id } = req.user;
+    const { user_password } = req.body;
+
+    const isDeletedUser = await userService.removeUser(user_id, user_password);
+
+    if (isDeletedUser) res.status(200).json({ message: '회원 탈퇴 성공', data: {} });
   } catch (error) {
     error instanceof AppError ? next(error) : next(AppErrors.handleInternalServerError());
   }

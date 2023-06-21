@@ -227,6 +227,27 @@ export const updateUserInfo = async (
   }
 };
 
+/* 회원 탈퇴 */
+export const deleteUserById = async (user_id: number): Promise<boolean> => {
+  try {
+    const SQL = `
+    DELETE FROM user
+    WHERE user_id = ?
+    `;
+
+    const [result, _] = await db.execute(SQL, [user_id]);
+
+    const isAffected = (result as { affectedRows: number }).affectedRows === 1 ? true : false;
+
+    if (!isAffected) throw AppErrors.handleForbidden('본인만 삭제 가능 합니다.');
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 /* 회원 마이페이지 상세 정보 조회  */
 export const findUserInfoById = async (user_id: number): Promise<any> => {
   try {
