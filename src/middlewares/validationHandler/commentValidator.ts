@@ -11,12 +11,13 @@ export const addProjectCommentValidateHandler = async (
 ) => {
   try {
     const { user_id } = req.user;
-    const { project_id, comment_content } = req.body;
+    const { project_id, comment_content, parent_id } = req.body;
 
     const addProjectComment = new Comment.AddProjectCommentDto(
       user_id,
       project_id,
-      comment_content
+      comment_content,
+      parent_id
     );
 
     validateDto(addProjectComment, next);
@@ -33,12 +34,13 @@ export const addPortfolioCommentValidateHandler = async (
 ) => {
   try {
     const { user_id } = req.user;
-    const { portfolio_id, comment_content } = req.body;
+    const { portfolio_id, comment_content, parent_id } = req.body;
 
     const addPortfolioComment = new Comment.AddPortfolioCommentDto(
       user_id,
       portfolio_id,
-      comment_content
+      comment_content,
+      parent_id
     );
 
     validateDto(addPortfolioComment, next);

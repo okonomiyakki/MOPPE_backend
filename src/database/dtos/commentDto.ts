@@ -13,10 +13,15 @@ export class AddProjectCommentDto {
   @IsString({ message: 'comment_content가 문자열 형식이 아닙니다.' })
   public comment_content: string;
 
-  constructor(user_id: number, project_id: number, comment_content: string) {
+  @IsNotEmpty({ message: 'parent_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'parent_id가 정수 형식이 아닙니다.' })
+  public parent_id: number;
+
+  constructor(user_id: number, project_id: number, comment_content: string, parent_id: number) {
     this.user_id = user_id;
     this.project_id = project_id;
     this.comment_content = comment_content;
+    this.parent_id = parent_id;
   }
 }
 
@@ -33,10 +38,15 @@ export class AddPortfolioCommentDto {
   @IsString({ message: 'comment_content가 문자열 형식이 아닙니다.' })
   public comment_content: string;
 
-  constructor(user_id: number, portfolio_id: number, comment_content: string) {
+  @IsNotEmpty({ message: 'parent_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'parent_id가 정수 형식이 아닙니다.' })
+  public parent_id: number;
+
+  constructor(user_id: number, portfolio_id: number, comment_content: string, parent_id: number) {
     this.user_id = user_id;
     this.portfolio_id = portfolio_id;
     this.comment_content = comment_content;
+    this.parent_id = parent_id;
   }
 }
 

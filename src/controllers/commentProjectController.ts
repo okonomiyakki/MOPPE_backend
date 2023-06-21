@@ -9,12 +9,13 @@ import * as CommentProject from '../types/CommentProjectType';
 export const addCommentHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { user_id } = req.user;
-    const { project_id, comment_content } = req.body;
+    const { project_id, comment_content, parent_id } = req.body;
 
     const inputData: CommentProject.CreateCommentInput = {
       user_id,
       project_id,
       comment_content,
+      parent_id,
     };
 
     const createdCommentId: CommentProject.Id = await commentProjectService.addComment(inputData);

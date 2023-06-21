@@ -10,15 +10,16 @@ export const createComment = async (
     const createColumn = `
     user_id,
     project_id,
-    comment_content
+    comment_content,
+    parent_id
     `;
 
     const createValues = Object.values(inputData);
 
     const SQL = `
     INSERT INTO
-    comment (${createColumn}) 
-    VALUES (?, ?, ?)
+    comment (${createColumn})
+    VALUES (?, ?, ?, ?)
     `;
 
     const [createdInfo, _] = await db.execute(SQL, createValues);
@@ -40,11 +41,10 @@ export const updateComment = async (
 ): Promise<number> => {
   try {
     const updateColums = Object.entries(inputData)
-      .filter(([_, value]) => value !== undefined)
       .map(([key, _]) => `${key} = ?`)
       .join(', ');
 
-    const updateValues = Object.values(inputData).filter((value) => value !== undefined);
+    const updateValues = Object.values(inputData);
 
     const SQL = `
     UPDATE comment
