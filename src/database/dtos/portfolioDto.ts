@@ -5,6 +5,10 @@ export class AddPortfolioDto {
   @IsInt({ message: 'user_id가 정수 형식이 아닙니다.' })
   public user_id: number;
 
+  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다.' })
+  @IsInt({ message: 'project_id가 정수 형식이 아닙니다.' })
+  public project_id: number;
+
   @IsNotEmpty({ message: 'portfolio_title이 입력되지 않았습니다.' })
   @IsString({ message: 'portfolio_title이 문자열 형식이 아닙니다.' })
   public portfolio_title: string;
@@ -32,10 +36,6 @@ export class AddPortfolioDto {
   @IsNotEmpty({ message: 'fileList가 입력되지 않았습니다.' })
   @IsArray({ message: 'fileList가 배열 형식이 아닙니다.' })
   public fileList: string[];
-
-  @IsNotEmpty({ message: 'project_id가 입력되지 않았습니다.' })
-  @IsInt({ message: 'project_id가 정수 형식이 아닙니다.' })
-  public project_id: number;
 
   constructor(
     user_id: number,

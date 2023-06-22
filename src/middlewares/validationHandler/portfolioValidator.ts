@@ -40,7 +40,7 @@ export const addPortfolioValidateHandler = async (
 
     const addPortfolio = new Portfolio.AddPortfolioDto(
       user_id,
-      project_id,
+      Number(project_id),
       portfolio_title,
       portfolio_summary,
       portfolio_github,
@@ -114,7 +114,7 @@ export const editPortfolioValidateHandler = async (
     const editPortfolio = new Portfolio.EditPortfolioDto(
       user_id,
       Number(portfolio_id),
-      project_id,
+      Number(project_id),
       JSON.parse(portfolio_stacks),
       JSON.parse(memberIds),
       portfolio_title,
