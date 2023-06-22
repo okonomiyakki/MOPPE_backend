@@ -54,12 +54,13 @@ export const getProjectCommentsById = async (project_id: number, page: number): 
   try {
     const foundComments = await commentProjectRepo.findProjectCommentsById(project_id);
 
-    const sortedComments = sortForReplies(foundComments);
+    const sortedComments = sortForReplies(foundComments) as any;
 
     const pagenatedRowsInfo = paginateList(sortedComments, page, 10, false);
 
     const pagenatedCommentsInfo = {
       listLength: foundComments.length,
+      originListLength: sortedComments.length,
       pageSize: pagenatedRowsInfo.pageSize,
       pagenatedComments: pagenatedRowsInfo.pageRows,
     };
