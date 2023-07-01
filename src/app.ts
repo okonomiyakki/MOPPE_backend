@@ -31,6 +31,8 @@ const allowedOrigins = [
   'http://172.30.1.42:3000',
   'http://192.168.0.64:3000',
   'http://192.168.0.*:3000',
+  'http://13.209.192.1',
+  'https://13.209.192.1',
 ];
 
 const corsOptions = {
