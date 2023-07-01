@@ -126,19 +126,19 @@ export const getPortfolioById = async (user_id: number, portfolio_id: number): P
 
     const foundParticipatedMembers = await memberRepo.findParticipatedMembersById(portfolio_id);
 
-    if (user_id !== 0) {
-      const currentKorDate = generateNewDate();
+    // if (user_id !== 0) {
+    //   const currentKorDate = generateNewDate();
 
-      const isUserEnteredCurrentDate = await portfolioRepo.findUserViewDateById(
-        user_id,
-        portfolio_id,
-        currentKorDate
-      );
+    //   const isUserEnteredCurrentDate = await portfolioRepo.findUserViewDateById(
+    //     user_id,
+    //     portfolio_id,
+    //     currentKorDate
+    //   );
 
-      if (!isUserEnteredCurrentDate) {
-        await portfolioRepo.updatePortfolioViewsCount(user_id, portfolio_id, currentKorDate);
-      }
-    }
+    //   if (!isUserEnteredCurrentDate) {
+    //     await portfolioRepo.updatePortfolioViewsCount(user_id, portfolio_id, currentKorDate);
+    //   }
+    // }
 
     const bookmarkedPortfolioIds = foundBookmarkedPortfolios.map(
       (portfolio: any) => portfolio.portfolio_id
