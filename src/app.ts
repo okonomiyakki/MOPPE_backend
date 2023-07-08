@@ -51,7 +51,7 @@ app.use(errorHandler);
 
 db.getConnection()
   .then(async () => {
-    console.log('✅ AWS RDS 접속 성공');
+    console.log('✅ GCP MySQL 접속 성공');
 
     app.listen(port, () => {
       console.log('DB_HOST:', env.DB_HOST);
@@ -59,4 +59,4 @@ db.getConnection()
       console.log(`Server is running on port ${port}`);
     });
   })
-  .catch((error) => console.log('⛔ AWS RDS 접속 및 서버 실행 실패', error));
+  .catch((error) => console.log('⛔ GCP MySQL 접속 및 서버 실행 실패', error));
