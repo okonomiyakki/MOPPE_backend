@@ -33,6 +33,8 @@ const allowedOrigins = [
   'http://192.168.0.*:3000',
   'http://13.209.192.1',
   'https://13.209.192.1',
+  'http://moppe.co.kr',
+  'https://moppe.co.kr',
 ];
 
 const corsOptions = {
